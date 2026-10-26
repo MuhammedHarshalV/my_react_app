@@ -1,0 +1,98 @@
+.alert {
+    position: fixed;
+
+    top: 30px;
+
+    min-width: 320px;
+    max-width: 480px;
+
+    min-height: 70px;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 16px 20px;
+
+    background: var(--color-white);
+    border-radius: 10px;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+
+    z-index: 9999;
+
+    animation: slideIn 0.25s ease;
+}
+
+.icon {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    color: var(--color-white);
+    font-weight: var(--font-bold);
+    font-size: 18px;
+}
+
+.error {
+    background: var(--color-error);
+}
+
+.success {
+    background: var(--color-success);
+}
+
+.warning {
+    background: var(--color-warning);
+}
+
+.info {
+    background: var(--color-blue);
+}
+
+.message {
+    flex: 1;
+
+    font-family: var(--font-poppins);
+    font-size: var(--font-size-md);
+    color: var(--color-text-secondary);
+}
+
+.closeButton {
+    border: none;
+    background: transparent;
+
+    font-size: 26px;
+    color: var(--color-grey-500);
+
+    cursor: pointer;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .alert {
+        left: 16px;
+        right: 16px;
+        top: 16px;
+
+        min-width: auto;
+    }
+}
