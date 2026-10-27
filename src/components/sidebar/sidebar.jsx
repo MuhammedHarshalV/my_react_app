@@ -36,19 +36,22 @@ const sidebarItems = [
     },
 ];
 
-export default function Sidebar() {
-
+export default function Sidebar({
+    onItemClick,
+}) {
     const navigate = useNavigate();
     const location = useLocation();
+
+    const handleItemClick = (item) => {
+        navigate(item.path);
+
+        onItemClick?.();
+    };
 
     return (
         <div className="sidebar-container">
 
-            <ProfileSection
-                image="https://i.pravatar.cc/300?img=12"
-                name="Harshal V"
-                designation="Flutter Developer"
-            />
+            <ProfileSection />
 
             <div className="sidebar-scroll-content">
 
@@ -57,20 +60,21 @@ export default function Sidebar() {
                     {sidebarItems.map((item) => {
 
                         const isSelected =
-                            location.pathname === item.path;
+                            location.pathname ===
+                            item.path;
 
                         return (
                             <motion.div
                                 key={item.id}
                                 className={`sidebar-item ${isSelected
-                                    ? "selected"
-                                    : ""
+                                        ? "selected"
+                                        : ""
                                     }`}
                                 onClick={() =>
-                                    navigate(item.path)
+                                    handleItemClick(item)
                                 }
                                 whileHover={{
-                                    scale: 1.04,
+                                    scale: 1.03,
                                 }}
                                 whileTap={{
                                     scale: 0.97,
@@ -86,6 +90,7 @@ export default function Sidebar() {
                 </div>
 
             </div>
+
         </div>
     );
 }

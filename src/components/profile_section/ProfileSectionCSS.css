@@ -1,5 +1,8 @@
 .profile-section {
     width: 100%;
+    height: 175px;
+
+    box-sizing: border-box;
 
     flex-shrink: 0;
 
@@ -10,14 +13,21 @@
 
     padding: 10px;
 
-    background-color: white;
+    background-color: var(--color-white);
 
     border-radius: 10px;
+
+    position: relative;
+
+    overflow: hidden;
 }
 
+
 .profile-image {
-    width: 100px;
-    height: 100px;
+    width: clamp(65px, 6.5vw, 100px);
+    height: clamp(65px, 6.5vw, 100px);
+
+    flex-shrink: 0;
 
     object-fit: cover;
 
@@ -26,20 +36,101 @@
     margin-bottom: 10px;
 }
 
+
 .profile-name {
     margin: 0;
 
-    font-size: 20px;
-    font-weight: bold;
+    font-size: var(--font-size-lg);
 
-    color: #161616;
+    font-weight: var(--font-bold);
+
+    color: var(--color-text-primary);
+
+    text-align: center;
 }
+
 
 .profile-designation {
     margin: 5px 0 0;
 
-    font-size: 16px;
-    font-weight: 400;
+    font-size: var(--font-size-md);
 
-    color: #444444;
+    font-weight: var(--font-regular);
+
+    color: var(--color-text-secondary);
+
+    text-align: center;
+}
+
+
+/* =========================================
+   SHIMMER
+========================================= */
+
+.profile-shimmer {
+    background: var(--color-grey-200);
+}
+
+
+.profile-shimmer::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 80%;
+    height: 100%;
+
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.4) 30%,
+            rgba(255, 255, 255, 0.95) 50%,
+            rgba(255, 255, 255, 0.4) 70%,
+            transparent 100%);
+
+    animation: profileShimmer 0.65s linear infinite;
+}
+
+
+@keyframes profileShimmer {
+
+    from {
+        left: -100%;
+    }
+
+    to {
+        left: 150%;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .profile-section {
+        height: 145px;
+
+        padding: 8px;
+    }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+    .profile-section {
+        height: 130px;
+
+        padding: 6px;
+    }
+
 }

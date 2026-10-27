@@ -1,42 +1,193 @@
-* {
+/* =========================================
+   GLOBAL RESET
+========================================= */
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+
     box-sizing: border-box;
 }
+
+
+/* =========================================
+   LARGE DESKTOP
+========================================= */
+
+html {
+    width: 100%;
+
+    font-size: 18px;
+
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+
+/* =========================================
+   ROOT
+========================================= */
 
 html,
 body,
 #root {
-    margin: 0;
-    padding: 0;
-
     width: 100%;
+    min-width: 100%;
     min-height: 100%;
-
-    background-color: white;
-}
-
-.page {
-    width: 100vw;
-    min-height: 100vh;
-
-    display: flex;
-
-    background-color: white;
 }
 
 
-/* RIGHT SIDE */
-
-.main-content {
-    flex: 1;
-
-    min-width: 0;
-    min-height: 100vh;
-
-    padding: 30px;
-
-    background-color: white;
-}
+/* =========================================
+   BODY
+========================================= */
 
 body {
-    font-family: "Notche", sans-serif;
+    width: 100%;
+    min-height: 100vh;
+
+    margin: 0;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-base);
+
+    color: var(--color-text-primary);
+
+    background: var(--color-background);
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================
+   COMMON ELEMENTS
+========================================= */
+
+p,
+span,
+label,
+a,
+button,
+input,
+textarea,
+select,
+option {
+    font-family: inherit;
+}
+
+
+/* =========================================
+   HEADINGS
+========================================= */
+
+h1 {
+    font-size: var(--font-size-title);
+
+    font-weight: var(--font-bold);
+}
+
+
+h2 {
+    font-size: var(--font-size-xxl);
+
+    font-weight: var(--font-bold);
+}
+
+
+h3 {
+    font-size: var(--font-size-xl);
+
+    font-weight: var(--font-semibold);
+}
+
+
+h4 {
+    font-size: var(--font-size-lg);
+
+    font-weight: var(--font-semibold);
+}
+
+
+h5 {
+    font-size: var(--font-size-base);
+
+    font-weight: var(--font-semibold);
+}
+
+
+h6 {
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-semibold);
+}
+
+
+/* =========================================
+   IMAGE
+========================================= */
+
+img {
+    max-width: 100%;
+}
+
+
+/* =========================================
+   NORMAL DESKTOP / LAPTOP
+========================================= */
+
+@media (max-width: 1440px) {
+
+    html {
+        font-size: 17px;
+    }
+}
+
+
+/* =========================================
+   SMALL LAPTOP
+========================================= */
+
+@media (max-width: 1199px) {
+
+    html {
+        font-size: 16px;
+    }
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1023px) {
+
+    html {
+        font-size: 15px;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    html {
+        font-size: 13px;
+    }
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+    html {
+        font-size: 12px;
+    }
 }
