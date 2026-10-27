@@ -3,16 +3,15 @@ import axios from "axios";
 
 import { TokenStorage } from "./tokenStorage";
 import { ApiEndpoints, BASE_URL } from "../../constants/apiConstants";
-import { AlertService } from "../../components/common/alert/AlertService";
+import { toast } from "react-toastify";
 
 const showApiError = (error) => {
   // No internet
-  if (!navigator.onLine || error.message === "NO_INTERNET") {
-    AlertService.show({
-      message: "No internet connection",
-      type: "error",
-    });
-
+  if (
+    !navigator.onLine ||
+    error.message === "NO_INTERNET"
+  ) {
+    toast.error("No internet connection");
     return;
   }
 
@@ -21,39 +20,33 @@ const showApiError = (error) => {
     error.code === "ECONNABORTED" ||
     error.code === "ETIMEDOUT"
   ) {
-    AlertService.show({
-      message: "Request timed out. Please try again.",
-      type: "warning",
-    });
-
+    toast.warning(
+      "Request timed out. Please try again."
+    );
     return;
   }
 
-  // Backend returned error message
+  // Backend error message
   if (error.response?.data?.message) {
-    AlertService.show({
-      message: error.response.data.message,
-      type: "error",
-    });
-
+    toast.error(
+      error.response.data.message
+    );
     return;
   }
 
-  // Server not reachable / CORS / network error
+  // Network / server / CORS
   if (error.message === "Network Error") {
-    AlertService.show({
-      message: "Unable to connect to server",
-      type: "error",
-    });
-
+    toast.error(
+      "Unable to connect to server"
+    );
     return;
   }
 
   // Default
-  AlertService.show({
-    message: error.message || "Something went wrong",
-    type: "error",
-  });
+  toast.error(
+    error.message ||
+    "Something went wrong"
+  );
 };
 
 const apiClient = axios.create({

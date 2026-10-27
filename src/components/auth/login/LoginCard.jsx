@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./LoginCard.module.css";
 import { adminLoginApi } from "../../../services/api/loginApi";
 
 export default function LoginCard() {
-
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
         password: "",
@@ -63,11 +64,11 @@ export default function LoginCard() {
 
 
 
-            // if (response.success === true) {
-            //     navigate("/dashboard", {
-            //         replace: true,
-            //     });
-            // }
+            if (response?.success === true) {
+                navigate("/dashboard", {
+                    replace: true,
+                });
+            }
 
         } catch (error) {
             console.log(error);

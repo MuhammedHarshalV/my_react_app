@@ -1,0 +1,111 @@
+.sidebar-container {
+    width: 16vw;
+    min-width: 16vw;
+
+    height: 100vh;
+
+    background-color: #e00000;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    /* IMPORTANT */
+    display: flex;
+    flex-direction: column;
+
+    /* Whole sidebar should NOT scroll */
+    overflow: hidden;
+}
+
+
+/* ============================= */
+/* SCROLLABLE MENU AREA          */
+/* ============================= */
+
+.sidebar-scroll-content {
+    flex: 1;
+
+    min-height: 0;
+
+    margin-top: 10px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+
+
+.sidebar-list {
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Individual item */
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px 14px;
+    margin-bottom: 8px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    color: white;
+}
+
+
+/* Hover */
+.sidebar-item:hover {
+    background-color: white;
+    color: #e00000;
+}
+
+
+/* Selected */
+.sidebar-item.selected {
+    background-color: white;
+    color: #e00000;
+}
+
+
+/* Count */
+.sidebar-item-count {
+    padding: 3px 8px;
+
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+}
+
+
+/* Selected count */
+.sidebar-item.selected .sidebar-item-count {
+    background-color: #ffe8e8;
+    color: #e00000;
+}
+
+
+/* Scrollbar */
+.sidebar-scroll-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar-scroll-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-scroll-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+}

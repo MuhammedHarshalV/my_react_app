@@ -1,5 +1,5 @@
 import apiClient from "./apiClient";
-import { AlertService } from "../../components/common/alert/AlertService";
+import { toast } from "react-toastify";
 
 const handleResponse = (response) => {
     const isValidStatus =
@@ -13,12 +13,10 @@ const handleResponse = (response) => {
         return response.data;
     }
     else {
-        AlertService.show({
-            message:
-                response.data?.message ||
-                "Something went wrong",
-            type: "error",
-        });
+        toast.error(
+            response.data?.message ||
+            "Something went wrong"
+        );
     }
 
 
