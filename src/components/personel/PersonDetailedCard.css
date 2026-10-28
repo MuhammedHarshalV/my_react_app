@@ -1,0 +1,641 @@
+/* =========================================
+   PERSON CARD
+========================================= */
+
+.person-detailed-card {
+    width: 100%;
+
+    position: relative;
+
+    box-sizing: border-box;
+
+    background: var(--color-white);
+
+    border-radius: 7px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 1px 5px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================================
+   TOP LINE
+========================================= */
+
+.person-card-top-line {
+    width: 100%;
+    height: 3px;
+
+    background: var(--color-primary);
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.person-card-header {
+    width: 100%;
+
+    padding: 10px 12px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+
+/* =========================================
+   MAIN PERSON INFO
+========================================= */
+
+.person-main-info {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+/* =========================================
+   PROFILE IMAGE
+========================================= */
+
+.person-profile-image {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    object-fit: cover;
+
+    border-radius: 7px;
+
+    background: var(--color-grey-200);
+}
+
+
+/* =========================================
+   NAME SECTION
+========================================= */
+
+.person-name-section {
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.person-name-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 6px;
+}
+
+
+.person-name-row h3 {
+    margin: 0;
+
+    font-size: var(--font-size-md);
+
+    font-weight: var(--font-bold);
+
+    color: var(--color-text-primary);
+}
+
+
+.person-pro-id {
+    padding: 2px 5px;
+
+    background: #eef1fa;
+
+    color: #59647a;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+
+    letter-spacing: 0.4px;
+}
+
+
+.person-name-section p {
+    margin: 2px 0 0;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-medium);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   COPY BUTTON
+========================================= */
+
+.person-copy-button {
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 3px;
+
+    background: #f4f5fc;
+
+    color: #667087;
+
+    font-size: var(--font-size-md);
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   CONTACT SECTION
+========================================= */
+
+.person-contact-section {
+    padding: 8px 12px;
+
+    background: #f5f6fd;
+}
+
+
+.person-contact-row {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    color: #434b5d;
+}
+
+
+.person-contact-icon {
+    color: #647087;
+}
+
+
+/* =========================================
+   LOCATION
+========================================= */
+
+.person-location-row {
+    margin-top: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+
+.person-location {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-medium);
+
+    color: #586176;
+}
+
+
+.person-location>span:last-child {
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.person-location-icon {
+    flex-shrink: 0;
+
+    color: var(--color-primary);
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.person-status {
+    flex-shrink: 0;
+
+    padding: 2px 6px;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+
+    line-height: 1.2;
+
+    letter-spacing: 0.4px;
+}
+
+
+/* ON FIELD */
+
+.person-status.on-field {
+    background: var(--color-primary);
+
+    color: var(--color-white);
+}
+
+
+/* IN TRANSIT */
+
+.person-status.in-transit {
+    background: var(--color-primary);
+
+    color: var(--color-white);
+}
+
+
+/* HQ REVIEW */
+
+.person-status.review {
+    background: #e9ebf5;
+
+    color: #4c566c;
+}
+
+
+/* OFFLINE */
+
+.person-status.offline {
+    background: var(--color-grey-300);
+
+    color: var(--color-grey-700);
+}
+
+
+/* =========================================
+   STAT GRID
+========================================= */
+
+.person-stat-grid {
+    width: 100%;
+
+    padding: 10px 12px;
+
+    box-sizing: border-box;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 6px;
+}
+
+
+/* =========================================
+   STAT BOX
+========================================= */
+
+.person-stat-box {
+    min-width: 0;
+
+    padding: 8px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #f5f6fd;
+}
+
+
+.person-stat-title {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    color: #606a7f;
+}
+
+
+.person-stat-value {
+    margin-top: 4px;
+
+    font-size: var(--font-size-md);
+
+    font-weight: var(--font-bold);
+
+    color: var(--color-text-primary);
+}
+
+
+.person-stat-subtext {
+    margin-top: 2px;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-medium);
+
+    color: var(--color-text-secondary);
+}
+
+
+.person-stat-subtext.highlight {
+    color: var(--color-primary);
+
+    font-weight: var(--font-semibold);
+}
+
+
+/* =========================================
+   TOTAL CLAIM
+========================================= */
+
+.person-total-claim {
+    margin: 0 12px 10px;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    background: #f1f3fc;
+}
+
+
+.person-total-left {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.person-total-label {
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    color: #667087;
+}
+
+
+.person-total-value {
+    margin-top: 3px;
+
+    display: flex;
+    align-items: flex-end;
+
+    gap: 5px;
+}
+
+
+.person-total-value strong {
+    font-size: var(--font-size-lg);
+
+    font-weight: var(--font-black);
+
+    color: var(--color-text-primary);
+}
+
+
+.person-total-value span {
+    padding-bottom: 2px;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   VERIFIED
+========================================= */
+
+.person-verified-amount {
+    flex-shrink: 0;
+
+    padding: 5px 7px;
+
+    background: #e7edfa;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+
+    color: #3d475d;
+}
+
+
+.person-verified-amount span {
+    font-size: var(--font-size-xs);
+
+    letter-spacing: 0.4px;
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.person-card-actions {
+    width: 100%;
+
+    padding: 0 12px 12px;
+
+    box-sizing: border-box;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 6px;
+}
+
+
+/* =========================================
+   COMMON ACTION BUTTON
+========================================= */
+
+.person-action-button {
+    min-width: 0;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    border: none;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    cursor: pointer;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.15s ease;
+}
+
+
+.person-action-button:hover {
+    opacity: 0.9;
+}
+
+
+.person-action-button:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================
+   LEDGER
+========================================= */
+
+.ledger-button {
+    background: #f0f2fb;
+
+    color: #31394b;
+}
+
+
+/* =========================================
+   GPS
+========================================= */
+
+.gps-button {
+    background: var(--color-primary);
+
+    color: var(--color-white);
+}
+
+
+/* =========================================
+   STATION LOG
+========================================= */
+
+.station-button {
+    background: #f0f2fb;
+
+    color: #31394b;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 768px) {
+
+    .person-card-header {
+        padding: 9px 10px;
+    }
+
+
+    .person-contact-section {
+        padding:
+            8px 10px;
+    }
+
+
+    .person-stat-grid {
+        padding:
+            9px 10px;
+    }
+
+
+    .person-total-claim {
+        margin:
+            0 10px 9px;
+    }
+
+
+    .person-card-actions {
+        padding:
+            0 10px 10px;
+    }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+    .person-profile-image {
+        width: 42px;
+        height: 42px;
+    }
+
+
+    .person-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .person-total-claim {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .person-verified-amount {
+        align-self: flex-end;
+    }
+
+
+    .person-card-actions {
+        grid-template-columns: 1fr;
+    }
+
+}

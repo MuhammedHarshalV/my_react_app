@@ -1,0 +1,548 @@
+/* =========================================
+   PAGE
+========================================= */
+
+.personnel-page {
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   FILTER BAR
+========================================= */
+
+.personnel-filter-bar {
+    width: 100%;
+
+    margin-bottom: 25px;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(260px, 1.5fr) minmax(280px, 1fr) minmax(180px, 0.7fr);
+
+    gap: 8px;
+
+    background: var(--color-white);
+
+    border-radius: 7px;
+
+    box-shadow:
+        0 1px 5px rgba(0, 0, 0, 0.04);
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.personnel-search {
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 0 12px;
+
+    box-sizing: border-box;
+
+    background: #f5f6fd;
+}
+
+
+.search-icon {
+    flex-shrink: 0;
+
+    font-size: var(--font-size-lg);
+
+    color: var(--color-text-secondary);
+}
+
+
+.personnel-search input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-text-primary);
+}
+
+
+.personnel-search input::placeholder {
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   DATE RANGE
+========================================= */
+
+.personnel-date-range {
+    min-width: 0;
+    height: 44px;
+
+    padding: 0 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    box-sizing: border-box;
+
+    background: #f5f6fd;
+}
+
+
+.personnel-date-range input {
+    min-width: 0;
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-primary);
+}
+
+
+.personnel-date-range>span {
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   SELECT
+========================================= */
+
+.personnel-filter-select {
+    width: 100%;
+    height: 44px;
+
+    padding: 0 10px;
+
+    border: none;
+    outline: none;
+
+    background: #f5f6fd;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-text-primary);
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   SECTION HEADER
+========================================= */
+
+.personnel-section-header {
+    width: 100%;
+
+    margin-bottom: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+.deployment-title-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+
+.deployment-title-row h2 {
+    margin: 0;
+
+    font-size: var(--font-size-lg);
+
+    font-weight: var(--font-bold);
+
+    color: var(--color-text-primary);
+}
+
+
+.active-pro-badge {
+    padding: 4px 7px;
+
+    background: var(--color-primary);
+
+    color: var(--color-white);
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+}
+
+
+.deployment-range {
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   GPS
+========================================= */
+
+.gps-pulse {
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    color: var(--color-text-secondary);
+}
+
+
+.gps-pulse>span {
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    background: var(--color-primary);
+
+    border-radius: 50%;
+}
+
+
+/* =========================================
+   PERSON GRID
+
+   Desktop = 2 columns
+   Default 4 rows = 2 x 2
+========================================= */
+
+.personnel-card-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+
+/* =========================================
+   EMPTY
+========================================= */
+
+.personnel-empty {
+    width: 100%;
+    min-height: 300px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   PAGINATION
+========================================= */
+
+.personnel-pagination {
+    width: 100%;
+
+    margin-top: 18px;
+
+    padding: 14px 16px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    background: var(--color-white);
+
+    border-radius: 5px;
+}
+
+
+/* =========================================
+   PAGINATION LEFT
+========================================= */
+
+.pagination-information {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-text-secondary);
+}
+
+
+.pagination-information strong {
+    color: #4e576a;
+
+    font-weight: var(--font-semibold);
+}
+
+
+.pagination-dot {
+    color: #cbd0db;
+}
+
+
+.pagination-information select {
+    height: 34px;
+
+    padding: 0 9px;
+
+    border: none;
+    outline: none;
+
+    background: #f2f3fa;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-semibold);
+
+    color: var(--color-text-primary);
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   PAGINATION BUTTONS
+========================================= */
+
+.pagination-buttons {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+}
+
+
+.pagination-buttons button {
+    min-width: 38px;
+    height: 38px;
+
+    padding: 0 8px;
+
+    border: none;
+
+    background: #f3f4fb;
+
+    color: #535c70;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-semibold);
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.pagination-buttons button:hover:not(:disabled) {
+    background: #e8eaf4;
+}
+
+
+.pagination-buttons button.active {
+    background: var(--color-primary);
+
+    color: var(--color-white);
+}
+
+
+.pagination-buttons button:disabled {
+    opacity: 0.4;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .personnel-filter-bar {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    .personnel-search {
+        grid-column:
+            1 / -1;
+    }
+
+
+    .personnel-section-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .personnel-filter-bar {
+        grid-template-columns: 1fr;
+
+        margin-bottom: 15px;
+    }
+
+
+    .personnel-search {
+        grid-column: auto;
+    }
+
+
+    .personnel-card-grid {
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+    }
+
+
+    .personnel-pagination {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .pagination-buttons {
+        width: 100%;
+
+        overflow-x: auto;
+
+        padding-bottom: 3px;
+    }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+    .personnel-filter-bar {
+        padding: 7px;
+    }
+
+
+    .personnel-date-range {
+        height: auto;
+
+        padding: 8px;
+
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .personnel-date-range>span {
+        display: none;
+    }
+
+
+    .personnel-date-range input {
+        height: 35px;
+
+        padding: 0 5px;
+
+        box-sizing: border-box;
+    }
+
+
+    .deployment-title-row {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 5px;
+    }
+
+
+    .personnel-pagination {
+        padding: 10px;
+    }
+
+
+    .pagination-information {
+        gap: 6px;
+    }
+
+
+    .pagination-buttons button {
+        min-width: 35px;
+        height: 35px;
+    }
+
+}

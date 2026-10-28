@@ -1,8 +1,15 @@
+import DashBoardAboveCard from "../../components/dashboard/DashBoardAboveCard";
+import DashBoardMiddleCard from "../../components/dashboard/DashBoardMiddleCard";
+import DashBoardBelowCard from "../../components/dashboard/DashBoardBelowCard";
 export default function DashboardHome() {
+
     return (
         <div>
-            <h1>Dashboard</h1>
-            <p>Welcome to dashboard</p>
+
+            <DashBoardAboveCard />
+            <DashBoardMiddleCard />
+            <DashBoardBelowCard />
+
         </div>
     );
 }

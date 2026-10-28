@@ -1,0 +1,618 @@
+/* =========================================
+   MAIN CARD
+========================================= */
+
+.dashboard-below-card {
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 16px 20px 12px;
+
+    box-sizing: border-box;
+
+    background: var(--color-white);
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 1px 5px rgba(0, 0, 0, 0.04);
+}
+
+
+/* =========================================
+   LOADER
+========================================= */
+
+.below-card-loader {
+    position: relative;
+
+    width: 100%;
+    height: 350px;
+
+    margin-top: 20px;
+}
+
+
+/* =========================================
+   NO DATA
+========================================= */
+
+.below-card-no-data {
+    width: 100%;
+    min-height: 250px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: var(--font-size-base);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.below-card-header {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 14px;
+}
+
+
+/* =========================================
+   HEADER LEFT
+========================================= */
+
+.below-header-left {
+    min-width: 0;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+}
+
+
+.below-header-icon {
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #fff0f1;
+
+    color: var(--color-primary);
+
+    border-radius: 3px;
+
+    font-size: var(--font-size-lg);
+
+    font-weight: var(--font-bold);
+}
+
+
+.below-header-content {
+    min-width: 0;
+}
+
+
+.below-header-content h2 {
+    margin: 0;
+
+    font-size: var(--font-size-lg);
+
+    font-weight: var(--font-bold);
+
+    line-height: 1.3;
+
+    color: var(--color-text-primary);
+}
+
+
+.below-header-content p {
+    margin: 3px 0 0;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   REAL TIME BADGE
+========================================= */
+
+.real-time-badge {
+    flex-shrink: 0;
+
+    padding: 5px 8px;
+
+    background: #f0f1f7;
+
+    color: #555e75;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================
+   CLINIC LIST
+========================================= */
+
+.clinic-visit-list {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+/* =========================================
+   CLINIC ITEM
+========================================= */
+
+.clinic-visit-item {
+    width: 100%;
+
+    padding: 10px 12px 8px;
+
+    box-sizing: border-box;
+
+    background: #f6f7ff;
+
+    border-radius: 4px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.clinic-visit-item:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 2px 7px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================
+   TOP ROW
+========================================= */
+
+.clinic-visit-top {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+/* =========================================
+   CLINIC DETAILS
+========================================= */
+
+.clinic-details {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.clinic-name-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 4px;
+}
+
+
+.clinic-name {
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-bold);
+
+    color: var(--color-text-primary);
+}
+
+
+.clinic-doctor {
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-regular);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   VISITED BY
+========================================= */
+
+.clinic-visited-by {
+    margin-top: 2px;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+.clinic-visited-by strong {
+    font-weight: var(--font-medium);
+}
+
+
+/* =========================================
+   CLAIM
+========================================= */
+
+.clinic-claim {
+    flex-shrink: 0;
+
+    min-width: 90px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    text-align: right;
+}
+
+
+.clinic-amount {
+    font-size: var(--font-size-md);
+
+    font-weight: var(--font-bold);
+
+    color: var(--color-text-primary);
+}
+
+
+.clinic-amount.amount-review {
+    color: var(--color-primary);
+}
+
+
+/* =========================================
+   CLAIM STATUS
+========================================= */
+
+.claim-status {
+    margin-top: 3px;
+
+    padding: 2px 5px;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+
+    letter-spacing: 0.5px;
+}
+
+
+/* APPROVED */
+
+.claim-status.approved {
+    background: var(--color-primary);
+
+    color: var(--color-white);
+}
+
+
+/* RECONCILED */
+
+.claim-status.reconciled {
+    background: #e5eaf5;
+
+    color: #3e4c68;
+}
+
+
+/* UNDER REVIEW */
+
+.claim-status.review {
+    background: #ffe3e3;
+
+    color: var(--color-primary);
+}
+
+
+/* =========================================
+   DIVIDER
+========================================= */
+
+.clinic-divider {
+    width: 100%;
+    height: 1px;
+
+    margin: 6px 0;
+
+    background: rgba(0, 0, 0, 0.035);
+}
+
+
+/* =========================================
+   BOTTOM ROW
+========================================= */
+
+.clinic-visit-bottom {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+/* =========================================
+   ACTIVITY
+========================================= */
+
+.clinic-activity {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    color: #5c6478;
+}
+
+
+.activity-icon {
+    flex-shrink: 0;
+
+    color: #5c6478;
+
+    font-size: var(--font-size-sm);
+}
+
+
+/* =========================================
+   TIME
+========================================= */
+
+.clinic-time {
+    flex-shrink: 0;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    color: var(--color-text-secondary);
+
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.below-card-footer {
+    width: 100%;
+
+    margin-top: 12px;
+
+    padding-top: 3px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+/* =========================================
+   MATCH RATE
+========================================= */
+
+.matching-rate {
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    letter-spacing: 0.3px;
+
+    color: var(--color-text-secondary);
+}
+
+
+.matching-rate strong {
+    color: #4f586e;
+}
+
+
+/* =========================================
+   OPEN RECORDS
+========================================= */
+
+.open-records-button {
+    padding: 5px 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--color-primary);
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+
+    cursor: pointer;
+}
+
+
+.open-records-button span {
+    font-size: var(--font-size-lg);
+
+    line-height: 1;
+}
+
+
+.open-records-button:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 768px) {
+
+    .dashboard-below-card {
+        margin-top: 12px;
+
+        padding: 14px;
+    }
+
+
+    .clinic-visit-item {
+        padding: 9px 10px 8px;
+    }
+
+
+    .below-header-content h2 {
+        font-size: var(--font-size-md);
+    }
+
+
+    .clinic-claim {
+        min-width: 75px;
+    }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+    .dashboard-below-card {
+        padding: 10px;
+    }
+
+
+    /* HEADER */
+
+    .below-card-header {
+        gap: 8px;
+    }
+
+
+    .below-header-icon {
+        width: 26px;
+        height: 26px;
+
+        font-size: var(--font-size-md);
+    }
+
+
+    .real-time-badge {
+        padding: 4px 5px;
+    }
+
+
+    /* VISIT */
+
+    .clinic-visit-top {
+        gap: 7px;
+    }
+
+
+    .clinic-name-row {
+        display: block;
+    }
+
+
+    .clinic-doctor {
+        display: block;
+
+        margin-top: 2px;
+    }
+
+
+    .clinic-claim {
+        min-width: 70px;
+    }
+
+
+    .clinic-amount {
+        font-size: var(--font-size-sm);
+    }
+
+
+    /* BOTTOM */
+
+    .clinic-visit-bottom {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 4px;
+    }
+
+
+    .clinic-time {
+        margin-left: auto;
+    }
+
+
+    /* FOOTER */
+
+    .below-card-footer {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 5px;
+    }
+
+
+    .open-records-button {
+        margin-left: auto;
+    }
+
+}

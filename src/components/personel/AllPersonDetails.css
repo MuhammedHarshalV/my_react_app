@@ -1,0 +1,843 @@
+/* =========================================
+   MAIN CARD
+========================================= */
+
+.all-person-card {
+    width: 100%;
+
+    margin-top: 20px;
+
+    box-sizing: border-box;
+
+    background: var(--color-white);
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 1px 5px rgba(0, 0, 0, 0.04);
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.all-person-header {
+    width: 100%;
+
+    padding: 16px 18px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+
+/* =========================================
+   HEADER TITLE
+========================================= */
+
+.all-person-title-section {
+    min-width: 0;
+}
+
+
+.all-person-title-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+
+.all-person-title-row h2 {
+    margin: 0;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-lg);
+
+    font-weight: var(--font-bold);
+
+    color: var(--color-text-primary);
+}
+
+
+.audit-master-badge {
+    padding: 3px 7px;
+
+    background: #e7eaf5;
+
+    color: #5b657c;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+
+    letter-spacing: 0.5px;
+}
+
+
+.all-person-title-section p {
+    margin: 3px 0 0;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   HEADER ACTIONS
+========================================= */
+
+.all-person-header-actions {
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.all-person-header-actions button {
+    height: 42px;
+
+    padding: 0 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border: none;
+
+    background: #f2f3fa;
+
+    color: #3e475a;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    cursor: pointer;
+}
+
+
+.all-person-header-actions button:hover {
+    background: #e8eaf3;
+}
+
+
+/* =========================================
+   TABLE SCROLL
+========================================= */
+
+.all-person-table-scroll {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.all-person-table {
+    width: 100%;
+
+    min-width: 1050px;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+
+/* =========================================
+   COLUMN WIDTHS
+========================================= */
+
+.all-person-table th:nth-child(1),
+.all-person-table td:nth-child(1) {
+    width: 21%;
+}
+
+
+.all-person-table th:nth-child(2),
+.all-person-table td:nth-child(2) {
+    width: 12%;
+}
+
+
+.all-person-table th:nth-child(3),
+.all-person-table td:nth-child(3) {
+    width: 10%;
+}
+
+
+.all-person-table th:nth-child(4),
+.all-person-table td:nth-child(4) {
+    width: 12%;
+}
+
+
+.all-person-table th:nth-child(5),
+.all-person-table td:nth-child(5) {
+    width: 14%;
+}
+
+
+.all-person-table th:nth-child(6),
+.all-person-table td:nth-child(6) {
+    width: 12%;
+}
+
+
+.all-person-table th:nth-child(7),
+.all-person-table td:nth-child(7) {
+    width: 11%;
+}
+
+
+.all-person-table th:nth-child(8),
+.all-person-table td:nth-child(8) {
+    width: 8%;
+}
+
+
+/* =========================================
+   TABLE HEADER
+========================================= */
+
+.all-person-table thead {
+    background: #f0f1fa;
+}
+
+
+.all-person-table th {
+    padding: 11px 14px;
+
+    box-sizing: border-box;
+
+    text-align: left;
+    vertical-align: middle;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+
+    color: #626c82;
+
+    letter-spacing: 0.3px;
+}
+
+
+.all-person-table th.actions-column {
+    text-align: center;
+}
+
+
+/* =========================================
+   TABLE ROW
+========================================= */
+
+.all-person-table tbody tr {
+    border-bottom:
+        1px solid var(--color-border-light);
+
+    transition:
+        background 0.15s ease;
+}
+
+
+.all-person-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+
+.all-person-table tbody tr:hover {
+    background: #fafaff;
+}
+
+
+.all-person-table td {
+    padding: 11px 14px;
+
+    box-sizing: border-box;
+
+    vertical-align: middle;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-primary);
+}
+
+
+/* =========================================
+   USER
+========================================= */
+
+.directory-user {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.directory-avatar {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #edf0fc;
+
+    color: #4b566d;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+}
+
+
+.directory-avatar.avatar-red {
+    background: var(--color-primary);
+
+    color: var(--color-white);
+}
+
+
+.directory-user-info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.directory-user-info strong {
+    font-size: var(--font-size-md);
+
+    font-weight: var(--font-bold);
+
+    color: var(--color-text-primary);
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.directory-user-info span {
+    margin-top: 2px;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================
+   DESIGNATION
+========================================= */
+
+.directory-designation {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.directory-designation strong {
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+
+    color: var(--color-text-primary);
+}
+
+
+.directory-designation span {
+    margin-top: 2px;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+
+    color: #505a70;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================
+   CONTACT
+========================================= */
+
+.directory-contact {
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   NODE
+========================================= */
+
+.directory-node {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+.node-location-icon {
+    flex-shrink: 0;
+
+    color: var(--color-primary);
+
+    font-size: var(--font-size-md);
+}
+
+
+/* =========================================
+   ENTRY
+========================================= */
+
+.directory-entry {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.directory-entry strong {
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+
+    color: var(--color-text-primary);
+}
+
+
+.directory-entry span {
+    margin-top: 2px;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   PERFORMANCE
+========================================= */
+
+.directory-performance {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.directory-performance strong {
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+
+    color: var(--color-text-primary);
+}
+
+
+.directory-performance span {
+    margin-top: 2px;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.directory-status {
+    min-width: 88px;
+
+    padding: 5px 8px;
+
+    box-sizing: border-box;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+
+    letter-spacing: 0.4px;
+}
+
+
+.status-dot {
+    width: 5px;
+    height: 5px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+
+/* ACTIVE */
+
+.directory-status.active {
+    background: var(--color-primary);
+
+    color: var(--color-white);
+}
+
+
+/* TRANSIT */
+
+.directory-status.transit {
+    background: var(--color-primary);
+
+    color: var(--color-white);
+}
+
+
+/* STATION */
+
+.directory-status.station {
+    background: #e8ebf6;
+
+    color: #4b556c;
+}
+
+
+/* AUDIT */
+
+.directory-status.audit {
+    background: #dfe4f3;
+
+    color: #48536b;
+}
+
+
+/* LEAVE */
+
+.directory-status.leave {
+    background: #edf0f8;
+
+    color: #7c879e;
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.directory-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+}
+
+
+.directory-actions button {
+    width: 28px;
+    height: 28px;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 4px;
+
+    background: transparent;
+
+    color: #596579;
+
+    font-size: var(--font-size-md);
+
+    cursor: pointer;
+}
+
+
+.directory-actions button:hover {
+    background: #eef0f7;
+
+    color: var(--color-primary);
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.all-person-footer {
+    width: 100%;
+
+    padding: 14px 18px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border-top:
+        1px solid var(--color-border-light);
+
+    background: var(--color-white);
+}
+
+
+/* =========================================
+   FOOTER INFO
+========================================= */
+
+.all-person-footer-info {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 9px;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+.all-person-footer-info strong {
+    color: #525d72;
+
+    font-weight: var(--font-semibold);
+}
+
+
+.footer-dot {
+    color: #c5cad5;
+}
+
+
+.all-person-footer-info select {
+    height: 32px;
+
+    padding: 0 8px;
+
+    border: none;
+    outline: none;
+
+    background: #f1f2f8;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   PAGINATION
+========================================= */
+
+.all-person-pagination {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+}
+
+
+.all-person-pagination button {
+    min-width: 36px;
+    height: 36px;
+
+    padding: 0 8px;
+
+    border: none;
+
+    background: #f2f3fa;
+
+    color: #596378;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    cursor: pointer;
+}
+
+
+.all-person-pagination button.active {
+    background: var(--color-primary);
+
+    color: var(--color-white);
+}
+
+
+.all-person-pagination button:hover:not(.active):not(:disabled) {
+    background: #e7e9f2;
+}
+
+
+.all-person-pagination button:disabled {
+    opacity: 0.4;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+
+    .all-person-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .all-person-header-actions {
+        width: 100%;
+    }
+
+
+    .all-person-header-actions button {
+        flex: 1;
+    }
+
+
+    .all-person-footer {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .all-person-card {
+        margin-top: 12px;
+    }
+
+
+    .all-person-header {
+        padding: 12px;
+    }
+
+
+    .all-person-title-row h2 {
+        font-size: var(--font-size-md);
+    }
+
+
+    .all-person-header-actions {
+        flex-direction: column;
+    }
+
+
+    .all-person-header-actions button {
+        width: 100%;
+    }
+
+
+    /*
+       Keep table format on mobile.
+       User can horizontally scroll.
+    */
+
+    .all-person-table {
+        min-width: 1000px;
+    }
+
+
+    .all-person-table th,
+    .all-person-table td {
+        padding:
+            9px 10px;
+    }
+
+
+    .all-person-footer {
+        padding: 10px 12px;
+    }
+
+
+    .all-person-pagination {
+        width: 100%;
+
+        overflow-x: auto;
+
+        padding-bottom: 3px;
+    }
+
+
+    .all-person-pagination button {
+        min-width: 34px;
+        height: 34px;
+
+        flex-shrink: 0;
+    }
+
+}

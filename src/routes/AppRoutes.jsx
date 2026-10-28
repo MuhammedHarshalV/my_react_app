@@ -5,6 +5,8 @@ import {
     Navigate,
 } from "react-router-dom";
 
+import CenterLoader from "../components/common/CenterLoader";
+
 import {
     lazy,
     Suspense,
@@ -109,8 +111,11 @@ export default function AppRoutes() {
 
 function PageLoader() {
     return (
-        <div>
-            Loading...
+        <div className="users-page">
+
+            <CenterLoader />
+
+
         </div>
     );
 }
