@@ -1,0 +1,1064 @@
+/* =========================================
+   PAGE
+========================================= */
+
+.clinic-details-page {
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   PAGE HEADER
+========================================= */
+
+.clinic-page-header {
+    width: 100%;
+
+    margin-bottom: 15px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+
+.clinic-page-title {
+    min-width: 0;
+}
+
+
+.clinic-header-label {
+    display: inline-block;
+
+    margin-bottom: 5px;
+
+    padding: 3px 6px;
+
+    background: var(--color-primary);
+
+    color: var(--color-white);
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+}
+
+
+.clinic-page-title h1 {
+    margin: 0;
+
+    max-width: 600px;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-xl);
+
+    font-weight: var(--font-bold);
+
+    line-height: 1.25;
+
+    color: var(--color-text-primary);
+}
+
+
+.clinic-page-title p {
+    margin: 5px 0 0;
+
+    max-width: 650px;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   ADD BUTTON
+========================================= */
+
+.clinic-add-button {
+    min-height: 40px;
+
+    padding: 0 14px;
+
+    flex-shrink: 0;
+
+    border: none;
+
+    background: var(--color-primary);
+
+    color: var(--color-white);
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   FILTER
+========================================= */
+
+.clinic-filter-bar {
+    width: 100%;
+
+    margin-bottom: 15px;
+
+    padding: 8px;
+
+    box-sizing: border-box;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(300px, 1.5fr) minmax(280px, 1fr) minmax(160px, 0.5fr);
+
+    gap: 8px;
+
+    background: var(--color-white);
+
+    border-radius: 7px;
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.clinic-search {
+    height: 42px;
+
+    padding: 0 12px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    box-sizing: border-box;
+
+    background: #f4f5fb;
+}
+
+
+.clinic-search>span {
+    color: var(--color-text-secondary);
+
+    font-size: var(--font-size-lg);
+}
+
+
+.clinic-search input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-text-primary);
+}
+
+
+/* =========================================
+   DATE
+========================================= */
+
+.clinic-date-range {
+    height: 42px;
+
+    padding: 0 10px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    box-sizing: border-box;
+
+    background: #f4f5fb;
+}
+
+
+.clinic-date-range input {
+    min-width: 0;
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-xs);
+}
+
+
+.clinic-date-range>span {
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   FILTER SELECT
+========================================= */
+
+.clinic-filter-select {
+    width: 100%;
+    height: 42px;
+
+    padding: 0 10px;
+
+    border: none;
+    outline: none;
+
+    background: #f4f5fb;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-sm);
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   SUMMARY
+========================================= */
+
+.clinic-summary-grid {
+    width: 100%;
+
+    margin-bottom: 18px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 8px;
+}
+
+
+.clinic-summary-card {
+    min-width: 0;
+
+    padding: 13px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--color-white);
+
+    border-radius: 5px;
+
+    border-top:
+        2px solid var(--color-primary);
+}
+
+
+.clinic-summary-card>span {
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    color: var(--color-text-secondary);
+}
+
+
+.clinic-summary-card>strong {
+    margin-top: 4px;
+
+    font-size: var(--font-size-xl);
+
+    font-weight: var(--font-black);
+
+    color: var(--color-text-primary);
+}
+
+
+.clinic-summary-card>small {
+    margin-top: 2px;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+.clinic-summary-card .clinic-positive {
+    color: var(--color-success);
+}
+
+
+/* =========================================
+   SECTION HEADER
+========================================= */
+
+.clinic-section-header {
+    width: 100%;
+
+    margin-bottom: 10px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+.clinic-section-header h2 {
+    margin: 0;
+
+    font-size: var(--font-size-md);
+
+    font-weight: var(--font-bold);
+
+    color: var(--color-text-primary);
+}
+
+
+.clinic-section-header p {
+    margin: 2px 0 0;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+.clinic-section-header>span {
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   GRID
+
+   DESKTOP = 3 COLUMNS
+========================================= */
+
+.clinic-card-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 10px;
+}
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.clinic-card {
+    min-width: 0;
+
+    background: var(--color-white);
+
+    border-radius: 6px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 1px 5px rgba(0, 0, 0, 0.07);
+}
+
+
+/* =========================================
+   IMAGE
+========================================= */
+
+.clinic-image-wrapper {
+    width: 100%;
+    height: 210px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background: var(--color-grey-200);
+}
+
+
+.clinic-image {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.clinic-status {
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    padding: 4px 7px;
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+}
+
+
+.clinic-status.active {
+    background: var(--color-success);
+
+    color: var(--color-white);
+}
+
+
+.clinic-status.review {
+    background: var(--color-warning);
+
+    color: var(--color-white);
+}
+
+
+.clinic-status.pending {
+    background: var(--color-warning);
+
+    color: var(--color-white);
+}
+
+
+.clinic-status.inactive {
+    background: var(--color-grey-600);
+
+    color: var(--color-white);
+}
+
+
+.clinic-code {
+    position: absolute;
+
+    top: 10px;
+    left: 10px;
+
+    padding: 4px 7px;
+
+    background: rgba(255,
+            255,
+            255,
+            0.92);
+
+    color: var(--color-text-primary);
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-bold);
+}
+
+
+/* =========================================
+   CARD CONTENT
+========================================= */
+
+.clinic-card-content {
+    padding: 11px;
+
+    box-sizing: border-box;
+}
+
+
+.clinic-card-content h3 {
+    margin: 0;
+
+    font-size: var(--font-size-md);
+
+    font-weight: var(--font-bold);
+
+    color: var(--color-text-primary);
+}
+
+
+.clinic-type {
+    margin: 2px 0 0;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   LOCATION
+========================================= */
+
+.clinic-location {
+    margin-top: 7px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+.clinic-location>span:first-child {
+    color: var(--color-primary);
+}
+
+
+/* =========================================
+   INFORMATION
+========================================= */
+
+.clinic-information-grid {
+    margin-top: 10px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 6px;
+}
+
+
+.clinic-information-grid>div {
+    min-width: 0;
+
+    padding: 7px;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+
+    background: #f5f6fc;
+}
+
+
+.clinic-information-grid span {
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+.clinic-information-grid strong {
+    margin-top: 2px;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-primary);
+}
+
+
+.clinic-information-grid small {
+    margin-top: 2px;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   EXPENSE
+========================================= */
+
+.clinic-expense-section {
+    margin-top: 8px;
+
+    padding: 8px;
+
+    background: #f5f6fc;
+}
+
+
+.clinic-expense-top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+
+.clinic-expense-top>div {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.clinic-expense-top span {
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+.clinic-expense-top strong {
+    margin-top: 2px;
+
+    font-size: var(--font-size-md);
+
+    color: var(--color-text-primary);
+}
+
+
+.clinic-verified {
+    text-align: right;
+}
+
+
+.clinic-verified strong {
+    color: var(--color-success);
+}
+
+
+/* =========================================
+   PROGRESS
+========================================= */
+
+.clinic-progress {
+    width: 100%;
+    height: 4px;
+
+    margin-top: 8px;
+
+    overflow: hidden;
+
+    background: #dfe3ee;
+}
+
+
+.clinic-progress>div {
+    height: 100%;
+
+    background: var(--color-primary);
+}
+
+
+.clinic-progress-label {
+    margin-top: 4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+/* =========================================
+   STATS
+========================================= */
+
+.clinic-card-stats {
+    margin-top: 8px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 6px;
+}
+
+
+.clinic-card-stats>div {
+    padding: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #f5f6fc;
+}
+
+
+.clinic-card-stats span {
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+.clinic-card-stats strong {
+    font-size: var(--font-size-sm);
+
+    color: var(--color-text-primary);
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.clinic-card-actions {
+    margin-top: 8px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 6px;
+}
+
+
+.clinic-card-actions button {
+    height: 36px;
+
+    border: none;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-semibold);
+
+    cursor: pointer;
+}
+
+
+.clinic-ledger-button {
+    background: #eff1f8;
+
+    color: var(--color-text-primary);
+}
+
+
+.clinic-view-button {
+    background: var(--color-primary);
+
+    color: var(--color-white);
+}
+
+
+/* =========================================
+   LOADING / EMPTY
+========================================= */
+
+.clinic-loading-container,
+.clinic-empty {
+    width: 100%;
+    min-height: 400px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.clinic-loader {
+    width: 34px;
+    height: 34px;
+
+    border: 4px solid var(--color-grey-300);
+
+    border-top-color:
+        var(--color-primary);
+
+    border-radius: 50%;
+
+    animation:
+        clinicLoaderSpin 0.7s linear infinite;
+}
+
+
+@keyframes clinicLoaderSpin {
+
+    to {
+        transform:
+            rotate(360deg);
+    }
+}
+
+
+/* =========================================
+   PAGINATION
+========================================= */
+
+.clinic-pagination {
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 12px 14px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    background: var(--color-white);
+}
+
+
+.clinic-pagination-info {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    font-size: var(--font-size-xs);
+
+    color: var(--color-text-secondary);
+}
+
+
+.clinic-pagination-info strong {
+    color: #515b70;
+}
+
+
+.clinic-pagination-info select {
+    height: 32px;
+
+    padding: 0 8px;
+
+    border: none;
+    outline: none;
+
+    background: #f1f2f8;
+
+    font-family: var(--font-poppins);
+
+    font-size: var(--font-size-xs);
+}
+
+
+/* =========================================
+   PAGINATION BUTTONS
+========================================= */
+
+.clinic-pagination-buttons {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+}
+
+
+.clinic-pagination-buttons button {
+    min-width: 34px;
+    height: 34px;
+
+    padding: 0 7px;
+
+    border: none;
+
+    background: #f1f2f8;
+
+    color: var(--color-text-secondary);
+
+    font-family: var(--font-poppins);
+
+    cursor: pointer;
+}
+
+
+.clinic-pagination-buttons button.active {
+    background: var(--color-primary);
+
+    color: var(--color-white);
+}
+
+
+.clinic-pagination-buttons button:disabled {
+    opacity: 0.4;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   MEDIUM SCREEN
+========================================= */
+
+@media (max-width: 1100px) {
+
+    .clinic-card-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .clinic-summary-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 850px) {
+
+    .clinic-filter-bar {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    .clinic-search {
+        grid-column:
+            1 / -1;
+    }
+
+
+    .clinic-page-header {
+        flex-direction: column;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 650px) {
+
+    .clinic-filter-bar {
+        grid-template-columns: 1fr;
+    }
+
+
+    .clinic-search {
+        grid-column: auto;
+    }
+
+
+    .clinic-summary-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+
+    .clinic-card-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .clinic-image-wrapper {
+        height: 190px;
+    }
+
+
+    .clinic-pagination {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .clinic-pagination-buttons {
+        width: 100%;
+
+        overflow-x: auto;
+
+        padding-bottom: 3px;
+    }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+    .clinic-page-title h1 {
+        font-size:
+            var(--font-size-lg);
+    }
+
+
+    .clinic-add-button {
+        width: 100%;
+    }
+
+
+    .clinic-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .clinic-date-range {
+        height: auto;
+
+        padding: 8px;
+
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .clinic-date-range>span {
+        display: none;
+    }
+
+
+    .clinic-date-range input {
+        height: 34px;
+    }
+
+
+    .clinic-section-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .clinic-information-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .clinic-card-actions {
+        grid-template-columns: 1fr;
+    }
+
+}

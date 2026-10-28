@@ -1,8 +1,5 @@
+import ExpenseCard from "../../components/expenses/ExpenseCard";
+
 export default function ExpensesPage() {
-    return (
-        <div>
-            <h1>Expenses</h1>
-            <p>Expense management page</p>
-        </div>
-    );
+    return <ExpenseCard />;
 }

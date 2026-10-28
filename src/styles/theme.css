@@ -1,154 +1,154 @@
 :root {
 
-    /* =========================================
+   /* =========================================
        FONT FAMILIES
     ========================================= */
 
-    --font-notche: "Notche", sans-serif;
-    --font-helmet: "Helmet", sans-serif;
-    --font-poppins: "Poppins", sans-serif;
+   --font-notche: "Notche", sans-serif;
+   --font-helmet: "Helmet", sans-serif;
+   --font-poppins: "Poppins", sans-serif;
 
 
-    /* =========================================
+   /* =========================================
        FONT SIZES
     ========================================= */
 
-    --font-size-xs: 0.625rem;
+   --font-size-xs: 0.625rem;
 
-    --font-size-sm: 0.75rem;
+   --font-size-sm: 0.75rem;
 
-    --font-size-md: 0.875rem;
+   --font-size-md: 0.875rem;
 
-    --font-size-base: 1rem;
+   --font-size-base: 1rem;
 
-    --font-size-lg: 1.125rem;
+   --font-size-lg: 1.125rem;
 
-    --font-size-xl: 1.375rem;
+   --font-size-xl: 1.375rem;
 
-    --font-size-xxl: 1.75rem;
+   --font-size-xxl: 1.75rem;
 
-    --font-size-title: 2.5rem;
+   --font-size-title: 2.5rem;
 
-    --font-size-large-title: 3rem;
+   --font-size-large-title: 3rem;
 
 
-    /* =========================================
+   /* =========================================
        FONT WEIGHTS
     ========================================= */
 
-    --font-regular: 400;
+   --font-regular: 400;
 
-    --font-medium: 500;
+   --font-medium: 500;
 
-    --font-semibold: 600;
+   --font-semibold: 600;
 
-    --font-bold: 700;
+   --font-bold: 700;
 
-    --font-black: 900;
+   --font-black: 900;
 
 
-    /* =========================================
+   /* =========================================
        MAIN COLORS
     ========================================= */
 
-    --color-primary: #E00000;
+   --color-primary: #E00000;
+   /* --color-primary: #00e031; */
+   --color-secondary: #C71920;
 
-    --color-secondary: #C71920;
+   --color-white: #FFFFFF;
 
-    --color-white: #FFFFFF;
+   --color-black: #000000;
 
-    --color-black: #000000;
+   --color-red: #E00000;
 
-    --color-red: #E00000;
+   --color-blue: #2196F3;
 
-    --color-blue: #2196F3;
+   --color-green: #22A06B;
 
-    --color-green: #22A06B;
+   --color-orange: #FF9800;
 
-    --color-orange: #FF9800;
+   --color-yellow: #FFC107;
 
-    --color-yellow: #FFC107;
+   --color-purple: #9C27B0;
 
-    --color-purple: #9C27B0;
+   --color-pink: #E91E63;
 
-    --color-pink: #E91E63;
+   --color-cyan: #00BCD4;
 
-    --color-cyan: #00BCD4;
-
-    --color-teal: #009688;
+   --color-teal: #009688;
 
 
-    /* =========================================
+   /* =========================================
        GREY
     ========================================= */
 
-    --color-grey-50: #FAFAFA;
+   --color-grey-50: #FAFAFA;
 
-    --color-grey-100: #F5F5F5;
+   --color-grey-100: #F5F5F5;
 
-    --color-grey-200: #EEEEEE;
+   --color-grey-200: #EEEEEE;
 
-    --color-grey-300: #E0E0E0;
+   --color-grey-300: #E0E0E0;
 
-    --color-grey-400: #BDBDBD;
+   --color-grey-400: #BDBDBD;
 
-    --color-grey-500: #9E9E9E;
+   --color-grey-500: #9E9E9E;
 
-    --color-grey-600: #757575;
+   --color-grey-600: #757575;
 
-    --color-grey-700: #616161;
+   --color-grey-700: #616161;
 
-    --color-grey-800: #424242;
+   --color-grey-800: #424242;
 
-    --color-grey-900: #212121;
+   --color-grey-900: #212121;
 
 
-    /* =========================================
+   /* =========================================
        TEXT COLORS
     ========================================= */
 
-    --color-text-primary: #222222;
+   --color-text-primary: #222222;
 
-    --color-text-secondary: #777777;
+   --color-text-secondary: #777777;
 
-    --color-text-hint: #AAAAAA;
+   --color-text-hint: #AAAAAA;
 
-    --color-text-disabled: #BDBDBD;
+   --color-text-disabled: #BDBDBD;
 
-    --color-text-white: #FFFFFF;
+   --color-text-white: #FFFFFF;
 
 
-    /* =========================================
+   /* =========================================
        BACKGROUND
     ========================================= */
 
-    --color-background: #F5F6FA;
+   --color-background: #F5F6FA;
 
-    --color-surface: #FFFFFF;
+   --color-surface: #FFFFFF;
 
-    --color-card: #FFFFFF;
+   --color-card: #FFFFFF;
 
 
-    /* =========================================
+   /* =========================================
        BORDER
     ========================================= */
 
-    --color-border: #D9D9D9;
+   --color-border: #D9D9D9;
 
-    --color-border-light: #EEEEEE;
+   --color-border-light: #EEEEEE;
 
-    --color-border-dark: #BDBDBD;
+   --color-border-dark: #BDBDBD;
 
 
-    /* =========================================
+   /* =========================================
        STATUS
     ========================================= */
 
-    --color-success: #22A06B;
+   --color-success: #22A06B;
 
-    --color-error: #D92D20;
+   --color-error: #D92D20;
 
-    --color-warning: #F79009;
+   --color-warning: #F79009;
 
-    --color-info: #2196F3;
+   --color-info: #2196F3;
 }

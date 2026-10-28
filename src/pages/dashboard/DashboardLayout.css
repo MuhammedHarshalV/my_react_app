@@ -352,3 +352,16 @@
         padding: 10px;
     }
 }
+
+/* Hide scrollbar but keep scrolling enabled */
+.dashboard-content {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer */
+}
+
+.dashboard-content::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Edge, Safari */
+}
