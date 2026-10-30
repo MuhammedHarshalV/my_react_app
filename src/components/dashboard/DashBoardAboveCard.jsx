@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import DashBoardMiddleCard from "./DashBoardMiddleCard";
 import "./DashBoardAboveCard.css";
 
 import CenterLoader from "../common/CenterLoader";
@@ -10,7 +10,11 @@ function DashBoardAboveCard() {
     const [isLoading, setIsLoading] = useState(true);
 
     const [dashboardData, setDashboardData] = useState(null);
+    const [startMonth, setStartMonth] = useState("");
+    const [endMonth, setEndMonth] = useState("");
 
+    const [showStartMonth, setShowStartMonth] = useState(false);
+    const [showEndMonth, setShowEndMonth] = useState(false);
 
     useEffect(() => {
         fetchDashboard();
@@ -45,11 +49,7 @@ function DashBoardAboveCard() {
 
                 data: {
 
-                    title:
-                        "Operations & Expense Overview",
 
-                    subtitle:
-                        "Real-time ledger reconciliation, field mobility, and clinic visit auditing",
 
 
                     /* ================================
@@ -87,13 +87,15 @@ function DashBoardAboveCard() {
                             "vs Sep 2026 (₹ 4,29,100)",
 
                         fuelPercentage:
-                            48,
+                            15,
 
-                        clinicFoodPercentage:
-                            32,
+                        FoodPercentage:
+                            15,
 
-                        logisticsPercentage:
+                        MedicalPercentage:
                             20,
+                        HotelPercentage: 20,
+                        StationeryPercentage: 15, OtherPercentage: 15,
                     },
 
 
@@ -263,11 +265,11 @@ function DashBoardAboveCard() {
                 <div className="dashboard-heading">
 
                     <h1>
-                        {dashboardData.title}
+                        Operations & Expense Overview
                     </h1>
 
                     <p>
-                        {dashboardData.subtitle}
+                        Real-time ledger reconciliation, field mobility, and clinic visit auditing
                     </p>
 
                 </div>
@@ -281,17 +283,43 @@ function DashBoardAboveCard() {
                     <div className="audit-badge">
 
                         <span>
-                            AUDIT OCT
+                            AUDIT OCTOBER
                         </span>
 
                         <strong>
-                            +{dashboardData.auditCount}
+                            {dashboardData.auditCount} Claims
                         </strong>
 
                     </div>
 
-
-                    <button
+                    <div className="dashboard-month-filters">
+                        {/* Start Month */}
+                        <button
+                            className="dashboard-filter-button"
+                            type="button"
+                            onClick={() => setShowStartMonth(true)}
+                        >
+                            <span className="filter-content">
+                                <small>COMPARITIVE MONTH</small>
+                                <strong>{startMonth || "Select month"}</strong>
+                            </span>
+                            <span className="filter-arrow">⌄</span>
+                        </button>
+                        <div className="audit-badge">V/S</div>
+                        {/* End Month */}
+                        <button
+                            className="dashboard-filter-button"
+                            type="button"
+                            onClick={() => setShowEndMonth(true)}
+                        >
+                            <span className="filter-content">
+                                <small>COMPARITIVE MONTH</small>
+                                <strong>{endMonth || "Select month"}</strong>
+                            </span>
+                            <span className="filter-arrow">⌄</span>
+                        </button>
+                    </div>
+                    {/* <button
                         className="dashboard-filter-button"
                         type="button"
                     >
@@ -319,10 +347,10 @@ function DashBoardAboveCard() {
                             ▾
                         </span>
 
-                    </button>
+                    </button> */}
 
 
-                    <button
+                    {/* <button
                         className="dashboard-filter-button zone-filter"
                         type="button"
                     >
@@ -350,31 +378,19 @@ function DashBoardAboveCard() {
                             ▾
                         </span>
 
-                    </button>
+                    </button> */}
 
 
-                    <button
-                        className="export-button"
-                        type="button"
-                    >
-                        ↓ Export Audit (PDF/XLS)
-                    </button>
 
-
-                    <button
-                        className="new-expense-button"
-                        type="button"
-                    >
-                        <span>⊕</span>
-
-                        New Expense Claim
-                    </button>
 
                 </div>
 
             </div>
 
 
+
+            <DashBoardMiddleCard />
+            <div style={{ height: "24px" }} />
             {/* =====================================
                 CARDS
             ====================================== */}
@@ -391,15 +407,11 @@ function DashBoardAboveCard() {
                     <div className="card-header">
 
                         <span className="card-title">
-                            TOTAL EXPENSE RUN RATE
+                            TOTAL EXPENSE
                         </span>
 
                         <span className="status-badge">
-                            {
-                                dashboardData
-                                    .expense
-                                    .status
-                            }
+                            OCTOBER
                         </span>
 
                     </div>
@@ -476,31 +488,35 @@ function DashBoardAboveCard() {
 
 
                         <div className="expense-progress">
-
                             <div
-                                className="progress-fuel"
-                                style={{
-                                    width:
-                                        `${dashboardData.expense.fuelPercentage}%`,
-                                }}
+                                className="FuelTravel"
+                                style={{ width: `${dashboardData.expense.fuelPercentage}%` }}
                             />
 
                             <div
-                                className="progress-food"
-                                style={{
-                                    width:
-                                        `${dashboardData.expense.clinicFoodPercentage}%`,
-                                }}
+                                className="FoodLunch"
+                                style={{ width: `${dashboardData.expense.FoodPercentage}%` }}
                             />
 
                             <div
-                                className="progress-logistics"
-                                style={{
-                                    width:
-                                        `${dashboardData.expense.logisticsPercentage}%`,
-                                }}
+                                className="MedicalDemo"
+                                style={{ width: `${dashboardData.expense.MedicalPercentage}%` }}
                             />
 
+                            <div
+                                className="HotelStay"
+                                style={{ width: `${dashboardData.expense.HotelPercentage}%` }}
+                            />
+
+                            <div
+                                className="Stationery"
+                                style={{ width: `${dashboardData.expense.StationeryPercentage}%` }}
+                            />
+
+                            <div
+                                className="Others"
+                                style={{ width: `${dashboardData.expense.OtherPercentage}%` }}
+                            />
                         </div>
 
 
@@ -508,17 +524,28 @@ function DashBoardAboveCard() {
 
                             <span>
                                 <i className="legend-dot fuel-dot" />
-                                Fuel
+                                Fuel/Travel
                             </span>
 
                             <span>
                                 <i className="legend-dot food-dot" />
-                                Clinic Tea
+                                Food&Lunch
                             </span>
 
                             <span>
-                                <i className="legend-dot logistics-dot" />
-                                Logistics
+                                <i className="legend-dot medical-dot" />
+                                Medical Demo
+                            </span>
+                            <span>
+                                <i className="legend-dot hotel-dot" />
+                                Hotel/Stay
+                            </span> <span>
+                                <i className="legend-dot stationery-dot" />
+                                Stationery
+                            </span>
+                            <span>
+                                <i className="legend-dot other-dot" />
+                                Others
                             </span>
 
                         </div>
@@ -532,7 +559,7 @@ function DashBoardAboveCard() {
                     PERSONNEL CARD
                 ================================== */}
 
-                <div className="overview-card personnel-card">
+                {/* <div className="overview-card personnel-card">
 
                     <div className="card-header">
 
@@ -659,7 +686,7 @@ function DashBoardAboveCard() {
                     </div>
 
                 </div>
-
+ */}
 
                 {/* =================================
                     CLINICS CARD
@@ -673,12 +700,8 @@ function DashBoardAboveCard() {
                             TOTAL CLINICS VISITED
                         </span>
 
-                        <span className="status-badge blue-badge">
-                            {
-                                dashboardData
-                                    .clinics
-                                    .status
-                            }
+                        <span className="status-badge">
+                            OCTOBER
                         </span>
 
                     </div>
@@ -773,75 +796,7 @@ function DashBoardAboveCard() {
                     APPROVAL CARD
                 ================================== */}
 
-                <div className="overview-card approval-card">
 
-                    <div className="card-header">
-
-                        <span className="card-title">
-                            PENDING APPROVALS
-                        </span>
-
-                        <span className="claims-badge">
-
-                            {
-                                dashboardData
-                                    .approvals
-                                    .claims
-                            } CLAIMS
-
-                        </span>
-
-                    </div>
-
-
-                    <div className="approval-value">
-
-                        <strong>
-                            {
-                                dashboardData
-                                    .approvals
-                                    .pendingAmount
-                            }
-                        </strong>
-
-                        <span>
-                            {
-                                dashboardData
-                                    .approvals
-                                    .status
-                            }
-                        </span>
-
-                    </div>
-
-
-                    <div className="pending-warning">
-
-                        <span>!</span>
-
-                        {
-                            dashboardData
-                                .approvals
-                                .pendingVouchers
-                        }{" "}
-                        vouchers{" "}
-                        {
-                            dashboardData
-                                .approvals
-                                .pendingTime
-                        }
-
-                    </div>
-
-
-                    <button
-                        className="quick-audit-button"
-                        type="button"
-                    >
-                        ◎ Quick Audit All
-                    </button>
-
-                </div>
 
             </div>
 

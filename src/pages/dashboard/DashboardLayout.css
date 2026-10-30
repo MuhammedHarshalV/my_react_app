@@ -74,63 +74,162 @@
    HEADER
 ========================================= */
 
+/* Header */
 .dashboard-header {
     width: 100%;
-    height: 65px;
-
+    height: 50px;
+    min-height: 50px;
     box-sizing: border-box;
-
-    flex-shrink: 0;
 
     display: flex;
     align-items: center;
+    gap: 16px;
 
-    padding: 0 20px;
-
+    padding: 0 8px;
     background: var(--color-white);
-
-    border-bottom:
-        1px solid var(--color-border-light);
+    border-bottom: 1px solid var(--color-border-light);
 }
 
-
-/* =========================================
-   MENU BUTTON
-========================================= */
-
+/* Menu button */
 .menu-button {
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    padding: 5px 10px;
+    width: 34px;
+    height: 34px;
+    padding: 0;
 
     border: none;
-
+    border-radius: 6px;
     background: transparent;
-
     color: var(--color-text-primary);
 
-    font-size: var(--font-size-xxl);
-
+    font-size: 23px;
     cursor: pointer;
 }
 
+.menu-button:hover {
+    background: var(--color-background);
+}
 
-/* =========================================
-   HEADER TITLE
-========================================= */
+/* Logo */
+.header-logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
 
+.header-logo img {
+    display: block;
+    width: 200px;
+    height: 50px;
+    object-fit: contain;
+}
+
+/* Flexible space between logo and title */
+.header-spacer {
+    flex: 1;
+    min-width: 8px;
+}
+
+/* Title */
 .header-title {
-    margin-left: auto;
+    margin: 0;
+    flex-shrink: 1;
+    min-width: 0;
 
     font-family: var(--font-poppins);
-
-    font-size: var(--font-size-lg);
-
+    font-size: var(--font-size-sm);
     font-weight: var(--font-regular);
-
     color: var(--color-text-secondary);
 
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Logout */
+.logout-button {
+    flex-shrink: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    padding: 8px 12px;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+    border-radius: 8px;
+
+    background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    color: var(--color-primary);
+
+    font-family: var(--font-poppins);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-semibold);
+
+    cursor: pointer;
+    transition:
+        transform 0.25s ease,
+        background-color 0.25s ease,
+        color 0.25s ease;
+}
+
+.logout-button svg {
+    width: 17px;
+    height: 17px;
+    transition: transform 0.25s ease;
+}
+
+.logout-button:hover {
+    background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    transform: scale(1.08);
+    color: var(--color-primary);
+    transform: scale(1.12);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .dashboard-header {
+        height: 56px;
+        min-height: 56px;
+        gap: 9px;
+        padding: 0 8px;
+    }
+
+    .menu-button {
+        width: 30px;
+        height: 30px;
+        font-size: 21px;
+    }
+
+    .header-logo img {
+        width: 70px;
+        height: 30px;
+    }
+
+    .header-title {
+        font-size: var(--font-size-xs);
+    }
+
+    .logout-button {
+        gap: 4px;
+        padding: 7px 8px;
+        font-size: var(--font-size-xs);
+    }
+
+    .logout-button svg {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .logout-button {
+        transition: none;
+    }
 }
 
 

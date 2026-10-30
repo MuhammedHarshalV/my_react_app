@@ -19,7 +19,6 @@
         0 1px 5px rgba(0, 0, 0, 0.04);
 }
 
-
 /* =========================================
    HEADER
 ========================================= */
@@ -141,7 +140,7 @@
 
 
 .legend-current {
-    background: #c00016;
+    background: var(--color-primary);
 }
 
 
@@ -392,7 +391,7 @@
 
 
 .current-bar {
-    background: #c00016;
+    background: var(--color-primary);
 }
 
 

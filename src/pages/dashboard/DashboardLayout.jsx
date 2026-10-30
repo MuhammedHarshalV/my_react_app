@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-
+import { FiMenu, FiLogOut } from "react-icons/fi";
 import Sidebar from "../../components/sidebar/sidebar";
 import "./DashboardLayout.css";
 
@@ -44,14 +44,26 @@ export default function DashboardLayout() {
                     <button
                         className="menu-button"
                         onClick={toggleSidebar}
+                        aria-label="Open sidebar"
                         type="button"
                     >
-                        ☰
+                        <FiMenu />
                     </button>
-
-                    <div className="header-title">
-                        Welcome to Icon Infoware Technologies!
+                    <div className="header-logo img">
+                        <img src="src/assets/images/iconinfoware_logo.png" />
                     </div>
+                    <div className="header-spacer" />
+                    <h1 className="header-title">
+                        Welcome to Icon Infoware Technologies!
+                    </h1>
+                    <button
+                        className="logout-button"
+
+                        type="button"
+                    >
+                        <FiLogOut />
+                        <span>Logout</span>
+                    </button>
 
                 </header>
 

@@ -117,85 +117,86 @@
 /* =========================================
    AUDIT BADGE
 ========================================= */
+/* =========================================
+   WRAPPER CONTAINER
+========================================= */
+.dashboard-month-filters {
+    display: flex;
+    align-items: stretch;
+    /* Forces all children to be the exact same height */
+    gap: 12px;
+    flex-wrap: wrap;
+}
 
+/* =========================================
+   GREEN BADGES
+========================================= */
 .audit-badge {
-    min-width: 82px;
-    height: 44px;
+    /* REMOVED: height: 44px; */
+    min-height: 60px;
+    /* Added to perfectly match the filter button */
 
-    padding: 6px 10px;
-
+    padding: 6px 16px;
+    /* Slightly wider padding for balance */
     box-sizing: border-box;
 
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
+    text-align: center;
 
     background: var(--color-primary);
-
+    /* Assuming this is the green */
     color: var(--color-white);
-}
 
+    /* Optional: uncomment below to give them rounded corners matching the white boxes */
+    /* border-radius: 8px; */
+}
 
 .audit-badge span {
     font-size: var(--font-size-xs);
-
     font-weight: var(--font-bold);
-
     line-height: 1;
 }
-
 
 .audit-badge strong {
     margin-top: 2px;
-
     font-size: var(--font-size-sm);
-
     line-height: 1;
 }
 
+/* =========================================
+   FILTER BUTTON (White Box)
+========================================= */
+.dashboard-filter-button {
+    min-height: 60px;
+    /* This now matches the badge perfectly */
+    min-width: 170px;
+    padding: 8px 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    border: 1px solid var(--color-border-light);
+    border-radius: 8px;
+
+    background: var(--color-white);
+    color: var(--color-text-primary);
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
 
 /* =========================================
    FILTER BUTTON
 ========================================= */
 
-.dashboard-filter-button {
-    min-height: 44px;
-
-    padding: 6px 12px;
-
-    display: flex;
-    align-items: center;
-
-    gap: 9px;
-
-    border: 1px solid var(--color-border-light);
-
-    border-radius: 4px;
-
-    background: var(--color-white);
-
-    color: var(--color-text-primary);
-
-    cursor: pointer;
-}
-
-
-.filter-icon {
-    flex-shrink: 0;
-
-    font-size: var(--font-size-lg);
-
-    color: var(--color-text-secondary);
-}
-
-
-.filter-content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    text-align: left;
-}
 
 
 .filter-content small {
@@ -220,11 +221,6 @@
 }
 
 
-.filter-arrow {
-    margin-left: 8px;
-
-    color: var(--color-text-secondary);
-}
 
 
 .zone-filter {
@@ -232,65 +228,49 @@
 }
 
 
-/* =========================================
-   EXPORT BUTTON
-========================================= */
 
-.export-button {
-    min-height: 44px;
-
-    padding: 0 15px;
-
-    border: 1px solid var(--color-border-light);
-
-    border-radius: 4px;
-
-    background: var(--color-white);
-
-    font-size: var(--font-size-sm);
-
-    font-weight: var(--font-semibold);
-
-    color: var(--color-text-primary);
-
-    cursor: pointer;
+.dashboard-filter-button:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-
-/* =========================================
-   NEW EXPENSE
-========================================= */
-
-.new-expense-button {
-    min-height: 44px;
-
-    padding: 0 16px;
-
+.filter-content {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
 
-    gap: 7px;
+.filter-content small {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-bold);
+    letter-spacing: 0.7px;
+    color: var(--color-text-secondary);
+}
 
-    border: none;
-
-    border-radius: 3px;
-
-    background: var(--color-primary);
-
-    color: var(--color-white);
-
+.filter-content strong {
+    margin-top: 4px;
     font-size: var(--font-size-sm);
-
     font-weight: var(--font-semibold);
-
-    cursor: pointer;
+    color: var(--color-text-primary);
 }
 
-
-.new-expense-button span {
-    font-size: var(--font-size-lg);
+.filter-arrow {
+    margin-left: auto;
+    color: var(--color-text-secondary);
 }
 
+@media (max-width: 480px) {
+    .dashboard-month-filters {
+        gap: 8px;
+    }
+
+    .dashboard-filter-button {
+        flex: 1;
+        min-width: 130px;
+        padding: 8px 10px;
+    }
+}
 
 /* =========================================
    CARD GRID
@@ -411,7 +391,7 @@
 
 
 .claims-badge {
-    background: #ffe5e5;
+    background: color-mix(in srgb, var(--color-primary) 5%, transparent);
 
     color: var(--color-primary);
 }
@@ -522,20 +502,35 @@
 }
 
 
-.progress-fuel {
-    background: var(--color-primary);
+/* Fuel / Travel — Primary Blue */
+.FuelTravel {
+    background: rgb(150, 248, 5);
 }
 
-
-.progress-food {
-    background: #b30f24;
+/* Food / Lunch — Red */
+.FoodLunch {
+    background: #D84343;
 }
 
+/* Medical / Demo — Teal */
+.MedicalDemo {
+    background: #00897B;
+}
 
-.progress-logistics {
+/* Hotel Stay — Purple */
+.HotelStay {
+    background: #7E57C2;
+}
+
+/* Stationery — Amber */
+.Stationery {
+    background: #E69B00;
+}
+
+/* Others — Slate Grey */
+.Others {
     background: #657089;
 }
-
 
 .expense-legend {
     margin-top: 6px;
@@ -569,17 +564,35 @@
 }
 
 
+/* Fuel / Travel — Primary */
 .fuel-dot {
-    background: var(--color-primary);
+    background: rgb(150, 248, 5);
 }
 
-
+/* Food / Lunch — Red */
 .food-dot {
-    background: #b30f24;
+    background: #D84343;
+}
+
+/* Logistics / Others — Slate Grey */
+.medical-dot {
+    background: #00897B;
 }
 
 
-.logistics-dot {
+
+/* Hotel Stay — Purple */
+.hotel-dot {
+    background: #7E57C2;
+}
+
+/* Stationery — Amber */
+.stationery-dot {
+    background: #E69B00;
+}
+
+/* Medical / Demo — Teal */
+.other-dot {
     background: #657089;
 }
 
@@ -625,8 +638,8 @@
 }
 
 
-.personnel-value > span,
-.clinic-value > span {
+.personnel-value>span,
+.clinic-value>span {
     padding-bottom: 4px;
 
     font-size: var(--font-size-lg);
@@ -652,7 +665,7 @@
 }
 
 
-.personnel-stats > div {
+.personnel-stats>div {
     padding: 8px 5px;
 
     display: flex;
@@ -663,7 +676,7 @@
 }
 
 
-.personnel-stats > div:last-child {
+.personnel-stats>div:last-child {
     border-right: none;
 }
 
@@ -704,7 +717,7 @@
 }
 
 
-.clinic-bottom > div {
+.clinic-bottom>div {
     padding: 7px 9px;
 
     display: flex;
@@ -714,7 +727,7 @@
 }
 
 
-.clinic-bottom > div + div {
+.clinic-bottom>div+div {
     border-left: 1px solid var(--color-white);
 }
 
