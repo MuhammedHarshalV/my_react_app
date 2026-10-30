@@ -39,6 +39,9 @@ const ExpensesPage = lazy(
 const SettingsPage = lazy(
     () => import("../pages/dashboard/SettingsPage")
 );
+const HistoryPage = lazy(
+    () => import("../pages/dashboard/HistoryPage")
+);
 
 export default function AppRoutes() {
     return (
@@ -87,6 +90,12 @@ export default function AppRoutes() {
                         <Route
                             path="settings"
                             element={<SettingsPage />}
+                        />
+
+                        {/* /dashboard/History */}
+                        <Route
+                            path="history"
+                            element={<HistoryPage />}
                         />
 
                     </Route>

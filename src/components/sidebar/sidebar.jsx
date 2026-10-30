@@ -31,6 +31,10 @@ const sidebarItems = [
     },
     {
         id: 5,
+        name: "History",
+        path: "/dashboard/history",
+    }, {
+        id: 6,
         name: "Settings",
         path: "/dashboard/settings",
     },
@@ -67,8 +71,8 @@ export default function Sidebar({
                             <motion.div
                                 key={item.id}
                                 className={`sidebar-item ${isSelected
-                                        ? "selected"
-                                        : ""
+                                    ? "selected"
+                                    : ""
                                     }`}
                                 onClick={() =>
                                     handleItemClick(item)

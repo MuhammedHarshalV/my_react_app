@@ -1,0 +1,709 @@
+/* =========================================
+   EMPLOYEE AUDIT CONTAINER
+========================================= */
+
+.employee-audit-card {
+    width: 100%;
+    min-width: 0;
+    padding: 14px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    background: var(--color-white);
+    border: 1px solid var(--color-border-light);
+
+    font-family: var(--font-poppins);
+    color: var(--color-text-primary);
+}
+
+
+/* =========================================
+   EMPLOYEE PROFILE
+========================================= */
+
+.employee-profile {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.employee-profile-image {
+    position: relative;
+
+    width: 48px;
+    height: 52px;
+    flex-shrink: 0;
+}
+
+.employee-profile-image img,
+.employee-avatar-placeholder {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+.employee-avatar-placeholder {
+    display: grid;
+    place-items: center;
+
+    background: color-mix(in srgb, var(--color-primary) 05%, white);
+    color: var(--color-primary);
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.employee-audited-label {
+    position: absolute;
+    bottom: -7px;
+    left: 0;
+
+    padding: 3px 5px;
+
+    background: var(--color-primary);
+    color: var(--color-white);
+
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.employee-profile-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.employee-name-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.employee-name-row h2 {
+    margin: 0;
+
+    color: var(--color-text-primary);
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.employee-code-badge,
+.employee-clearance-badge {
+    padding: 3px 6px;
+
+    border-radius: 2px;
+
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.employee-code-badge {
+    background: color-mix(in srgb, var(--color-primary) 05%, white);
+    color: var(--color-primary);
+}
+
+.employee-clearance-badge {
+    background: color-mix(in srgb, var(--color-primary) 05%, white);
+    color: var(--color-primary);
+}
+
+.employee-profile-details>p {
+    margin: 3px 0 8px;
+
+    color: var(--color-text-secondary);
+    font-size: 10px;
+}
+
+.employee-profile-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.employee-compliance-badge,
+.employee-dossier-button {
+    min-height: 25px;
+    padding: 5px 9px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    box-sizing: border-box;
+
+    background: color-mix(in srgb, var(--color-primary) 05%, white);
+    color: var(--color-text-primary);
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.employee-compliance-badge>span {
+    color: var(--color-primary);
+    font-size: 13px;
+}
+
+.employee-compliance-badge strong {
+    color: var(--color-primary);
+}
+
+.employee-dossier-button {
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.employee-dossier-button:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+}
+
+
+/* =========================================
+   SUMMARY CARDS
+========================================= */
+
+.employee-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.employee-summary-card {
+    min-width: 0;
+    min-height: 76px;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    background: color-mix(in srgb, var(--color-primary) 05%, white);
+}
+
+.employee-summary-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+
+    margin-bottom: 4px;
+
+    color: var(--color-text-secondary);
+
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.summary-icon {
+    color: var(--color-primary);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.summary-amount {
+    color: var(--color-text-primary);
+    font-size: clamp(17px, 2vw, 22px);
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.employee-summary-card>small {
+    margin-top: 3px;
+
+    color: var(--color-text-secondary);
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.approved-summary .summary-amount,
+.approved-summary>small {
+    color: var(--color-primary);
+}
+
+.top-month-summary {
+    background: var(--color-primary);
+}
+
+.top-month-summary .employee-summary-heading,
+.top-month-summary .summary-icon,
+.top-month-summary .summary-amount,
+.top-month-summary>small {
+    color: var(--color-white);
+}
+
+
+/* =========================================
+   LEDGER HEADING
+========================================= */
+
+.employee-ledger-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.employee-ledger-heading>div:first-child {
+    min-width: 0;
+}
+
+.employee-ledger-heading h3 {
+    margin: 0;
+
+    color: var(--color-text-primary);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.employee-ledger-heading p {
+    margin: 3px 0 0;
+
+    color: var(--color-text-secondary);
+    font-size: 9px;
+}
+
+.employee-ledger-actions {
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.employee-ledger-actions small {
+    max-width: 110px;
+
+    color: var(--color-text-secondary);
+    font-size: 8px;
+    font-weight: 600;
+}
+
+.employee-ledger-actions button {
+    padding: 7px 9px;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    border: none;
+
+    background: color-mix(in srgb, var(--color-primary) 05%, white);
+    color: var(--color-text-primary);
+
+    font-family: var(--font-poppins);
+    font-size: 9px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.employee-ledger-actions button:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+}
+
+.employee-ledger-actions button span {
+    font-size: 15px;
+}
+
+
+/* =========================================
+   LEDGER TABLE
+========================================= */
+
+.employee-ledger-scroll {
+    width: 100%;
+    overflow-x: auto;
+
+    scrollbar-width: thin;
+}
+
+.employee-ledger-table {
+    width: 100%;
+    min-width: 720px;
+
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+.employee-ledger-table thead {
+    background: color-mix(in srgb, var(--color-primary) 05%, white);
+}
+
+.employee-ledger-table th {
+    padding: 9px 7px;
+
+    color: var(--color-text-secondary);
+
+    font-size: 8px;
+    font-weight: 700;
+    text-align: left;
+    letter-spacing: 0.2px;
+}
+
+.employee-ledger-table td {
+    padding: 10px 7px;
+
+    border-bottom: 1px solid var(--color-border-light);
+
+    color: var(--color-text-primary);
+
+    font-size: 10px;
+    vertical-align: middle;
+}
+
+.employee-ledger-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.employee-ledger-table tbody tr:hover {
+    background: color-mix(in srgb, var(--color-primary) 03%, white);
+}
+
+.voucher-id {
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.voucher-category {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.voucher-category>span {
+    flex-shrink: 0;
+    color: var(--color-primary);
+    font-size: 12px;
+}
+
+.voucher-category>div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.voucher-category strong {
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.voucher-category small {
+    color: var(--color-primary);
+    font-size: 8px;
+    font-weight: 600;
+}
+
+.voucher-date {
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+.voucher-facility {
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.voucher-money {
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+}
+
+.voucher-approved {
+    color: var(--color-text-primary);
+    white-space: nowrap;
+}
+
+.voucher-receipt-button {
+    padding: 2px;
+
+    border: none;
+    background: transparent;
+    color: var(--color-primary);
+
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.voucher-receipt-button:hover {
+    transform: scale(1.12);
+}
+
+.voucher-status {
+    display: inline-block;
+
+    padding: 4px 6px;
+
+    border-radius: 2px;
+
+    font-size: 8px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-approved {
+    background: color-mix(in srgb, var(--color-primary) 05%, white);
+    color: var(--color-primary) 05%;
+}
+
+.status-adjusted {
+    background: color-mix(in srgb, #d98a20 14%, white);
+    color: #9a5a0b;
+}
+
+.voucher-empty {
+    padding: 20px !important;
+    color: var(--color-text-secondary) !important;
+    text-align: center;
+}
+
+
+/* =========================================
+   MONTHLY SUMMARY
+========================================= */
+
+.employee-month-summary {
+    padding: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    background: color-mix(in srgb, var(--color-primary) 05% 7%, white);
+}
+
+.month-summary-title {
+    color: var(--color-text-secondary);
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.month-summary-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    font-size: 9px;
+}
+
+.month-summary-item span {
+    color: var(--color-text-secondary);
+    font-weight: 600;
+}
+
+.month-summary-item strong {
+    color: var(--color-text-primary);
+    font-weight: 700;
+}
+
+.month-summary-item .month-approved {
+    color: var(--color-primary);
+}
+
+.month-summary-auditor {
+    color: var(--color-text-secondary);
+    font-size: 8px;
+    font-weight: 600;
+}
+
+.month-summary-auditor strong {
+    margin-left: 4px;
+    color: var(--color-primary);
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 850px) {
+
+    .employee-profile {
+        align-items: flex-start;
+    }
+
+    .employee-ledger-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .employee-ledger-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .employee-month-summary {
+        justify-content: flex-start;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 550px) {
+
+    .employee-audit-card {
+        padding: 9px;
+        gap: 10px;
+    }
+
+    .employee-name-row h2 {
+        font-size: 13px;
+    }
+
+    .employee-profile-details>p {
+        font-size: 9px;
+        line-height: 1.5;
+    }
+
+    .employee-profile-actions {
+        gap: 5px;
+    }
+
+    .employee-compliance-badge,
+    .employee-dossier-button {
+        padding: 5px 6px;
+        font-size: 8px;
+    }
+
+    .employee-summary-grid {
+        gap: 6px;
+    }
+
+    .employee-summary-card {
+        min-height: 72px;
+        padding: 8px;
+    }
+
+    .employee-summary-heading {
+        font-size: 8px;
+    }
+
+    .summary-amount {
+        font-size: 17px;
+    }
+
+    .employee-summary-card>small {
+        font-size: 8px;
+        line-height: 1.4;
+    }
+
+    .employee-ledger-heading h3 {
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .employee-ledger-heading p {
+        font-size: 9px;
+        line-height: 1.5;
+    }
+
+    .employee-ledger-actions {
+        align-items: center;
+    }
+
+    .employee-month-summary {
+        gap: 8px;
+    }
+
+    .month-summary-title {
+        width: 100%;
+    }
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 380px) {
+
+    .employee-profile-image {
+        width: 40px;
+        height: 45px;
+    }
+
+    .employee-name-row h2 {
+        font-size: 12px;
+    }
+
+    .employee-clearance-badge,
+    .employee-code-badge {
+        font-size: 7px;
+    }
+
+    .employee-summary-card {
+        padding: 7px;
+    }
+
+    .summary-amount {
+        font-size: 15px;
+    }
+
+    .employee-summary-card>small {
+        font-size: 7px;
+    }
+}
+
+
+/* =========================================
+   PRINT
+========================================= */
+
+@media print {
+
+    .employee-audit-card {
+        border: none;
+        box-shadow: none;
+    }
+
+    .employee-dossier-button,
+    .employee-ledger-actions button,
+    .voucher-receipt-button {
+        display: none !important;
+    }
+
+    .employee-ledger-scroll {
+        overflow: visible;
+    }
+
+    .employee-ledger-table {
+        min-width: 0;
+        font-size: 8px;
+    }
+
+    .employee-ledger-table th,
+    .employee-ledger-table td {
+        padding: 6px 4px;
+    }
+
+    .employee-summary-card,
+    .employee-month-summary,
+    .employee-ledger-table tr {
+        break-inside: avoid;
+    }
+}

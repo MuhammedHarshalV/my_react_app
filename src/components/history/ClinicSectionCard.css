@@ -1,0 +1,712 @@
+/* =========================================
+   MAIN CLINIC CARD
+========================================= */
+
+.clinic-section-card {
+    width: 100%;
+    min-width: 0;
+    padding: 14px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    background: var(--color-white);
+    border: 1px solid var(--color-border-light);
+
+    font-family: var(--font-poppins);
+    color: var(--color-text-primary);
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.clinic-section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.clinic-section-title {
+    min-width: 0;
+}
+
+.clinic-title-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.clinic-inspection-label {
+    padding: 3px 6px;
+
+    background: var(--color-primary);
+    color: white;
+
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.clinic-title-row h2 {
+    margin: 0;
+
+    color: var(--color-text-primary);
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.clinic-title-row>small {
+    color: var(--color-text-secondary);
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.clinic-section-title>p {
+    margin: 4px 0 0;
+
+    color: var(--color-text-secondary);
+
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.clinic-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.clinic-geofence-badge,
+.clinic-history-button {
+    min-height: 26px;
+    padding: 5px 9px;
+
+    box-sizing: border-box;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    border: none;
+
+    font-family: var(--font-poppins);
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.clinic-geofence-badge.active {
+    background: #e6faf2;
+    color: #087b58;
+}
+
+.clinic-geofence-badge.inactive {
+    background: #fff0e8;
+    color: #a45b24;
+}
+
+.clinic-geofence-badge>span {
+    font-size: 14px;
+}
+
+.clinic-history-button {
+    background: #f0f1ff;
+    color: #202b40;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.clinic-history-button:hover {
+    background: var(--color-primary);
+    color: white;
+}
+
+
+/* =========================================
+   HERO IMAGE
+========================================= */
+
+.clinic-hero {
+    position: relative;
+
+    width: 100%;
+    height: 165px;
+
+    overflow: hidden;
+
+    background: #e8edf0;
+}
+
+.clinic-hero>img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+.clinic-hero-placeholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+
+    background: linear-gradient(120deg, #dce9e9, #b8d4ce, #e7e6dc);
+    color: #526d69;
+
+    font-size: 13px;
+}
+
+.clinic-hero-placeholder>span {
+    font-size: 35px;
+}
+
+.clinic-hero-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    padding: 20px 10px 8px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    background: linear-gradient(to top,
+            rgba(0, 0, 0, 0.78),
+            transparent);
+
+    color: white;
+}
+
+.clinic-hero-caption strong {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.clinic-hero-caption small {
+    font-size: 9px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   STATISTICS
+========================================= */
+
+.clinic-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.clinic-stat-card {
+    min-width: 0;
+    min-height: 82px;
+
+    padding: 11px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+
+    background: #f0f1ff;
+}
+
+.clinic-stat-card>small {
+    color: #657089;
+
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.clinic-stat-card>strong {
+    color: #202b40;
+
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.clinic-stat-card .clinic-spend-value {
+    color: var(--color-primary);
+}
+
+.clinic-stat-card>span {
+    color: #657089;
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   ASSIGNED PERSONNEL
+========================================= */
+
+.clinic-personnel-card {
+    padding: 10px;
+
+    background: #f0f1ff;
+}
+
+.clinic-personnel-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.clinic-personnel-heading>strong {
+    color: #657089;
+
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.roster-active,
+.roster-inactive {
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.roster-active {
+    color: var(--color-primary);
+}
+
+.roster-inactive {
+    color: #657089;
+}
+
+.clinic-personnel-list {
+    display: flex;
+    align-items: center;
+
+    margin-top: 8px;
+    padding-left: 2px;
+}
+
+.clinic-person-avatar,
+.clinic-person-extra {
+    width: 29px;
+    height: 29px;
+    flex-shrink: 0;
+
+    margin-left: -3px;
+
+    padding: 0;
+
+    display: grid;
+    place-items: center;
+
+    overflow: hidden;
+
+    border: 2px solid white;
+    border-radius: 50%;
+
+    background: #dbe2ed;
+    color: #202b40;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.clinic-person-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.clinic-person-extra {
+    background: #dce3ff;
+    color: #202b40;
+}
+
+.clinic-personnel-card>p {
+    margin: 8px 0 0;
+
+    color: #657089;
+
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   VISIT VELOCITY CHART
+========================================= */
+
+.clinic-velocity-card {
+    padding: 11px;
+
+    background: #f0f1ff;
+}
+
+.clinic-velocity-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.clinic-velocity-heading h3 {
+    margin: 0;
+
+    color: #202b40;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.clinic-velocity-heading small {
+    color: #657089;
+
+    font-size: 9px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.clinic-chart-area {
+    width: 100%;
+    height: 95px;
+
+    margin-top: 8px;
+}
+
+.clinic-velocity-svg {
+    width: 100%;
+    height: 100%;
+
+    overflow: visible;
+}
+
+.clinic-chart-grid-line {
+    stroke: #dce0f0;
+    stroke-width: 1;
+    stroke-dasharray: 2 3;
+}
+
+.clinic-chart-line {
+    fill: none;
+
+    stroke: var(--color-primary);
+    stroke-width: 2.3;
+
+    vector-effect: non-scaling-stroke;
+}
+
+.clinic-chart-point {
+    fill: var(--color-primary);
+}
+
+.clinic-chart-months {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 2px;
+
+    margin-top: 4px;
+}
+
+.clinic-chart-months span {
+    color: #657089;
+
+    font-size: 8px;
+    text-align: center;
+}
+
+.clinic-chart-months span.active {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+
+/* =========================================
+   RECENT FIELD LOGS
+========================================= */
+
+.clinic-field-logs>h3 {
+    margin: 0 0 5px;
+
+    color: #202b40;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.clinic-field-log-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.clinic-field-log {
+    width: 100%;
+    min-width: 0;
+
+    padding: 7px 0;
+
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 9px;
+
+    border: none;
+    border-bottom: 1px solid #e7eaf2;
+
+    background: transparent;
+    text-align: left;
+
+    font-family: var(--font-poppins);
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+.clinic-field-log:hover {
+    background: #f8f8fc;
+}
+
+.clinic-field-log:last-child {
+    border-bottom: none;
+}
+
+.clinic-log-date {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+
+    color: #596781;
+}
+
+.clinic-log-date strong {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.clinic-log-date span {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.clinic-field-log:first-child .clinic-log-date {
+    color: var(--color-primary);
+}
+
+.clinic-log-details {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.clinic-log-details>strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    color: #202b40;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.clinic-log-details>p {
+    margin: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    color: #657089;
+
+    font-size: 9px;
+}
+
+.clinic-gps-match {
+    padding: 4px 6px;
+
+    background: #d1f7e8;
+    color: #087b58;
+
+    font-size: 8px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.clinic-log-amount {
+    color: #202b40;
+
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.clinic-no-logs {
+    padding: 18px;
+
+    color: #657089;
+    text-align: center;
+
+    font-size: 11px;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 768px) {
+
+    .clinic-section-card {
+        padding: 11px;
+        gap: 10px;
+    }
+
+    .clinic-hero {
+        height: 145px;
+    }
+
+    .clinic-field-log {
+        grid-template-columns: 34px minmax(0, 1fr) auto;
+    }
+
+    .clinic-log-amount {
+        grid-column: 3;
+        grid-row: 1;
+    }
+
+    .clinic-gps-match {
+        grid-column: 2 / 3;
+        grid-row: 2;
+        justify-self: start;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 550px) {
+
+    .clinic-section-card {
+        padding: 9px;
+        gap: 9px;
+    }
+
+    .clinic-title-row h2 {
+        font-size: 13px;
+    }
+
+    .clinic-section-title>p {
+        font-size: 9px;
+    }
+
+    .clinic-hero {
+        height: 125px;
+    }
+
+    .clinic-stat-card {
+        min-height: 75px;
+        padding: 8px;
+    }
+
+    .clinic-stat-card>strong {
+        font-size: 16px;
+    }
+
+    .clinic-velocity-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .clinic-velocity-heading h3 {
+        font-size: 12px;
+    }
+
+    .clinic-chart-area {
+        height: 80px;
+    }
+
+    .clinic-chart-months span {
+        font-size: 7px;
+    }
+
+    .clinic-field-log {
+        grid-template-columns: 32px minmax(0, 1fr) auto;
+        gap: 6px;
+    }
+
+    .clinic-log-details>strong {
+        font-size: 9px;
+    }
+
+    .clinic-log-details>p {
+        font-size: 8px;
+    }
+
+    .clinic-gps-match {
+        font-size: 7px;
+    }
+
+    .clinic-log-amount {
+        font-size: 10px;
+    }
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 380px) {
+
+    .clinic-title-row h2 {
+        font-size: 12px;
+    }
+
+    .clinic-hero {
+        height: 110px;
+    }
+
+    .clinic-stat-card>strong {
+        font-size: 14px;
+    }
+
+    .clinic-field-log {
+        grid-template-columns: 29px minmax(0, 1fr);
+    }
+
+    .clinic-gps-match {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .clinic-log-amount {
+        grid-column: 2;
+        grid-row: 3;
+        justify-self: end;
+    }
+}

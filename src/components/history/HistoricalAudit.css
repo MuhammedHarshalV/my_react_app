@@ -1,0 +1,571 @@
+.historical-audit-page {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    color: #202b40;
+    font-family: var(--font-poppins);
+}
+
+/* HEADING */
+
+.history-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.history-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.history-brand span {
+    padding: 3px 7px;
+    background: var(--color-primary);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.history-brand small {
+    color: #657089;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.history-heading h1 {
+    margin: 0;
+    font-size: clamp(18px, 2vw, 25px);
+    font-weight: 700;
+    color: #202b40;
+}
+
+.history-heading p {
+    margin: 5px 0 0;
+    color: #657089;
+    font-size: 12px;
+}
+
+.history-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.history-actions button {
+    padding: 8px 10px;
+    border: 1px solid #e1e5ed;
+    border-radius: 4px;
+    background: white;
+    color: #34415a;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.history-actions button:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.history-actions .history-pdf {
+    background: #c90013;
+    border-color: #c90013;
+    color: white;
+}
+
+/* FILTER PANEL */
+
+.history-filter-panel {
+    padding: 10px;
+    background: #f0f1ff;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.history-search {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    background: white;
+    border: 1px solid #e4e7f0;
+}
+
+.history-search span {
+    font-size: 18px;
+    color: #657089;
+}
+
+.history-search input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 11px;
+    color: #202b40;
+}
+
+.history-filter-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.history-periods {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.history-periods button,
+.history-jump-links a {
+    padding: 5px 8px;
+    border: 1px solid #e2e5ee;
+    background: white;
+    color: #657089;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.history-periods button.active {
+    background: #e2e6ff;
+    border-color: #cbd1ff;
+    color: #344c9a;
+}
+
+.history-date-range {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 7px;
+    background: white;
+}
+
+.history-date-range input {
+    width: 112px;
+    border: none;
+    outline: none;
+    color: #34415a;
+    font-size: 10px;
+}
+
+.history-jump-links {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+    color: #657089;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.history-loading {
+    padding: 10px;
+    text-align: center;
+    color: #657089;
+    font-size: 12px;
+}
+
+/* DIMENSIONS */
+
+.history-dimension {
+    min-width: 0;
+}
+
+.dimension-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 7px;
+}
+
+.dimension-heading h2 {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: #202b40;
+}
+
+.dimension-heading h2>span {
+    width: 7px;
+    height: 7px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--color-primary);
+}
+
+.dimension-heading>small {
+    padding: 3px 6px;
+    background: #e9ecf7;
+    color: #53617d;
+    font-size: 9px;
+    white-space: nowrap;
+}
+
+.dimension-arrows {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+}
+
+.dimension-arrows button {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #e1e5ed;
+    background: white;
+    color: #34415a;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.dimension-arrows button:hover {
+    background: #f0f1ff;
+}
+
+/* CARD GRID */
+
+.history-card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+/* EMPLOYEE CARDS */
+
+.history-person-card,
+.history-clinic-card,
+.history-category-card {
+    position: relative;
+    min-width: 0;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #e8eaf0;
+    background: white;
+    transition: 0.2s ease;
+}
+
+.history-person-card,
+.history-clinic-card {
+    cursor: pointer;
+}
+
+.history-person-card:hover,
+.history-clinic-card:hover,
+.history-category-card:hover {
+    border-color: #cbd1e5;
+    box-shadow: 0 3px 12px rgba(32, 43, 64, 0.08);
+}
+
+.history-person-card.selected {
+    border: 1px solid var(--color-primary);
+    background: #fffafa;
+}
+
+.history-card-image {
+    height: 52px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.history-card-image img {
+    width: 38px;
+    height: 38px;
+    object-fit: cover;
+}
+
+.history-image-placeholder {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    background: #e8ecf5;
+    color: #344c9a;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.history-card-image>span {
+    padding: 3px 5px;
+    background: #e9ecf7;
+    color: #53617d;
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.selection-label {
+    position: absolute;
+    top: 8px;
+    left: 48px;
+    padding: 3px 5px;
+    background: var(--color-primary);
+    color: white;
+    font-size: 8px;
+}
+
+.history-person-card h3,
+.history-clinic-card h3 {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    color: #202b40;
+}
+
+.history-person-card p,
+.history-clinic-card p {
+    margin: 3px 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 9px;
+    color: #657089;
+}
+
+.history-card-footer,
+.clinic-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    padding-top: 7px;
+    border-top: 1px solid #edf0f5;
+}
+
+.history-card-footer small,
+.clinic-card-footer small {
+    color: #7b879c;
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.history-card-footer strong,
+.clinic-card-footer strong {
+    color: #202b40;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.history-person-card.selected .history-card-footer strong,
+.history-clinic-card:first-child .clinic-card-footer strong {
+    color: var(--color-primary);
+}
+
+/* CLINIC CARDS */
+
+.clinic-image {
+    position: relative;
+    height: 75px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    background: #e8ecf5;
+}
+
+.clinic-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.clinic-placeholder {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    font-size: 30px;
+}
+
+.focus-label {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 3px 6px;
+    background: var(--color-primary);
+    color: white;
+    font-size: 8px;
+    font-weight: 700;
+}
+
+/* CATEGORY CARDS */
+
+.category-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.category-icon {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    background: #f0f1ff;
+    color: #344c9a;
+    font-size: 17px;
+}
+
+.category-card-top small {
+    padding: 3px 5px;
+    background: #e9ecf7;
+    color: #657089;
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.history-category-card h3 {
+    min-height: 28px;
+    margin: 0 0 5px;
+    font-size: 11px;
+    color: #34415a;
+}
+
+.history-category-card>strong {
+    font-size: 12px;
+    color: var(--color-primary);
+}
+
+/* TABLET */
+
+@media (max-width: 850px) {
+    .history-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .history-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 550px) {
+    .historical-audit-page {
+        gap: 14px;
+    }
+
+    .history-heading h1 {
+        font-size: 18px;
+    }
+
+    .history-heading p {
+        font-size: 10px;
+    }
+
+    .history-actions {
+        width: 100%;
+    }
+
+    .history-actions button {
+        flex: 1;
+        font-size: 9px;
+        padding: 7px 5px;
+    }
+
+    .history-filter-bottom {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .history-date-range {
+        width: 100%;
+        box-sizing: border-box;
+        justify-content: space-between;
+    }
+
+    .history-date-range input {
+        width: 45%;
+    }
+
+    .dimension-heading {
+        flex-wrap: wrap;
+    }
+
+    .dimension-heading h2 {
+        font-size: 10px;
+        flex: 1;
+    }
+
+    .dimension-heading>small {
+        font-size: 8px;
+    }
+
+    .history-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+    }
+
+    .history-person-card,
+    .history-clinic-card,
+    .history-category-card {
+        padding: 6px;
+    }
+
+    .clinic-image {
+        height: 65px;
+    }
+
+    .history-person-card h3,
+    .history-clinic-card h3 {
+        font-size: 10px;
+    }
+
+    .history-card-footer strong,
+    .clinic-card-footer strong {
+        font-size: 9px;
+    }
+
+    .history-jump-links {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+}
+
+/* PRINT */
+
+@media print {
+
+    .history-actions,
+    .history-filter-panel,
+    .dimension-arrows {
+        display: none !important;
+    }
+
+    .historical-audit-page {
+        gap: 12px;
+    }
+
+    .history-card-grid {
+        break-inside: avoid;
+    }
+
+    .history-person-card,
+    .history-clinic-card,
+    .history-category-card {
+        break-inside: avoid;
+        box-shadow: none;
+    }
+}
