@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import "./ProfileSectionCSS.css";
 
@@ -10,6 +10,8 @@ import girlImage from "../../assets/images/girl.avif";
 
 function ProfileSection() {
 
+    const hasFetched = useRef(false);
+
     const [isLoading, setIsLoading] = useState(true);
 
     const [profile, setProfile] = useState({
@@ -18,8 +20,11 @@ function ProfileSection() {
         designation: "",
     });
 
-
     useEffect(() => {
+        if (hasFetched.current) return;
+
+        hasFetched.current = true;
+
         fetchProfile();
     }, []);
 

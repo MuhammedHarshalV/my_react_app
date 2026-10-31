@@ -21,5 +21,14 @@ export const adminLoginApi = async (username, password) => {
             response.refresh_token
         );
     }
+    console.log("LOGIN SUCCESS");
+    console.log(
+        "Access token saved:",
+        !!TokenStorage.getAccessToken()
+    );
+    console.log(
+        "Refresh token saved:",
+        !!TokenStorage.getRefreshToken()
+    );
     return response;
 };
