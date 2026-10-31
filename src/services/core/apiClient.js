@@ -195,7 +195,7 @@ apiClient.interceptors.response.use(
       // ======================================
 
       if (isRefreshing) {
-
+        console.log("bbbbbbbbb");
         return new Promise((resolve, reject) => {
 
           subscribeTokenRefresh(
@@ -234,8 +234,10 @@ apiClient.interceptors.response.use(
         if (!refreshToken) {
 
           TokenStorage.clearTokens();
+          console.log("cccccccccc");
 
-          window.location.href = "/";
+          toast.warning("Your session has expired. Please log in again.");
+          // window.location.href = "/";
 
           return Promise.reject(error);
         }
@@ -260,14 +262,16 @@ apiClient.interceptors.response.use(
               },
             }
           );
-
-
+        console.log("======== refresh token trigger ========");
+        console.log("Refresh Token API Response:", response.data);
+        console.log("New Access Token:", response.data.access_token);
+        console.log("Status Code:", response.status);
         // ======================================
         // GET NEW ACCESS TOKEN
         // ======================================
 
         const newAccessToken =
-          refreshResponse.data.access_token;
+          refreshResponse.data.data["access_token"];
 
 
         if (!newAccessToken) {
@@ -289,10 +293,10 @@ apiClient.interceptors.response.use(
         // If your backend also rotates
         // refresh token
         if (
-          refreshResponse.data.refresh_token
+          refreshResponse.data.data["refresh_token"]
         ) {
           TokenStorage.saveRefreshToken(
-            refreshResponse.data.refresh_token
+            refreshResponse.data.data["refresh_token"]
           );
         }
 
@@ -321,6 +325,7 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
 
         TokenStorage.clearTokens();
+        console.log("ddddddddddd");
 
         notifySubscribers(null);
 

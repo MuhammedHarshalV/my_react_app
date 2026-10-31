@@ -1,3 +1,4 @@
+
 import {
     BrowserRouter,
     Routes,
@@ -5,114 +6,51 @@ import {
     Navigate,
 } from "react-router-dom";
 
-import CenterLoader from "../components/common/CenterLoader";
-
 import {
     lazy,
     Suspense,
 } from "react";
 
-const LoginPage = lazy(
-    () => import("../pages/LoginPage")
-);
+import CenterLoader from "../components/common/CenterLoader";
 
-const DashboardLayout = lazy(
-    () => import("../pages/dashboard/DashboardLayout")
-);
-
-const DashboardHome = lazy(
-    () => import("../pages/dashboard/DashboardHome")
-);
-
-const UsersPage = lazy(
-    () => import("../pages/dashboard/UsersPage")
-);
-
-const ClinicsPage = lazy(
-    () => import("../pages/dashboard/ClinicsPage")
-);
-
-const ExpensesPage = lazy(
-    () => import("../pages/dashboard/ExpensesPage")
-);
-
-const SettingsPage = lazy(
-    () => import("../pages/dashboard/SettingsPage")
-);
-const HistoryPage = lazy(
-    () => import("../pages/dashboard/HistoryPage")
-);
+const LoginPage = lazy(() => import("../pages/LoginPage"));
+const DashboardLayout = lazy(() => import("../pages/dashboard/DashboardLayout"));
+const DashboardHome = lazy(() => import("../pages/dashboard/DashboardHome"));
+const UsersPage = lazy(() => import("../pages/dashboard/UsersPage"));
+const ClinicsPage = lazy(() => import("../pages/dashboard/ClinicsPage"));
+const ExpensesPage = lazy(() => import("../pages/dashboard/ExpensesPage"));
+const MenuPage = lazy(() => import("../pages/dashboard/MenuPage"));
+const HistoryPage = lazy(() => import("../pages/dashboard/HistoryPage"));
 
 export default function AppRoutes() {
     return (
         <BrowserRouter>
             <Suspense fallback={<PageLoader />}>
-
                 <Routes>
 
-                    {/* LOGIN */}
-                    <Route
-                        path="/"
-                        element={<LoginPage />}
-                    />
+                    {/* Login */}
+                    <Route path="/" element={<LoginPage />} />
 
-                    {/* DASHBOARD LAYOUT */}
+                    {/* Dashboard */}
                     <Route
                         path="/dashboard"
                         element={<DashboardLayout />}
                     >
-
-                        {/* /dashboard */}
-                        <Route
-                            index
-                            element={<DashboardHome />}
-                        />
-
-                        {/* /dashboard/users */}
-                        <Route
-                            path="users"
-                            element={<UsersPage />}
-                        />
-
-                        {/* /dashboard/clinics */}
-                        <Route
-                            path="clinics"
-                            element={<ClinicsPage />}
-                        />
-
-                        {/* /dashboard/expenses */}
-                        <Route
-                            path="expenses"
-                            element={<ExpensesPage />}
-                        />
-
-                        {/* /dashboard/settings */}
-                        <Route
-                            path="settings"
-                            element={<SettingsPage />}
-                        />
-
-                        {/* /dashboard/History */}
-                        <Route
-                            path="history"
-                            element={<HistoryPage />}
-                        />
-
+                        <Route index element={<DashboardHome />} />
+                        <Route path="users" element={<UsersPage />} />
+                        <Route path="clinics" element={<ClinicsPage />} />
+                        <Route path="expenses" element={<ExpensesPage />} />
+                        <Route path="menu" element={<MenuPage />} />
+                        <Route path="history" element={<HistoryPage />} />
                     </Route>
 
-                    {/* UNKNOWN ROUTE */}
+                    {/* Unknown Route */}
                     <Route
                         path="*"
-                        element={
-                            <Navigate
-                                to="/"
-                                replace
-                            />
-                        }
+                        element={<Navigate to="/" replace />}
                     />
 
                 </Routes>
-
             </Suspense>
         </BrowserRouter>
     );
@@ -120,11 +58,8 @@ export default function AppRoutes() {
 
 function PageLoader() {
     return (
-        <div className="users-page">
-
+        <div className="page-loader">
             <CenterLoader />
-
-
         </div>
     );
 }

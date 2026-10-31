@@ -1,3 +1,4 @@
+
 import { motion } from "motion/react";
 
 import {
@@ -9,46 +10,20 @@ import "./Sidebar.css";
 import ProfileSection from "../profile_section/ProfileSection";
 
 const sidebarItems = [
-    {
-        id: 1,
-        name: "Dashboard",
-        path: "/dashboard",
-    },
-    {
-        id: 2,
-        name: "Users",
-        path: "/dashboard/users",
-    },
-    {
-        id: 3,
-        name: "Clinics",
-        path: "/dashboard/clinics",
-    },
-    {
-        id: 4,
-        name: "Expenses",
-        path: "/dashboard/expenses",
-    },
-    {
-        id: 5,
-        name: "History",
-        path: "/dashboard/history",
-    }, {
-        id: 6,
-        name: "Settings",
-        path: "/dashboard/settings",
-    },
+    { id: 1, name: "Dashboard", path: "/dashboard" },
+    { id: 2, name: "Users", path: "/dashboard/users" },
+    { id: 3, name: "Clinics", path: "/dashboard/clinics" },
+    { id: 4, name: "Expenses", path: "/dashboard/expenses" },
+    { id: 5, name: "History", path: "/dashboard/history" },
+    { id: 6, name: "Menu", path: "/dashboard/menu" },
 ];
 
-export default function Sidebar({
-    onItemClick,
-}) {
+export default function Sidebar({ onItemClick }) {
     const navigate = useNavigate();
     const location = useLocation();
 
     const handleItemClick = (item) => {
         navigate(item.path);
-
         onItemClick?.();
     };
 
@@ -58,31 +33,22 @@ export default function Sidebar({
             <ProfileSection />
 
             <div className="sidebar-scroll-content">
-
                 <div className="sidebar-list">
 
                     {sidebarItems.map((item) => {
 
                         const isSelected =
-                            location.pathname ===
-                            item.path;
+                            item.path === "/dashboard"
+                                ? location.pathname === "/dashboard"
+                                : location.pathname.startsWith(item.path);
 
                         return (
                             <motion.div
                                 key={item.id}
-                                className={`sidebar-item ${isSelected
-                                    ? "selected"
-                                    : ""
-                                    }`}
-                                onClick={() =>
-                                    handleItemClick(item)
-                                }
-                                whileHover={{
-                                    scale: 1.03,
-                                }}
-                                whileTap={{
-                                    scale: 0.97,
-                                }}
+                                className={`sidebar-item ${isSelected ? "selected" : ""}`}
+                                onClick={() => handleItemClick(item)}
+                                whileHover={{ scale: 1.03 }}
+                                whileTap={{ scale: 0.97 }}
                             >
                                 <span className="sidebar-item-name">
                                     {item.name}
@@ -92,9 +58,7 @@ export default function Sidebar({
                     })}
 
                 </div>
-
             </div>
-
         </div>
     );
 }

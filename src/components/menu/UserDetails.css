@@ -1,0 +1,680 @@
+/* =========================================
+   BASE
+========================================= */
+
+.roster-container {
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    background: var(--color-white);
+    font-family: var(--font-poppins);
+    color: var(--color-text-primary);
+    border-radius: 8px;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        0 8px 24px rgba(0, 0, 0, 0.03);
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.roster-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.roster-heading {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.roster-heading-icon {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--color-primary) 10%, white);
+    color: var(--color-primary);
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+.roster-heading-text {
+    min-width: 0;
+}
+
+.roster-title-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.roster-title-row h2 {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-bold);
+}
+
+.roster-heading-text p {
+    margin: 3px 0 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.online-badge {
+    padding: 3px 6px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 3px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-bold);
+    white-space: nowrap;
+}
+
+.roster-header-actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.roster-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 10px;
+    border-radius: 4px;
+    font-family: var(--font-poppins);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-semibold);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.roster-btn-secondary {
+    background: var(--color-white);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border-light);
+}
+
+.roster-btn-secondary:hover {
+    background: color-mix(in srgb, var(--color-primary) 5%, white);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* =========================================
+   FILTERS
+========================================= */
+
+.roster-filter-panel {
+    display: grid;
+    grid-template-columns: minmax(180px, 2fr) repeat(3, minmax(130px, 1fr));
+    align-items: center;
+    gap: 8px;
+    padding: 9px;
+    margin-bottom: 12px;
+    background: #FAFAFC;
+    border: 1px solid var(--color-border-light);
+    border-radius: 5px;
+}
+
+.roster-search {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--color-white);
+    border: 1px solid var(--color-border-light);
+    border-radius: 4px;
+    color: var(--color-text-secondary);
+}
+
+.roster-search:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+.roster-search svg {
+    flex-shrink: 0;
+    font-size: 15px;
+}
+
+.roster-search input {
+    width: 100%;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--color-text-primary);
+    font-family: var(--font-poppins);
+    font-size: var(--font-size-sm);
+}
+
+.roster-search input::placeholder {
+    color: var(--color-text-secondary);
+}
+
+.roster-select {
+    width: 100%;
+    min-width: 0;
+    padding: 8px 9px;
+    border: 1px solid var(--color-border-light);
+    border-radius: 4px;
+    outline: none;
+    background: var(--color-white);
+    color: var(--color-text-primary);
+    font-family: var(--font-poppins);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+}
+
+.roster-select:focus {
+    border-color: var(--color-primary);
+}
+
+/* =========================================
+   USER GRID
+========================================= */
+
+.user-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+/* =========================================
+   USER CARD
+========================================= */
+
+.user-card {
+    min-width: 0;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    background: var(--color-white);
+    border: 1px solid var(--color-border-light);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.user-card:hover {
+    border-color: color-mix(in srgb, var(--color-primary) 35%, white);
+    box-shadow: 0 3px 12px color-mix(in srgb, var(--color-primary) 7%, transparent);
+}
+
+.flagged-card {
+    background: color-mix(in srgb, var(--color-primary) 2%, white);
+    border-color: color-mix(in srgb, var(--color-primary) 20%, white);
+}
+
+/* =========================================
+   CARD HEADER
+========================================= */
+
+.user-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 6px;
+    min-width: 0;
+}
+
+.user-main-info {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-avatar {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-bold);
+}
+
+.avatar-indicator {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    right: -2px;
+    bottom: -2px;
+    border: 1.5px solid var(--color-white);
+    border-radius: 50%;
+}
+
+.indicator-active {
+    background: #16A34A;
+}
+
+.indicator-inactive {
+    background: #94A3B8;
+}
+
+.user-name-info {
+    min-width: 0;
+}
+
+.user-name-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.user-name-row h3 {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-bold);
+    line-height: 1.3;
+}
+
+.user-name-info>p {
+    margin: 2px 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    line-height: 1.3;
+}
+
+.user-pro-id {
+    padding: 2px 4px;
+    background: #EEF2FF;
+    color: #475569;
+    border-radius: 3px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-bold);
+    white-space: nowrap;
+}
+
+.root-pro-id {
+    background: color-mix(in srgb, var(--color-primary) 12%, white);
+    color: var(--color-primary);
+}
+
+.user-location {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+}
+
+.user-location svg {
+    flex-shrink: 0;
+    color: var(--color-text-secondary);
+    font-size: 12px;
+}
+
+/* =========================================
+   DEVICE AND FLAG BADGES
+========================================= */
+
+.user-card-badges {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.device-count,
+.flagged-badge {
+    padding: 3px 6px;
+    border-radius: 10px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-semibold);
+    white-space: nowrap;
+}
+
+.device-count {
+    background: #EEF2FF;
+    color: #475569;
+}
+
+.flagged-badge {
+    background: color-mix(in srgb, var(--color-primary) 13%, white);
+    color: var(--color-primary);
+}
+
+/* =========================================
+   SESSION ROW
+========================================= */
+
+.user-session-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 8px;
+    background: #F5F6FC;
+    border-radius: 4px;
+    color: var(--color-text-secondary);
+}
+
+.session-row-flagged {
+    background: color-mix(in srgb, var(--color-primary) 5%, white);
+}
+
+.session-duration,
+.session-status {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-medium);
+}
+
+.session-duration svg {
+    flex-shrink: 0;
+    font-size: 13px;
+}
+
+.session-status {
+    justify-content: flex-end;
+    color: var(--color-text-primary);
+    text-align: right;
+}
+
+.session-status-dot {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--color-primary);
+}
+
+/* =========================================
+   CARD ACTIONS
+========================================= */
+
+.user-card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 6px 9px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    font-family: var(--font-poppins);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-semibold);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.view-profile-btn {
+    background: #F1F2FF;
+    color: var(--color-text-primary);
+}
+
+.view-profile-btn:hover {
+    background: color-mix(in srgb, var(--color-primary) 9%, white);
+    color: var(--color-primary);
+}
+
+.signout-btn {
+    background: #FFF1F2;
+    color: var(--color-primary);
+}
+
+.signout-btn:hover {
+    background: color-mix(in srgb, var(--color-primary) 15%, white);
+}
+
+.quarantine-btn {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+}
+
+.quarantine-btn:hover {
+    filter: brightness(0.9);
+}
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.roster-empty-state {
+    grid-column: 1 / -1;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px dashed var(--color-border-light);
+    border-radius: 5px;
+    color: var(--color-text-secondary);
+}
+
+.roster-empty-state svg {
+    font-size: 28px;
+    color: var(--color-primary);
+}
+
+.roster-empty-state h3,
+.roster-empty-state p {
+    margin: 0;
+}
+
+.roster-empty-state h3 {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+}
+
+.roster-empty-state p {
+    font-size: var(--font-size-sm);
+}
+
+/* =========================================
+   PAGINATION
+========================================= */
+
+.roster-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.roster-pagination p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.roster-pagination strong {
+    color: var(--color-text-primary);
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pagination-btn,
+.pagination-number {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border-light);
+    border-radius: 4px;
+    background: var(--color-white);
+    color: var(--color-text-primary);
+    font-family: var(--font-poppins);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination-number.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.pagination-btn:hover:not(:disabled),
+.pagination-number:hover:not(.active) {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 6%, white);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1000px) {
+    .user-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .roster-filter-panel {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .roster-search {
+        grid-column: 1 / -1;
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 650px) {
+    .roster-container {
+        padding: 12px;
+    }
+
+    .roster-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .roster-header-actions {
+        width: 100%;
+    }
+
+    .roster-header-actions button {
+        flex: 1;
+    }
+
+    .user-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .roster-filter-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .roster-search {
+        grid-column: auto;
+    }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 380px) {
+    .roster-container {
+        padding: 8px;
+    }
+
+    .roster-title-row h2 {
+        font-size: var(--font-size-sm);
+    }
+
+    .roster-heading-text p {
+        font-size: var(--font-size-xs);
+    }
+
+    .user-card {
+        padding: 10px;
+    }
+
+    .user-name-row h3 {
+        font-size: var(--font-size-sm);
+    }
+
+    .user-session-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .session-status {
+        justify-content: flex-start;
+        text-align: left;
+    }
+
+    .roster-pagination {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .user-card,
+    .roster-btn,
+    .user-action-btn,
+    .pagination-btn,
+    .pagination-number {
+        transition: none;
+    }
+
+    .user-card:hover {
+        transform: none;
+    }
+}
