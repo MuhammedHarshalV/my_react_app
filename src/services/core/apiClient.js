@@ -236,7 +236,7 @@ apiClient.interceptors.response.use(
           console.log("cccccccccc");
 
           toast.warning("Your session has expired. Please log in again.");
-          window.location.href = "/";
+          window.location.href = "/login";
 
           return Promise.reject(error);
         }
@@ -328,7 +328,7 @@ apiClient.interceptors.response.use(
 
         notifySubscribers(null);
 
-        window.location.href = "/";
+        window.location.href = "/login";
 
         return Promise.reject(
           refreshError

@@ -21,6 +21,8 @@ const ClinicsPage = lazy(() => import("../pages/dashboard/ClinicsPage"));
 const ExpensesPage = lazy(() => import("../pages/dashboard/ExpensesPage"));
 const MenuPage = lazy(() => import("../pages/dashboard/MenuPage"));
 const HistoryPage = lazy(() => import("../pages/dashboard/HistoryPage"));
+const SplashScreen = lazy(() => import("../pages/SplashScreen"));
+
 
 export default function AppRoutes() {
     return (
@@ -29,8 +31,10 @@ export default function AppRoutes() {
                 <Routes>
 
                     {/* Login */}
-                    <Route path="/" element={<LoginPage />} />
 
+                    <Route path="/" element={<SplashScreen />} />
+
+                    <Route path="/login" element={<LoginPage />} />
                     {/* Dashboard */}
                     <Route
                         path="/dashboard"
