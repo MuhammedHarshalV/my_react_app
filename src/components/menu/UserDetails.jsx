@@ -1,338 +1,157 @@
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     FiUsers,
-    FiUserPlus,
-    FiDownload,
     FiSearch,
     FiMapPin,
-    FiClock,
     FiEye,
-    FiLogOut,
-    FiSlash,
     FiChevronLeft,
     FiChevronRight,
-    FiMonitor,
+    FiX,
+    FiPhone,
+    FiMail,
+    FiCalendar,
+    FiUser,
+    FiShield,
+    FiSmartphone,
+
+    FiCopy,
+    FiInfo,
 } from "react-icons/fi";
 
 import "./UserDetails.css";
+import "./userProfilePop.css"
+import { getAllEmployeesApi } from "../../services/api/menu_screen/allEmployeesApi";
 
 const USERS_PER_PAGE = 6;
 
-const initialUsers = [
-    {
-        id: 1,
-        name: "Rahul Menon",
-        proId: "PRO-104",
-        department: "Senior Field Liaison",
-        location: "Kakkanad SEZ",
-        branch: "Kochi Central Lab",
-        role: "Field Liaison",
-        status: "Active",
-        session: "3h 42m",
-        lastActive: "Active Now",
-        devices: "1 Device",
-        avatar: "RM",
-        color: "#263F45",
-        flagged: false,
-    },
-    {
-        id: 2,
-        name: "Kavitha Nair",
-        proId: "PRO-201",
-        department: "Phlebotomist PRO",
-        location: "Kochi Central Lab",
-        branch: "Kochi Central Lab",
-        role: "Phlebotomist",
-        status: "Flagged",
-        session: "1h 14m",
-        lastActive: "Geofence Breach",
-        devices: "1 Device",
-        avatar: "KN",
-        color: "#246A83",
-        flagged: true,
-    },
-    {
-        id: 3,
-        name: "Sijomon Varghese",
-        proId: "PRO-042",
-        department: "Dispatch Supervisor",
-        location: "Angamaly Hub",
-        branch: "Angamaly Hub",
-        role: "Supervisor",
-        status: "Active",
-        session: "5h 08m",
-        lastActive: "Active: 1m ago",
-        devices: "2 Devices",
-        avatar: "SV",
-        color: "#A78B70",
-        flagged: false,
-    },
-    {
-        id: 4,
-        name: "Dr. Mathew",
-        proId: "ROOT-ADM",
-        department: "Chief Pathology Auditor",
-        location: "Central HQ",
-        branch: "Central HQ",
-        role: "Administrator",
-        status: "Active",
-        session: "6h 12m",
-        lastActive: "FIDO2 Authenticated",
-        devices: "1 Workstation",
-        avatar: "DM",
-        color: "#475569",
-        flagged: false,
-    },
-    {
-        id: 5,
-        name: "Deepa Mohan",
-        proId: "PRO-119",
-        department: "Phlebotomist PRO",
-        location: "Kochi Central Lab",
-        branch: "Kochi Central Lab",
-        role: "Phlebotomist",
-        status: "Active",
-        session: "2h 20m",
-        lastActive: "Active: 4m ago",
-        devices: "1 Device",
-        avatar: "DM",
-        color: "#4B7891",
-        flagged: false,
-    },
-    {
-        id: 6,
-        name: "Arun Kumar",
-        proId: "PRO-110",
-        department: "Dispatch Courier PRO",
-        location: "Kakkanad SEZ",
-        branch: "Kakkanad SEZ",
-        role: "Courier",
-        status: "Active",
-        session: "4h 15m",
-        lastActive: "Active: 8m ago",
-        devices: "1 Device",
-        avatar: "AK",
-        color: "#92785C",
-        flagged: false,
-    },
-    {
-        id: 7,
-        name: "Anjali Thomas",
-        proId: "PRO-125",
-        department: "Laboratory Technician",
-        location: "Aluva Lab",
-        branch: "Aluva Lab",
-        role: "Technician",
-        status: "Pending",
-        session: "0h 00m",
-        lastActive: "Not Active",
-        devices: "1 Device",
-        avatar: "AT",
-        color: "#946B86",
-        flagged: false,
-    },
-    {
-        id: 8,
-        name: "Nithin Raj",
-        proId: "PRO-132",
-        department: "Field Executive",
-        location: "Thrippunithura",
-        branch: "Kochi Central Lab",
-        role: "Field Liaison",
-        status: "Inactive",
-        session: "0h 00m",
-        lastActive: "Active: 2 days ago",
-        devices: "1 Device",
-        avatar: "NR",
-        color: "#557A63",
-        flagged: false,
-    },
-    {
-        id: 9,
-        name: "Meera Suresh",
-        proId: "PRO-140",
-        department: "Phlebotomist PRO",
-        location: "Kochi Central Lab",
-        branch: "Kochi Central Lab",
-        role: "Phlebotomist",
-        status: "Active",
-        session: "3h 10m",
-        lastActive: "Active: 2m ago",
-        devices: "1 Device",
-        avatar: "MS",
-        color: "#9A705F",
-        flagged: false,
-    },
-];
-
 function UserDetails() {
-    const [users, setUsers] = useState(initialUsers);
-    const [search, setSearch] = useState("");
-    const [roleFilter, setRoleFilter] = useState("All");
-    const [statusFilter, setStatusFilter] = useState("All");
-    const [branchFilter, setBranchFilter] = useState("All");
+    const [users, setUsers] = useState([]);
+    const [search, setSearch] = useState("");            // what the user types
+    const [debouncedSearch, setDebouncedSearch] = useState(""); // what the API uses
     const [currentPage, setCurrentPage] = useState(1);
 
-    const filteredUsers = useMemo(() => {
-        return users.filter((user) => {
-            const searchValue = search.toLowerCase();
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalEmployees, setTotalEmployees] = useState(0);
 
-            const matchesSearch =
-                user.name.toLowerCase().includes(searchValue) ||
-                user.proId.toLowerCase().includes(searchValue) ||
-                user.department.toLowerCase().includes(searchValue) ||
-                user.location.toLowerCase().includes(searchValue);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-            const matchesRole =
-                roleFilter === "All" || user.role === roleFilter;
+    // 1) Debounce the search text. When it settles, reset to page 1.
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(search.trim());
+            setCurrentPage(1);
+        }, 400);
 
-            const matchesStatus =
-                statusFilter === "All" || user.status === statusFilter;
+        return () => clearTimeout(timer);
+    }, [search]);
 
-            const matchesBranch =
-                branchFilter === "All" || user.branch === branchFilter;
+    // 2) Fetch whenever the page or the (debounced) search changes.
+    //    Every response REPLACES the list.
+    useEffect(() => {
+        let ignore = false;
 
-            return (
-                matchesSearch &&
-                matchesRole &&
-                matchesStatus &&
-                matchesBranch
-            );
-        });
-    }, [users, search, roleFilter, statusFilter, branchFilter]);
+        const getUsers = async () => {
+            try {
+                setLoading(true);
+                setError("");
 
-    const totalPages = Math.max(
-        1,
-        Math.ceil(filteredUsers.length / USERS_PER_PAGE)
-    );
+                const result = await getAllEmployeesApi({
+                    page: currentPage,
+                    limit: USERS_PER_PAGE,
+                    search: debouncedSearch,
+                });
 
-    const startIndex = (currentPage - 1) * USERS_PER_PAGE;
+                if (!result.success) {
+                    throw new Error(result.message || "Failed to fetch employees");
+                }
 
-    const paginatedUsers = filteredUsers.slice(
-        startIndex,
-        startIndex + USERS_PER_PAGE
-    );
+                if (ignore) return;
 
-    const onlineCount = users.filter(
-        (user) => user.status === "Active"
-    ).length;
+                const employees = result.data.map((item) => {
+                    const name = item.user_name || "Unknown User";
 
-    const handleFilterChange = (setter) => (event) => {
-        setter(event.target.value);
-        setCurrentPage(1);
+                    const avatar = name
+                        .split(" ")
+                        .filter(Boolean)
+                        .map((word) => word[0])
+                        .join("")
+                        .substring(0, 2)
+                        .toUpperCase();
+
+
+                    return {
+                        id: item.user_emp_key,
+                        name,
+                        proId: item.user_emp_key?.toString() || "",
+                        phone: item.user_phone_number || "—",
+                        email: item.user_email || "—",
+                        dob: item.date_of_birth || "",
+                        gender: item.user_gender || "—",
+                        department: "—",
+                        location: item.user_location || "—",
+                        about: item.user_about || "—",
+                        isAdmin: Boolean(item.is_admin),
+                        deviceCount: item.device_count || 0,
+                        devices: `${item.device_count || 0} ${item.device_count === 1 ? "Device" : "Devices"
+                            }`,
+                        avatar,
+                        profilePhoto: item.profile_photo_url,
+                        color: "#263F45",
+                        status: "Active", pin: item.user_pin,
+                        flagged: Boolean(item.is_multiple_device),
+                    };
+                });
+
+                setUsers(employees); // replaces the old list
+                setTotalEmployees(result.pagination?.total_employees || 0);
+                setTotalPages(Math.max(1, result.pagination?.total_pages || 1));
+            } catch (err) {
+                console.error("Error fetching employees:", err);
+
+                if (!ignore) {
+                    setUsers([]);
+                    setTotalEmployees(0);
+                    setTotalPages(1);
+                    setError(err.message || "Something went wrong");
+                }
+            } finally {
+                if (!ignore) setLoading(false);
+            }
+        };
+
+        getUsers();
+
+        // If page/search changes again before this request finishes,
+        // the old response is ignored so it can't overwrite the new list.
+        return () => {
+            ignore = true;
+        };
+    }, [currentPage, debouncedSearch]);
+
+    // Search handler: just update the text, nothing else
+    const handleSearchChange = (event) => {
+        setSearch(event.target.value);
     };
 
-    const handleExport = () => {
-        const headers = [
-            "Name",
-            "PRO ID",
-            "Department",
-            "Role",
-            "Branch",
-            "Status",
-            "Session",
-            "Last Active",
-            "Devices",
-        ];
-
-        const rows = filteredUsers.map((user) => [
-            user.name,
-            user.proId,
-            user.department,
-            user.role,
-            user.branch,
-            user.status,
-            user.session,
-            user.lastActive,
-            user.devices,
-        ]);
-
-        const csvContent = [
-            headers,
-            ...rows,
-        ]
-            .map((row) =>
-                row
-                    .map((value) => `"${String(value).replace(/"/g, '""')}"`)
-                    .join(",")
-            )
-            .join("\n");
-
-        const blob = new Blob([csvContent], {
-            type: "text/csv;charset=utf-8;",
-        });
-
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-
-        link.href = url;
-        link.download = "user-roster.csv";
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    // Pagination handler: just change the page, the effect fetches it
+    const handlePageChange = (page) => {
+        if (page < 1 || page > totalPages) return;
+        setCurrentPage(page);
     };
-
-    const handleSignOut = (userId) => {
-        const user = users.find((item) => item.id === userId);
-
-        if (!user) return;
-
-        const confirmed = window.confirm(
-            `Sign out ${user.name}?`
-        );
-
-        if (!confirmed) return;
-
-        setUsers((previousUsers) =>
-            previousUsers.map((item) =>
-                item.id === userId
-                    ? {
-                        ...item,
-                        status: "Inactive",
-                        lastActive: "Signed Out",
-                    }
-                    : item
-            )
-        );
-    };
-
-    const handleQuarantine = (userId) => {
-        const user = users.find((item) => item.id === userId);
-
-        if (!user) return;
-
-        const confirmed = window.confirm(
-            `Quarantine ${user.name}?`
-        );
-
-        if (!confirmed) return;
-
-        setUsers((previousUsers) =>
-            previousUsers.map((item) =>
-                item.id === userId
-                    ? {
-                        ...item,
-                        status: "Flagged",
-                        flagged: true,
-                        lastActive: "Quarantined",
-                    }
-                    : item
-            )
-        );
-    };
-
-    const handleAuthorize = () => {
-        // Connect your authorize-user modal or API here.
-        alert("Connect your Authorize New User form here.");
-    };
-
+    // Open user profile popup
     const handleViewProfile = (user) => {
-        // Navigate to your user profile page or open a modal here.
-        alert(`Selected user: ${user.name}`);
+        setSelectedUser(user);
+        setIsProfileOpen(true);
+    };
+
+    // Close user profile popup
+    const handleCloseProfile = () => {
+        setIsProfileOpen(false);
+        setSelectedUser(null);
     };
 
     return (
@@ -347,11 +166,7 @@ function UserDetails() {
 
                     <div className="roster-heading-text">
                         <div className="roster-title-row">
-                            <h2>All Logged Employees &amp; Users</h2>
-
-                            <span className="online-badge">
-                                {onlineCount} Online
-                            </span>
+                            <h2>All Logged Employees</h2>
                         </div>
 
                         <p>
@@ -360,84 +175,37 @@ function UserDetails() {
                         </p>
                     </div>
                 </div>
-
-                <div className="roster-header-actions">
-                    <button
-                        className="roster-btn roster-btn-secondary"
-                        onClick={handleAuthorize}
-                    >
-                        <FiUserPlus />
-                        Authorize New User
-                    </button>
-
-                    <button
-                        className="roster-btn roster-btn-secondary"
-                        onClick={handleExport}
-                    >
-                        <FiDownload />
-                        Export User Roster
-                    </button>
-                </div>
             </div>
 
-            {/* FILTERS */}
+            {/* SEARCH */}
             <div className="roster-filter-panel">
-
                 <div className="roster-search">
                     <FiSearch />
 
                     <input
                         type="text"
-                        placeholder="Search by employee name, PRO ID, department, email..."
+                        placeholder="Search by employee name..."
                         value={search}
-                        onChange={handleFilterChange(setSearch)}
+                        onChange={handleSearchChange}
                     />
                 </div>
-
-                <select
-                    className="roster-select"
-                    value={roleFilter}
-                    onChange={handleFilterChange(setRoleFilter)}
-                >
-                    <option value="All">All Roles &amp; Departments</option>
-                    <option value="Field Liaison">Field Liaison</option>
-                    <option value="Phlebotomist">Phlebotomist</option>
-                    <option value="Supervisor">Supervisor</option>
-                    <option value="Administrator">Administrator</option>
-                    <option value="Courier">Courier</option>
-                    <option value="Technician">Technician</option>
-                </select>
-
-                <select
-                    className="roster-select"
-                    value={statusFilter}
-                    onChange={handleFilterChange(setStatusFilter)}
-                >
-                    <option value="All">Status: All Active States</option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Flagged">Flagged</option>
-                </select>
-
-                <select
-                    className="roster-select"
-                    value={branchFilter}
-                    onChange={handleFilterChange(setBranchFilter)}
-                >
-                    <option value="All">All Branches</option>
-                    <option value="Kochi Central Lab">Kochi Central Lab</option>
-                    <option value="Kakkanad SEZ">Kakkanad SEZ</option>
-                    <option value="Angamaly Hub">Angamaly Hub</option>
-                    <option value="Central HQ">Central HQ</option>
-                    <option value="Aluva Lab">Aluva Lab</option>
-                </select>
             </div>
 
             {/* USER CARDS */}
             <div className="user-grid">
-                {paginatedUsers.length > 0 ? (
-                    paginatedUsers.map((user) => (
+
+                {loading ? (
+                    <div className="roster-empty-state">
+                        <p>Loading employees...</p>
+                    </div>
+                ) : error ? (
+                    <div className="roster-empty-state">
+                        <FiUsers />
+                        <h3>Unable to load employees</h3>
+                        <p>{error}</p>
+                    </div>
+                ) : users.length > 0 ? (
+                    users.map((user) => (
                         <div
                             className={`user-card ${user.flagged ? "flagged-card" : ""
                                 }`}
@@ -447,76 +215,59 @@ function UserDetails() {
                             <div className="user-card-header">
 
                                 <div className="user-main-info">
+
                                     <div
                                         className="user-avatar"
                                         style={{
                                             backgroundColor: user.color,
                                         }}
                                     >
-                                        {user.avatar}
+                                        {user.profilePhoto ? (
+                                            <img
+                                                src={user.profilePhoto}
+                                                alt={user.name}
+                                                className="user-profile-image"
+                                            />
+                                        ) : (
+                                            user.avatar
+                                        )}
 
-                                        <span
-                                            className={`avatar-indicator ${user.status === "Active"
+                                        {user.status && (
+                                            <span
+                                                className={`avatar-indicator ${user.status === "Active"
                                                     ? "indicator-active"
                                                     : "indicator-inactive"
-                                                }`}
-                                        />
+                                                    }`}
+                                            />
+                                        )}
                                     </div>
 
                                     <div className="user-name-info">
+
                                         <div className="user-name-row">
                                             <h3>{user.name}</h3>
 
-                                            <span
-                                                className={`user-pro-id ${user.proId === "ROOT-ADM"
-                                                        ? "root-pro-id"
-                                                        : ""
-                                                    }`}
-                                            >
-                                                {user.proId}
+                                            <span className="user-pro-id">
+                                                PRO - ID {user.proId}
                                             </span>
                                         </div>
 
-                                        <p>{user.department}</p>
+                                        <p>{user.phone}</p>
 
                                         <div className="user-location">
                                             <FiMapPin />
                                             <span>{user.location}</span>
                                         </div>
+
                                     </div>
                                 </div>
 
                                 <div className="user-card-badges">
-                                    {user.flagged && (
-                                        <span className="flagged-badge">
-                                            ! Flagged
-                                        </span>
-                                    )}
-
-                                    {!user.flagged && (
-                                        <span className="device-count">
-                                            {user.devices}
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* SESSION DETAILS */}
-                            <div
-                                className={`user-session-row ${user.flagged
-                                        ? "session-row-flagged"
-                                        : ""
-                                    }`}
-                            >
-                                <div className="session-duration">
-                                    <FiClock />
-                                    <span>Session: {user.session}</span>
+                                    <span className="device-count">
+                                        {user.devices}
+                                    </span>
                                 </div>
 
-                                <div className="session-status">
-                                    <span className="session-status-dot" />
-                                    <span>{user.lastActive}</span>
-                                </div>
                             </div>
 
                             {/* CARD ACTIONS */}
@@ -528,67 +279,54 @@ function UserDetails() {
                                     <FiEye />
                                     View Profile
                                 </button>
-
-                                {user.flagged ? (
-                                    <button
-                                        className="user-action-btn quarantine-btn"
-                                        onClick={() =>
-                                            handleQuarantine(user.id)
-                                        }
-                                    >
-                                        <FiSlash />
-                                        Quarantine
-                                    </button>
-                                ) : (
-                                    <button
-                                        className="user-action-btn signout-btn"
-                                        onClick={() =>
-                                            handleSignOut(user.id)
-                                        }
-                                    >
-                                        <FiLogOut />
-                                        Sign Out
-                                    </button>
-                                )}
                             </div>
+
                         </div>
                     ))
                 ) : (
                     <div className="roster-empty-state">
                         <FiUsers />
                         <h3>No employees found</h3>
-                        <p>Try changing your search or filter options.</p>
+                        <p>Try searching with another employee detail.</p>
                     </div>
                 )}
+
             </div>
 
             {/* PAGINATION */}
-            {filteredUsers.length > 0 && (
+            {!loading && !error && totalEmployees > 0 && (
                 <div className="roster-pagination">
+
                     <p>
                         Showing{" "}
-                        <strong>{startIndex + 1}</strong> to{" "}
+                        <strong>
+                            {(currentPage - 1) * USERS_PER_PAGE + 1}
+                        </strong>{" "}
+                        to{" "}
                         <strong>
                             {Math.min(
-                                startIndex + USERS_PER_PAGE,
-                                filteredUsers.length
+                                currentPage * USERS_PER_PAGE,
+                                totalEmployees
                             )}
                         </strong>{" "}
-                        of <strong>{filteredUsers.length}</strong> employees
+                        of <strong>{totalEmployees}</strong> employees
                     </p>
 
                     <div className="pagination-controls">
+
+                        {/* PREVIOUS */}
                         <button
                             className="pagination-btn"
                             disabled={currentPage === 1}
                             onClick={() =>
-                                setCurrentPage((page) => page - 1)
+                                handlePageChange(currentPage - 1)
                             }
                             aria-label="Previous page"
                         >
                             <FiChevronLeft />
                         </button>
 
+                        {/* PAGE NUMBERS */}
                         {Array.from(
                             { length: totalPages },
                             (_, index) => index + 1
@@ -597,25 +335,288 @@ function UserDetails() {
                                 key={page}
                                 className={`pagination-number ${currentPage === page ? "active" : ""
                                     }`}
-                                onClick={() => setCurrentPage(page)}
+                                onClick={() =>
+                                    handlePageChange(page)
+                                }
                             >
                                 {page}
                             </button>
                         ))}
 
+                        {/* NEXT */}
                         <button
                             className="pagination-btn"
                             disabled={currentPage === totalPages}
                             onClick={() =>
-                                setCurrentPage((page) => page + 1)
+                                handlePageChange(currentPage + 1)
                             }
                             aria-label="Next page"
                         >
                             <FiChevronRight />
                         </button>
+
                     </div>
                 </div>
             )}
+
+            {/* USER PROFILE POPUP */}
+            {isProfileOpen && selectedUser && (
+                <div
+                    className="profile-modal-overlay"
+                    onClick={handleCloseProfile}
+                >
+                    <div
+                        className="profile-modal"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* HEADER */}
+                        <div className="profile-modal-header">
+                            <div className="profile-modal-title">
+                                <div className="profile-modal-icon">
+                                    <FiShield />
+                                </div>
+
+                                <div>
+                                    <div className="profile-title-line">
+                                        <h2>User Profile Dossier</h2>
+
+                                        <span className="profile-pin">
+                                            PRO-ID #{selectedUser.proId}
+                                        </span>
+
+                                        <span className="profile-active-badge">
+                                            <span />
+                                            Active User
+                                        </span>
+                                    </div>
+
+                                    <p>
+                                        Personnel details and device
+                                    </p>
+                                </div>
+                            </div>
+
+                            <button
+                                className="profile-close-btn"
+                                onClick={handleCloseProfile}
+                            >
+                                <FiX />
+                            </button>
+                        </div>
+
+                        {/* BODY */}
+                        <div className="profile-modal-body">
+
+                            {/* EMPLOYEE SUMMARY */}
+                            <div className="profile-summary">
+                                <div className="profile-summary-left">
+
+                                    <div className="profile-large-avatar">
+                                        {selectedUser.profilePhoto ? (
+                                            <img
+                                                src={selectedUser.profilePhoto}
+                                                alt={selectedUser.name}
+                                            />
+                                        ) : (
+                                            selectedUser.avatar
+                                        )}
+
+                                        <span className="profile-status-dot online" />
+                                    </div>
+
+                                    <div className="profile-summary-info">
+                                        <div className="profile-name-line">
+                                            <h2>{selectedUser.name}</h2>
+
+                                            <span>
+                                                {selectedUser.isAdmin
+                                                    ? "Administrator"
+                                                    : "Staff"}
+                                            </span>
+                                        </div>
+
+
+
+                                        <div className="profile-summary-tags">
+                                            <span>
+                                                <FiShield />
+                                                {selectedUser.isAdmin
+                                                    ? "Administrator"
+                                                    : "Standard Staff"}
+                                            </span>
+
+                                            <span>
+                                                <FiSmartphone />
+                                                {selectedUser.deviceCount} Devices Bound
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="profile-summary-right">
+                                    <span>ID: #PRO-{selectedUser.id}</span>
+                                    <span>{selectedUser.location}</span>
+                                </div>
+                            </div>
+
+                            {/* DETAILS GRID */}
+                            <div className="profile-details-grid">
+
+                                <div className="profile-detail-card">
+                                    <div className="profile-detail-icon">
+                                        <FiPhone />
+                                    </div>
+
+                                    <div className="profile-detail-content">
+                                        <label>PHONE NUMBER</label>
+                                        <strong>{selectedUser.phone}</strong>
+                                    </div>
+
+                                    {selectedUser.phone !== "—" && (
+                                        <button
+                                            className="profile-copy-btn"
+                                            onClick={() =>
+                                                navigator.clipboard.writeText(
+                                                    selectedUser.phone
+                                                )
+                                            }
+                                        >
+                                            <FiCopy />
+                                        </button>
+                                    )}
+                                </div>
+
+                                <div className="profile-detail-card">
+                                    <div className="profile-detail-icon">
+                                        <FiMail />
+                                    </div>
+
+                                    <div className="profile-detail-content">
+                                        <label>EMAIL ADDRESS</label>
+                                        <strong>{selectedUser.email}</strong>
+                                    </div>
+
+                                    {selectedUser.email !== "—" && (
+                                        <button
+                                            className="profile-copy-btn"
+                                            onClick={() =>
+                                                navigator.clipboard.writeText(
+                                                    selectedUser.email
+                                                )
+                                            }
+                                        >
+                                            <FiCopy />
+                                        </button>
+                                    )}
+                                </div>
+
+                                <div className="profile-detail-card">
+                                    <div className="profile-detail-icon">
+                                        <FiCalendar />
+                                    </div>
+
+                                    <div className="profile-detail-content">
+                                        <label>DATE OF BIRTH</label>
+                                        <strong>
+                                            {selectedUser.dob
+                                                ? new Date(
+                                                    `${selectedUser.dob}T00:00:00`
+                                                ).toLocaleDateString("en-IN", {
+                                                    day: "2-digit",
+                                                    month: "short",
+                                                    year: "numeric",
+                                                })
+                                                : "—"}
+                                        </strong>
+                                    </div>
+                                </div>
+
+                                <div className="profile-detail-card">
+                                    <div className="profile-detail-icon">
+                                        <FiUser />
+                                    </div>
+
+                                    <div className="profile-detail-content">
+                                        <label>GENDER</label>
+                                        <strong>{selectedUser.gender}</strong>
+                                    </div>
+                                </div>
+
+                                <div className="profile-detail-card">
+                                    <div className="profile-detail-icon">
+                                        <FiMapPin />
+                                    </div>
+
+                                    <div className="profile-detail-content">
+                                        <label>ASSIGNED LOCATION</label>
+                                        <strong>{selectedUser.location}</strong>
+                                    </div>
+                                </div>
+
+                                <div className="profile-detail-card">
+                                    <div className="profile-detail-icon">
+                                        <FiShield />
+                                    </div>
+
+                                    <div className="profile-detail-content">
+                                        <label>EMPLOYEE PIN</label>
+                                        <strong className="profile-pin-value">
+                                            {selectedUser.pin}
+                                        </strong>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            {/* ABOUT */}
+                            <div className="profile-about">
+                                <div className="profile-section-title">
+                                    <FiInfo />
+                                    ABOUT / PERSONNEL MEMO
+                                </div>
+
+                                <div className="profile-about-content">
+                                    {selectedUser.about}
+                                </div>
+                            </div>
+
+                            {/* DEVICES */}
+                            <div className="profile-devices-section">
+                                <div className="profile-devices-heading">
+                                    <h4>
+                                        <FiSmartphone />
+                                        CONNECTED REGISTERED HARDWARE
+                                    </h4>
+
+                                    <span>
+                                        device_count: {selectedUser.deviceCount}
+                                    </span>
+                                </div>
+
+                                <div className="profile-device-card">
+                                    <div className="profile-device-icon">
+                                        <FiSmartphone />
+                                    </div>
+
+                                    <div className="profile-device-info">
+                                        <strong>Registered Devices</strong>
+                                        <p>
+                                            {selectedUser.deviceCount > 0
+                                                ? `${selectedUser.deviceCount} device(s) registered`
+                                                : "No registered devices found"}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            )}
+
+
         </div>
     );
 }

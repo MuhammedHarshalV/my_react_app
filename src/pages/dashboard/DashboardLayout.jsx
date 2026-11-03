@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { FiMenu, FiLogOut } from "react-icons/fi";
 import Sidebar from "../../components/sidebar/sidebar";
+import { TokenStorage } from "../../services/core/tokenStorage";
 import "./DashboardLayout.css";
 
 export default function DashboardLayout() {
@@ -13,6 +14,15 @@ export default function DashboardLayout() {
 
     const closeSidebar = () => {
         setSidebarOpen(false);
+    };
+    const handleLogout = async () => {
+        try {
+            await TokenStorage.clearTokens();
+
+            window.location.href = "/login";
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
     };
 
     return (
@@ -60,6 +70,7 @@ export default function DashboardLayout() {
                         className="logout-button"
 
                         type="button"
+                        onClick={handleLogout}
                     >
                         <FiLogOut />
                         <span>Logout</span>
