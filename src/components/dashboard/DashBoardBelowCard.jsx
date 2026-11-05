@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import "./DashBoardBelowCard.css";
 
 import CenterLoader from "../common/CenterLoader";
-
+import { getRecentClinicsApi } from "../../services/api/dashboard/getRecentClinics";
 
 function DashBoardBelowCard() {
 
@@ -22,208 +22,24 @@ function DashBoardBelowCard() {
         setIsLoading(true);
 
         try {
+            const response = await getRecentClinicsApi(
 
-            /*
-             * =========================================
-             * TEMP DATA
-             *
-             * Replace this with API later:
-             *
-             * const response =
-             *     await getRecentClinicVisitsApi();
-             *
-             * if (response?.success === true) {
-             *     setClinicData(response.data);
-             * }
-             * =========================================
-             */
-
-            const response = {
-
-                success: true,
-
-                data: {
-
-                    title:
-                        "Recent Clinic Visits & Claims",
-
-                    subtitle:
-                        "Automated OCR and geo-stamped vouchers",
-
-                    feedStatus:
-                        "REAL-TIME FEED",
-
-                    successRate:
-                        "96.4%",
-
-                    totalClinicRecords:
-                        342,
-
-                    clinicVisits: [
-
-                        {
-                            id: 1,
-
-                            clinicName:
-                                "City Health Centre",
-
-                            doctorName:
-                                "Dr. K. Nair",
-
-                            visitedBy:
-                                "Rahul Menon",
-
-                            proId:
-                                "PRO-104",
-
-                            activity:
-                                "Routine Sample Pickup & Reagents Delivery",
-
-                            amount:
-                                "₹ 1,250",
-
-                            status:
-                                "APPROVED",
-
-                            statusType:
-                                "approved",
-
-                            time:
-                                "22 mins ago",
-
-                            icon:
-                                "♙",
-                        },
-
-                        {
-                            id: 2,
-
-                            clinicName:
-                                "Metro PathLab & Diagnostics",
-
-                            doctorName:
-                                "Dr. Susan Thomas",
-
-                            visitedBy:
-                                "Ananya Sharma",
-
-                            proId:
-                                "PRO-218",
-
-                            activity:
-                                "Doctor Consultation & New Tie-up Onboarding",
-
-                            amount:
-                                "₹ 2,400",
-
-                            status:
-                                "RECONCILED",
-
-                            statusType:
-                                "reconciled",
-
-                            time:
-                                "1 hour ago",
-
-                            icon:
-                                "◈",
-                        },
-
-                        {
-                            id: 3,
-
-                            clinicName:
-                                "Care Diagnostic Centre",
-
-                            doctorName:
-                                "Dr. Mathews Roy",
-
-                            visitedBy:
-                                "Deepak Varma",
-
-                            proId:
-                                "PRO-092",
-
-                            activity:
-                                "Cold-chain Temperature Kit Handover",
-
-                            amount:
-                                "₹ 890",
-
-                            status:
-                                "UNDER REVIEW",
-
-                            statusType:
-                                "review",
-
-                            time:
-                                "Today, 10:15 AM",
-
-                            icon:
-                                "❉",
-                        },
-
-                        {
-                            id: 4,
-
-                            clinicName:
-                                "Grace Multi-Speciality Clinic",
-
-                            doctorName:
-                                "Dr. Priya Kurian",
-
-                            visitedBy:
-                                "Sneha Paul",
-
-                            proId:
-                                "PRO-305",
-
-                            activity:
-                                "Urgent STAT Biopsy Batch Transport",
-
-                            amount:
-                                "₹ 1,750",
-
-                            status:
-                                "APPROVED",
-
-                            statusType:
-                                "approved",
-
-                            time:
-                                "Today, 09:30 AM",
-
-                            icon:
-                                "▣",
-                        },
-
-                    ],
-                },
-            };
-
-
-            /*
-             * Simulating API loading.
-             * Remove when actual API is connected.
-             */
-
-            await new Promise(
-                (resolve) =>
-                    setTimeout(resolve, 500)
             );
 
-
-            if (response?.success === true) {
-
-                setClinicData(
-                    response.data
-                );
+            if (response?.success) {
+                setClinicData(response);
+            } else {
+                console.log(response?.message);
             }
+
+
+
+
 
         } catch (error) {
 
             console.log(
-                "Recent Clinic API Error:",
+                "recent clinic API Error:",
                 error
             );
 
@@ -284,11 +100,11 @@ function DashBoardBelowCard() {
                     <div className="below-header-content">
 
                         <h2>
-                            {clinicData.title}
+                            Recent Clinic Visits & Claims
                         </h2>
 
                         <p>
-                            {clinicData.subtitle}
+                            Automated OCR and geo-stamped vouchers
                         </p>
 
                     </div>
@@ -297,7 +113,7 @@ function DashBoardBelowCard() {
 
 
                 <span className="real-time-badge">
-                    {clinicData.feedStatus}
+                    REAL-TIME FEED
                 </span>
 
             </div>
@@ -309,12 +125,12 @@ function DashBoardBelowCard() {
 
             <div className="clinic-visit-list">
 
-                {clinicData.clinicVisits?.map(
-                    (visit) => (
+                {clinicData.recentExpenses?.map(
+                    (visit, index) => (
 
                         <div
                             className="clinic-visit-item"
-                            key={visit.id}
+                            key={index}
                         >
 
 
@@ -330,12 +146,12 @@ function DashBoardBelowCard() {
                                     <div className="clinic-name-row">
 
                                         <strong className="clinic-name">
-                                            {visit.clinicName}
+                                            {visit?.clinicName || "Unknown Clinic"}
                                         </strong>
 
 
                                         <span className="clinic-doctor">
-                                            • {visit.doctorName}
+                                            • PRO-ID {visit.visitedEmployeeEmpId}
                                         </span>
 
                                     </div>
@@ -346,12 +162,12 @@ function DashBoardBelowCard() {
                                         Visited by{" "}
 
                                         <strong>
-                                            {visit.visitedBy}
+                                            {visit?.visitedEmployeeName || "-"}
                                         </strong>
 
                                         {" "}
 
-                                        ({visit.proId})
+                                        {/* ({visit.visitedEmployeeEmpId}) */}
 
                                     </div>
 
@@ -363,22 +179,29 @@ function DashBoardBelowCard() {
                                 <div className="clinic-claim">
 
                                     <strong
-                                        className={`clinic-amount ${visit.statusType ===
-                                                "review"
-                                                ? "amount-review"
-                                                : ""
+                                        className={`clinic-amount ${visit?.approvedAmount != null
+
+                                            ? ""
+                                            : "amount-review"
                                             }`}
                                     >
-                                        {visit.amount}
+                                        Requested : ₹ {visit.requestAmount}
                                     </strong>
 
 
                                     <span
-                                        className={`claim-status ${visit.statusType
+                                        className={`claim-status ${visit?.approvedAmount != null ? "approved" : "review"
                                             }`}
                                     >
-                                        {visit.status}
+                                        {visit?.approvedAmount != null ? "APPROVED" : "UNDER REVIEW"}
                                     </span>
+
+                                    {visit?.approvedAmount != null && (
+                                        <strong className="clinic-amount">
+                                            Approved: ₹ {visit.approvedAmount}
+                                        </strong>
+                                    )}
+
 
                                 </div>
 
@@ -402,19 +225,25 @@ function DashBoardBelowCard() {
                                 <div className="clinic-activity">
 
                                     <span className="activity-icon">
-                                        {visit.icon}
+                                        ❉
                                     </span>
 
 
                                     <span>
-                                        {visit.activity}
+                                        Field Visit Expenses
                                     </span>
 
                                 </div>
 
 
                                 <span className="clinic-time">
-                                    {visit.time}
+                                    {visit?.entryDate
+                                        ? new Date(visit.entryDate).toLocaleDateString("en-GB", {
+                                            day: "2-digit",
+                                            month: "short",
+                                            year: "numeric",
+                                        })
+                                        : "-"}
                                 </span>
 
                             </div>
@@ -434,17 +263,7 @@ function DashBoardBelowCard() {
             <div className="below-card-footer">
 
 
-                <span className="matching-rate">
 
-                    Auto-matching:{" "}
-
-                    <strong>
-                        {clinicData.successRate}
-                    </strong>
-
-                    {" "}success rate
-
-                </span>
 
 
                 <button
@@ -454,7 +273,7 @@ function DashBoardBelowCard() {
 
                     Open All{" "}
 
-                    {clinicData.totalClinicRecords}{" "}
+                    {clinicData?.totalClinicVisited ?? 0}   {" "}
 
                     Clinic Records
 

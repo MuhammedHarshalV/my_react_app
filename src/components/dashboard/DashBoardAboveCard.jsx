@@ -3,208 +3,67 @@ import DashBoardMiddleCard from "./DashBoardMiddleCard";
 import "./DashBoardAboveCard.css";
 
 import CenterLoader from "../common/CenterLoader";
+import { getExpClinicApi } from "../../services/api/dashboard/getExpClinnicApi";
 
 
 function DashBoardAboveCard() {
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const [dashboardData, setDashboardData] = useState(null);
+    const [expenseData, SetExpenseData] = useState(null);
+    const currentDate = new Date();
+
+
+
+    const [selectedMonth, setSelectedMonth] = useState(
+        currentDate.getMonth()
+    );
+
+    const [selectedYear, setSelectedYear] = useState(
+        currentDate.getFullYear()
+    );
+
+
+
     const [startMonth, setStartMonth] = useState("");
-    const [endMonth, setEndMonth] = useState("");
+    const [endMonth, setEndMonth] = useState(
+        currentDate.toLocaleString("en-US", {
+            month: "long",
+            year: "numeric",
+        })
+    );
 
     const [showStartMonth, setShowStartMonth] = useState(false);
-    const [showEndMonth, setShowEndMonth] = useState(false);
 
     useEffect(() => {
         fetchDashboard();
     }, []);
 
 
-    const fetchDashboard = async () => {
+    const fetchDashboard = async ({
+        compareMonth = "",
+        compareYear = "",
+    } = {}) => {
 
         setIsLoading(true);
 
         try {
-
-            /*
-             * =====================================================
-             * REPLACE THIS MOCK DATA WITH YOUR API CALL
-             * =====================================================
-             *
-             * Example:
-             *
-             * const response = await getDashboardApi();
-             *
-             * if (response?.success === true) {
-             *     setDashboardData(response.data);
-             * }
-             *
-             */
-
-
-            const response = {
-
-                success: true,
-
-                data: {
-
-
-
-
-                    /* ================================
-                       TOP FILTER DATA
-                    ================================= */
-
-                    auditCount: 26,
-
-                    comparativeWindow:
-                        "Oct 2026 vs Sep 2026",
-
-                    operationalZone:
-                        "Kochi Central Lab & All Nodes",
-
-
-                    /* ================================
-                       EXPENSE
-                    ================================= */
-
-                    expense: {
-
-                        total:
-                            "₹ 4,82,450",
-
-                        currency:
-                            "INR",
-
-                        status:
-                            "Budget Ok",
-
-                        percentage:
-                            "+12.4%",
-
-                        comparison:
-                            "vs Sep 2026 (₹ 4,29,100)",
-
-                        fuelPercentage:
-                            15,
-
-                        FoodPercentage:
-                            15,
-
-                        MedicalPercentage:
-                            20,
-                        HotelPercentage: 20,
-                        StationeryPercentage: 15, OtherPercentage: 15,
-                    },
-
-
-                    /* ================================
-                       PERSONNEL
-                    ================================= */
-
-                    personnel: {
-
-                        active:
-                            48,
-
-                        total:
-                            62,
-
-                        label:
-                            "PROs",
-
-                        syncStatus:
-                            "Live Sync",
-
-                        techChange:
-                            "+8 Techs",
-
-                        comparison:
-                            "(+16.7% vs last mo. 40 active)",
-
-                        enRoute:
-                            38,
-
-                        atClinic:
-                            6,
-
-                        offline:
-                            4,
-                    },
-
-
-                    /* ================================
-                       CLINICS
-                    ================================= */
-
-                    clinics: {
-
-                        visited:
-                            342,
-
-                        label:
-                            "Clinics",
-
-                        status:
-                            "MTD Reach",
-
-                        visitChange:
-                            "+38 Visits",
-
-                        comparison:
-                            "(+12.5% vs Sep: 304 visits)",
-
-                        averageClaim:
-                            "₹ 1,410",
-
-                        costChange:
-                            "-3.2%",
-                    },
-
-
-                    /* ================================
-                       APPROVALS
-                    ================================= */
-
-                    approvals: {
-
-                        pendingAmount:
-                            "₹ 64,800",
-
-                        claims:
-                            19,
-
-                        status:
-                            "Awaiting Auth",
-
-                        pendingVouchers:
-                            4,
-
-                        pendingTime:
-                            "> 48 hrs pending",
-                    },
-                },
-            };
-
-
-            /*
-             * Simulating API delay.
-             * Remove this when using actual API.
-             */
-
-            await new Promise(
-                (resolve) =>
-                    setTimeout(resolve, 600)
+            const response = await getExpClinicApi(
+                {
+                    compareMonth,
+                    compareYear,
+                }
             );
 
-
-            if (response?.success === true) {
-
-                setDashboardData(
-                    response.data
-                );
+            if (response?.success) {
+                SetExpenseData(response);
+            } else {
+                console.log(response?.message);
             }
+
+
+
+
 
         } catch (error) {
 
@@ -238,7 +97,7 @@ function DashBoardAboveCard() {
        NO DATA
     ========================================= */
 
-    if (!dashboardData) {
+    if (!expenseData) {
 
         return (
             <div className="dashboard-no-data">
@@ -283,113 +142,134 @@ function DashBoardAboveCard() {
                     <div className="audit-badge">
 
                         <span>
-                            AUDIT OCTOBER
+                            AUDIT {new Date().toLocaleString("en-US", { month: "long" }).toUpperCase()}
+
                         </span>
 
-                        <strong>
-                            {dashboardData.auditCount} Claims
-                        </strong>
+
 
                     </div>
+                    <div className="month-picker-container">
 
-                    <div className="dashboard-month-filters">
-                        {/* Start Month */}
+                        {/* Compare Month Button */}
                         <button
                             className="dashboard-filter-button"
                             type="button"
-                            onClick={() => setShowStartMonth(true)}
+                            onClick={() => setShowStartMonth(!showStartMonth)}
                         >
                             <span className="filter-content">
-                                <small>COMPARITIVE MONTH</small>
+                                <small>COMPARISON MONTH</small>
                                 <strong>{startMonth || "Select month"}</strong>
                             </span>
+
                             <span className="filter-arrow">⌄</span>
                         </button>
+
+                        {/* Month Picker Popup */}
+                        {showStartMonth && (
+                            <div className="custom-month-popup">
+
+                                {/* Header */}
+                                <div className="month-popup-header">
+                                    {new Date(selectedYear, selectedMonth).toLocaleString(
+                                        "en-US",
+                                        { month: "long", year: "numeric" }
+                                    )}
+                                    <span>⌄</span>
+                                </div>
+
+                                {/* Year List */}
+                                {/* Year List */}
+                                <div className="month-year-list">
+                                    {Array.from(
+                                        { length: 20 },
+                                        (_, index) => currentDate.getFullYear() - 10 + index
+                                    ).map((year) => (
+                                        <div
+                                            key={year}
+                                            className={`month-year-item ${selectedYear === year ? "active-year" : ""
+                                                }`}
+                                            onClick={() => setSelectedYear(year)}
+                                        >
+                                            {year}
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Month Grid */}
+                                <div className="month-grid">
+                                    {Array.from({ length: 12 }, (_, index) => {
+                                        const monthName = new Date(
+                                            2000,
+                                            index
+                                        ).toLocaleString("en-US", {
+                                            month: "short",
+                                        });
+
+                                        return (
+                                            <button
+                                                key={index}
+                                                type="button"
+                                                className={`month-grid-item ${selectedMonth === index
+                                                    ? "selected-month"
+                                                    : ""
+                                                    }`}
+                                                onClick={() => {
+                                                    setSelectedMonth(index);
+
+                                                    const formatted = new Date(
+                                                        selectedYear,
+                                                        index
+                                                    ).toLocaleString("en-US", {
+                                                        month: "long",
+                                                        year: "numeric",
+                                                    });
+
+                                                    setStartMonth(formatted);
+                                                    setShowStartMonth(false);
+                                                    fetchDashboard({
+                                                        compareMonth: index + 1,
+                                                        compareYear: selectedYear,
+                                                    });
+                                                }}
+                                            >
+                                                {monthName}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+
+                            </div>
+                        )}
+
+                    </div>
+                    <div className="dashboard-month-filters">
+
                         <div className="audit-badge">V/S</div>
-                        {/* End Month */}
+
+                        {/* Current Month */}
                         <button
                             className="dashboard-filter-button"
                             type="button"
-                            onClick={() => setShowEndMonth(true)}
+                            disabled
                         >
                             <span className="filter-content">
-                                <small>COMPARITIVE MONTH</small>
-                                <strong>{endMonth || "Select month"}</strong>
+                                <small>CURRENT MONTH</small>
+                                <strong>{endMonth}</strong>
                             </span>
-                            <span className="filter-arrow">⌄</span>
                         </button>
+
                     </div>
-                    {/* <button
-                        className="dashboard-filter-button"
-                        type="button"
-                    >
-
-                        <span className="filter-icon">
-                            ▦
-                        </span>
-
-                        <span className="filter-content">
-
-                            <small>
-                                COMPARATIVE WINDOW
-                            </small>
-
-                            <strong>
-                                {
-                                    dashboardData
-                                        .comparativeWindow
-                                }
-                            </strong>
-
-                        </span>
-
-                        <span className="filter-arrow">
-                            ▾
-                        </span>
-
-                    </button> */}
-
-
-                    {/* <button
-                        className="dashboard-filter-button zone-filter"
-                        type="button"
-                    >
-
-                        <span className="filter-icon">
-                            ▤
-                        </span>
-
-                        <span className="filter-content">
-
-                            <small>
-                                OPERATIONAL ZONE
-                            </small>
-
-                            <strong>
-                                {
-                                    dashboardData
-                                        .operationalZone
-                                }
-                            </strong>
-
-                        </span>
-
-                        <span className="filter-arrow">
-                            ▾
-                        </span>
-
-                    </button> */}
-
-
-
-
                 </div>
 
             </div>
 
 
 
-            <DashBoardMiddleCard />
+            <DashBoardMiddleCard
+                compareMonth={startMonth ? selectedMonth + 1 : ""}
+                compareYear={startMonth ? selectedYear : ""}
+            />
             <div style={{ height: "24px" }} />
             {/* =====================================
                 CARDS
@@ -403,357 +283,151 @@ function DashBoardAboveCard() {
                 ================================== */}
 
                 <div className="overview-card expense-card">
-
                     <div className="card-header">
-
-                        <span className="card-title">
-                            TOTAL EXPENSE
-                        </span>
-
-                        <span className="status-badge">
-                            OCTOBER
-                        </span>
-
+                        <span className="card-title">TOTAL EXPENSE</span>
+                        <span className="status-badge">{endMonth}</span>
                     </div>
-
 
                     <div className="expense-value-row">
-
                         <strong className="main-value">
-                            {
-                                dashboardData
-                                    .expense
-                                    .total
-                            }
+                            ₹ {expenseData?.totalExpense?.currentMonth ?? 0}
                         </strong>
-
-                        <span className="currency-text">
-                            {
-                                dashboardData
-                                    .expense
-                                    .currency
-                            }
-                        </span>
-
+                        <span className="currency-text">INR</span>
                     </div>
-
 
                     <div className="comparison-row">
-
-                        <span className="positive-text">
-                            ↗
-                            {
-                                dashboardData
-                                    .expense
-                                    .percentage
-                            }
-                        </span>
-
                         <span>
-                            {
-                                dashboardData
-                                    .expense
-                                    .comparison
-                            }
+                            {startMonth
+                                ? new Date(selectedYear, selectedMonth).toLocaleString("en-US", {
+                                    month: "long",
+                                }) + " " + String(selectedYear).slice(-2)
+                                : "Previous Month"
+                            } : ₹ {expenseData?.totalExpense?.compareMonth ?? 0}
                         </span>
-
                     </div>
 
-
                     <div className="expense-bottom">
-
                         <div className="expense-label-row">
-
                             <span>
-                                Transit & Fuel (
-                                {
-                                    dashboardData
-                                        .expense
-                                        .fuelPercentage
-                                }
-                                %)
+                                Fuel/Travel (
+                                {expenseData?.fuelTravel ?? 0}
+                                )
                             </span>
 
                             <span>
-                                Clinic & Food (
-                                {
-                                    dashboardData
-                                        .expense
-                                        .clinicFoodPercentage
-                                }
-                                %)
+                                Food&Lunch (
+                                {expenseData?.foodLunch ?? 0}
+                                )
                             </span>
-
                         </div>
-
 
                         <div className="expense-progress">
                             <div
                                 className="FuelTravel"
-                                style={{ width: `${dashboardData.expense.fuelPercentage}%` }}
+                                style={{
+                                    width: `${expenseData?.totalExpense?.currentMonth > 0
+                                        ? (expenseData.fuelTravel / expenseData.totalExpense.currentMonth) * 100
+                                        : 0
+                                        }%`
+                                }}
                             />
 
                             <div
                                 className="FoodLunch"
-                                style={{ width: `${dashboardData.expense.FoodPercentage}%` }}
+                                style={{
+                                    width: `${expenseData?.totalExpense?.currentMonth > 0
+                                        ? (expenseData.foodLunch / expenseData.totalExpense.currentMonth) * 100
+                                        : 0
+                                        }%`
+                                }}
                             />
 
                             <div
                                 className="MedicalDemo"
-                                style={{ width: `${dashboardData.expense.MedicalPercentage}%` }}
+                                style={{
+                                    width: `${expenseData?.totalExpense?.currentMonth > 0
+                                        ? (expenseData.medicalDemo / expenseData.totalExpense.currentMonth) * 100
+                                        : 0
+                                        }%`
+                                }}
                             />
 
                             <div
                                 className="HotelStay"
-                                style={{ width: `${dashboardData.expense.HotelPercentage}%` }}
+                                style={{
+                                    width: `${expenseData?.totalExpense?.currentMonth > 0
+                                        ? (expenseData.hotelStay / expenseData.totalExpense.currentMonth) * 100
+                                        : 0
+                                        }%`
+                                }}
                             />
 
                             <div
                                 className="Stationery"
-                                style={{ width: `${dashboardData.expense.StationeryPercentage}%` }}
+                                style={{
+                                    width: `${expenseData?.totalExpense?.currentMonth > 0
+                                        ? (expenseData.stationery / expenseData.totalExpense.currentMonth) * 100
+                                        : 0
+                                        }%`
+                                }}
                             />
 
                             <div
                                 className="Others"
-                                style={{ width: `${dashboardData.expense.OtherPercentage}%` }}
+                                style={{
+                                    width: `${expenseData?.totalExpense?.currentMonth > 0
+                                        ? (expenseData.others / expenseData.totalExpense.currentMonth) * 100
+                                        : 0
+                                        }%`
+                                }}
                             />
                         </div>
 
-
                         <div className="expense-legend">
-
-                            <span>
-                                <i className="legend-dot fuel-dot" />
-                                Fuel/Travel
-                            </span>
-
-                            <span>
-                                <i className="legend-dot food-dot" />
-                                Food&Lunch
-                            </span>
-
-                            <span>
-                                <i className="legend-dot medical-dot" />
-                                Medical Demo
-                            </span>
-                            <span>
-                                <i className="legend-dot hotel-dot" />
-                                Hotel/Stay
-                            </span> <span>
-                                <i className="legend-dot stationery-dot" />
-                                Stationery
-                            </span>
-                            <span>
-                                <i className="legend-dot other-dot" />
-                                Others
-                            </span>
-
+                            <span><i className="legend-dot fuel-dot" />Fuel/Travel</span>
+                            <span><i className="legend-dot food-dot" />Food&Lunch</span>
+                            <span><i className="legend-dot medical-dot" />Medical Demo</span>
+                            <span><i className="legend-dot hotel-dot" />Hotel/Stay</span>
+                            <span><i className="legend-dot stationery-dot" />Stationery</span>
+                            <span><i className="legend-dot other-dot" />Others</span>
                         </div>
-
                     </div>
-
                 </div>
 
 
-                {/* =================================
-                    PERSONNEL CARD
-                ================================== */}
-
-                {/* <div className="overview-card personnel-card">
-
-                    <div className="card-header">
-
-                        <span className="card-title">
-                            ACTIVE SITE PERSONNEL
-                        </span>
-
-                        <span className="live-status">
-
-                            <i />
-
-                            {
-                                dashboardData
-                                    .personnel
-                                    .syncStatus
-                            }
-
-                        </span>
-
-                    </div>
-
-
-                    <div className="personnel-value">
-
-                        <strong className="main-value">
-                            {
-                                dashboardData
-                                    .personnel
-                                    .active
-                            }
-                        </strong>
-
-                        <span>
-                            /
-                            {
-                                dashboardData
-                                    .personnel
-                                    .total
-                            }{" "}
-                            {
-                                dashboardData
-                                    .personnel
-                                    .label
-                            }
-                        </span>
-
-                    </div>
-
-
-                    <div className="comparison-row">
-
-                        <span className="positive-text">
-                            ♙
-                            {
-                                dashboardData
-                                    .personnel
-                                    .techChange
-                            }
-                        </span>
-
-                        <span>
-                            {
-                                dashboardData
-                                    .personnel
-                                    .comparison
-                            }
-                        </span>
-
-                    </div>
-
-
-                    <div className="personnel-stats">
-
-                        <div>
-
-                            <span>
-                                En Route
-                            </span>
-
-                            <strong>
-                                {
-                                    dashboardData
-                                        .personnel
-                                        .enRoute
-                                }
-                            </strong>
-
-                        </div>
-
-
-                        <div>
-
-                            <span>
-                                At Clinic
-                            </span>
-
-                            <strong className="red-text">
-                                {
-                                    dashboardData
-                                        .personnel
-                                        .atClinic
-                                }
-                            </strong>
-
-                        </div>
-
-
-                        <div>
-
-                            <span>
-                                Offline
-                            </span>
-
-                            <strong>
-                                {
-                                    dashboardData
-                                        .personnel
-                                        .offline
-                                }
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                </div>
- */}
 
                 {/* =================================
                     CLINICS CARD
                 ================================== */}
 
                 <div className="overview-card clinic-card">
-
                     <div className="card-header">
-
-                        <span className="card-title">
-                            TOTAL CLINICS VISITED
-                        </span>
-
-                        <span className="status-badge">
-                            OCTOBER
-                        </span>
-
+                        <span className="card-title">TOTAL CLINICS VISITED</span>
+                        <span className="status-badge">{endMonth}</span>
                     </div>
-
 
                     <div className="clinic-value">
-
                         <strong className="main-value">
-                            {
-                                dashboardData
-                                    .clinics
-                                    .visited
-                            }
+                            {expenseData?.totalClinic?.currentMonth ?? 0}
                         </strong>
 
-                        <span>
-                            {
-                                dashboardData
-                                    .clinics
-                                    .label
-                            }
-                        </span>
-
+                        <span>Clinics visited</span>
                     </div>
-
 
                     <div className="comparison-row">
-
-                        <span className="positive-text">
-                            ♧
-                            {
-                                dashboardData
-                                    .clinics
-                                    .visitChange
-                            }
-                        </span>
-
                         <span>
-                            {
-                                dashboardData
-                                    .clinics
-                                    .comparison
-                            }
-                        </span>
+                            {startMonth
+                                ? new Date(selectedYear, selectedMonth).toLocaleString("en-US", {
+                                    month: "long",
+                                }) + " " + String(selectedYear).slice(-2)
+                                : "Previous Month"
+                            } : ₹ {expenseData?.totalClinic?.compareMonth ?? 0}
 
+                        </span>
                     </div>
 
-
                     <div className="clinic-bottom">
-
                         <div>
-
                             <span>
                                 AVERAGE CLAIM /
                                 <br />
@@ -761,40 +435,11 @@ function DashBoardAboveCard() {
                             </span>
 
                             <strong>
-                                {
-                                    dashboardData
-                                        .clinics
-                                        .averageClaim
-                                }
+                                ₹ {expenseData?.averageClaimPerVisit ?? 0}
                             </strong>
-
                         </div>
-
-
-                        <div>
-
-                            <strong>
-                                {
-                                    dashboardData
-                                        .clinics
-                                        .costChange
-                                }
-                            </strong>
-
-                            <span>
-                                Cost/Stop
-                            </span>
-
-                        </div>
-
                     </div>
-
                 </div>
-
-
-                {/* =================================
-                    APPROVAL CARD
-                ================================== */}
 
 
 

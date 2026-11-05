@@ -1,410 +1,371 @@
+import { useEffect, useState } from "react";
+import { getExpenseComparisonApi } from "../../services/api/dashboard/getExpenseComparisonApi";
 import "./DashBoardMiddleCard.css";
 
+function DashBoardMiddleCard({
+    compareMonth: selectedCompareMonth,
+    compareYear: selectedCompareYear,
+}) {
 
-function DashBoardMiddleCard() {
-
-    /* =========================================
-       TEMP DATA
-
-       Replace with API response later
-    ========================================= */
-
-    const data = {
-
-        title:
-            "Month-over-Month Expense & Field Activity Analysis",
-
-        subtitle:
-            "Aggregated expenditure cadence, diagnostic transit volume, and unit-cost variance benchmarks.",
-
-        period:
-            "Oct 2026 vs Sep 2026",
-
-        currentMonth:
-            "Current Month (Oct)",
-
-        previousMonth:
-            "Previous Month (Sep)",
+    const [dashboardData, setDashboardData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState("");
 
 
-        /* =====================================
-           WEEKLY CHART
-        ====================================== */
+    const currentDate = new Date();
 
-        weeklyExpenses: [
-            {
-                week: "W1 (1-7)",
-                previous: 102,
-                current: 120,
-            },
-            {
-                week: "W2 (8-14)",
-                previous: 112,
-                current: 129,
-            },
-            {
-                week: "W3 (15-21)",
-                previous: 120,
-                current: 142,
-            },
-            {
-                week: "W4 (22-31)",
-                previous: 110,
-                current: 134,
-            },
-        ],
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentYear = currentDate.getFullYear();
+
+    const previousMonthName = new Date(
+        selectedCompareYear || currentYear,
+        (selectedCompareMonth || (currentMonth === 1 ? 12 : currentMonth - 1)) - 1
+    ).toLocaleString("en-US", {
+        month: "short",
+        year: "numeric",
+    });
+
+    const currentMonthName = currentDate.toLocaleString("en-US", {
+        month: "short",
+        year: "numeric",
+    });
 
 
-        /* =====================================
-           AUDIT MESSAGE
-        ====================================== */
+    // Fetch API
+    useEffect(() => {
 
-        auditMessage:
-            "Largest surge observed in Week 3 (+16.6%) due to intensive outer-hub specimen routing.",
+        const fetchExpenseComparison = async () => {
 
-        auditStatus:
-            "AUDIT LOG VERIFIED",
+            try {
 
+                setIsLoading(true);
+                setError("");
 
-        /* =====================================
-           VARIANCE LIST
-        ====================================== */
+                const response = await getExpenseComparisonApi({
+                    compareMonth: selectedCompareMonth || "",
+                    compareYear: selectedCompareYear || "",
+                });
 
-        varianceItems: [
-            {
-                id: 1,
-                icon: "⌘",
-                title: "Field Travel Mileage",
-                comparison:
-                    "Oct: 18,420 km • Sep: 15,900 km",
-                value: "+2,520 km",
-                variance: "+15.8% MoM",
-                type: "increase",
-            },
-
-            {
-                id: 2,
-                icon: "▣",
-                title: "Specimen Transit & Logistics",
-                comparison:
-                    "Oct: ₹1,12,000 • Sep: ₹98,500",
-                value: "₹ 13,500",
-                variance: "+13.7% MoM",
-                type: "increase",
-            },
-
-            {
-                id: 3,
-                icon: "♜",
-                title: "Daily Field DA & Food",
-                comparison:
-                    "Oct: ₹96,200 • Sep: ₹91,400",
-                value: "₹ 4,800",
-                variance: "+5.2% MoM",
-                type: "normal",
-            },
-
-            {
-                id: 4,
-                icon: "▱",
-                title: "Lodging & Overnight Stays",
-                comparison:
-                    "Oct: ₹45,000 • Sep: ₹52,000",
-                value: "-₹ 7,000",
-                variance: "-13.5% Saved",
-                type: "saving",
-            },
-        ],
-    };
+                if (response?.success) {
+                    setDashboardData(response);
+                } else {
+                    setError(response?.message || "Unable to fetch expense details");
+                }
 
 
-    /* =========================================
-       CHART MAX VALUE
+            } catch (error) {
 
-       Screenshot graph = 150k maximum
-    ========================================= */
+                console.error("Expense comparison API error:", error);
 
-    const chartMaxValue = 150;
+                setError("Something went wrong while fetching expense details");
 
+            } finally {
+
+                setIsLoading(false);
+
+            }
+        };
+
+        fetchExpenseComparison();
+
+    }, [selectedCompareMonth, selectedCompareYear]);
+    // Loading
+    if (isLoading) {
+        return (
+            <section className="dashboard-middle-card">
+                <div className="middle-card-loading">
+                    Loading expense comparison...
+                </div>
+            </section>
+        );
+    }
+
+    // Error / No data
+    if (error || !dashboardData) {
+        return (
+            <section className="dashboard-middle-card">
+                <div className="middle-card-loading">
+                    {error || "No expense data available"}
+                </div>
+            </section>
+        );
+    }
+
+    // API data
+    const data = dashboardData;
+
+    // Weekly chart data
+    const weeklyExpenses = [
+        {
+            week: "W1 (1-7)",
+            previous: Number(data.week1?.comparitiveMonth || 0),
+            current: Number(data.week1?.currentMonth || 0),
+        },
+        {
+            week: "W2 (8-14)",
+            previous: Number(data.week2?.comparitiveMonth || 0),
+            current: Number(data.week2?.currentMonth || 0),
+        },
+        {
+            week: "W3 (15-21)",
+            previous: Number(data.week3?.comparitiveMonth || 0),
+            current: Number(data.week3?.currentMonth || 0),
+        },
+        {
+            week: "W4 (22-31)",
+            previous: Number(data.week4?.comparitiveMonth || 0),
+            current: Number(data.week4?.currentMonth || 0),
+        },
+    ];
+
+    // Expense category data
+    const categoryItems = [
+        {
+            id: 1,
+            icon: "🍔",
+            title: "Food & Lunch",
+            previous: Number(data.foodLunch?.comparitiveMonth || 0),
+            current: Number(data.foodLunch?.currentMonth || 0),
+        },
+        {
+            id: 2,
+            icon: "⛽",
+            title: "Fuel / Travel",
+            previous: Number(data.fuelTravel?.comparitiveMonth || 0),
+            current: Number(data.fuelTravel?.currentMonth || 0),
+        },
+        {
+            id: 3,
+            icon: "🏨",
+            title: "Hotel / Stay",
+            previous: Number(data.hotelStay?.comparitiveMonth || 0),
+            current: Number(data.hotelStay?.currentMonth || 0),
+        },
+        {
+            id: 4,
+            icon: "📦",
+            title: "Other Expenses",
+            previous: Number(data.otherExpenses?.comparitiveMonth || 0),
+            current: Number(data.otherExpenses?.currentMonth || 0),
+        },
+    ];
+
+    // Dynamic chart maximum
+    const highestValue = Math.max(
+        ...weeklyExpenses.flatMap(item => [
+            item.previous,
+            item.current,
+        ]),
+        0
+    );
+
+    const chartMaxValue = highestValue > 0
+        ? Math.ceil(highestValue / 4 / 100) * 100 * 4
+        : 100;
 
     const getBarHeight = (value) => {
-
-        const percentage =
-            (value / chartMaxValue) * 100;
-
-        return `${Math.min(
-            percentage,
-            100
-        )}%`;
+        return `${(value / chartMaxValue) * 100}%`;
     };
+
+    // Currency format
+    const formatAmount = (amount) => {
+        return new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "INR",
+            maximumFractionDigits: 0,
+        }).format(amount);
+    };
+
+    // Calculate category variance
+    const getVariance = (current, previous) => {
+
+        const difference = current - previous;
+
+        const percentage = previous > 0
+            ? ((difference / previous) * 100).toFixed(1)
+            : current > 0 ? "100" : "0";
+
+        return {
+            difference,
+            percentage,
+            type: difference > 0
+                ? "increase"
+                : difference < 0
+                    ? "saving"
+                    : "normal",
+        };
+    };
+
 
 
     return (
 
         <section className="dashboard-middle-card">
 
-
-            {/* =====================================
-                HEADER
-            ====================================== */}
+            {/* HEADER */}
 
             <div className="middle-card-header">
-
-
-                {/* LEFT */}
 
                 <div className="middle-card-heading">
 
                     <div className="middle-title-row">
 
                         <h2>
-                            {data.title}
+                            Month-over-Month Expense Analysis
                         </h2>
 
                         <span className="middle-period-badge">
-                            {data.period}
+                            {currentMonthName} vs {previousMonthName}
                         </span>
 
                     </div>
 
-
                     <p>
-                        {data.subtitle}
+                        Monthly expense comparison and weekly expenditure analysis.
                     </p>
 
                 </div>
-
 
                 {/* LEGEND */}
 
                 <div className="middle-chart-legend">
 
                     <div className="middle-legend-item">
-
                         <span className="legend-box legend-current" />
-
-                        <span>
-                            {data.currentMonth}
-                        </span>
-
+                        <span>Current Month ({currentMonthName})</span>
                     </div>
 
-
                     <div className="middle-legend-item">
-
                         <span className="legend-box legend-previous" />
-
-                        <span>
-                            {data.previousMonth}
-                        </span>
-
+                        <span>Comparative Month ({previousMonthName})</span>
                     </div>
 
                 </div>
 
             </div>
 
-
-            {/* =====================================
-                BODY
-            ====================================== */}
+            {/* BODY */}
 
             <div className="middle-card-body">
 
-
-                {/* =================================
-                    LEFT CHART SECTION
-                ================================== */}
+                {/* WEEKLY CHART */}
 
                 <div className="weekly-chart-card">
-
-
-                    {/* CHART HEADER */}
 
                     <div className="weekly-chart-header">
 
                         <h3>
-                            Weekly Expense Run Rate Comparison
+                            Weekly Expense Comparison
                         </h3>
 
-                        <span>
-                            Values in INR (Thousands)
-                        </span>
+                        <span>Values in INR (₹)</span>
 
                     </div>
 
-
-                    {/* =================================
-                        GRAPH
-                    ================================== */}
-
                     <div className="weekly-chart-area">
-
 
                         {/* Y AXIS */}
 
                         <div className="chart-y-axis">
 
-                            <span>
-                                150k
-                            </span>
-
-                            <span>
-                                100k
-                            </span>
-
-                            <span>
-                                50k
-                            </span>
-
-                            <span>
-                                0
-                            </span>
+                            {[4, 3, 2, 1, 0].map((value) => (
+                                <span key={value}>
+                                    {formatAmount(
+                                        (chartMaxValue / 4) * value
+                                    )}
+                                </span>
+                            ))}
 
                         </div>
-
 
                         {/* GRAPH */}
 
                         <div className="chart-content">
 
-
-                            {/* GRID LINES */}
-
                             <div className="chart-grid-lines">
-
                                 <div />
                                 <div />
                                 <div />
                                 <div />
-
+                                <div />
                             </div>
-
-
-                            {/* BARS */}
 
                             <div className="chart-bars">
 
-                                {data.weeklyExpenses.map(
-                                    (item) => (
+                                {weeklyExpenses.map((item) => (
 
-                                        <div
-                                            className="chart-week"
-                                            key={item.week}
-                                        >
+                                    <div
+                                        className="chart-week"
+                                        key={item.week}
+                                    >
 
-                                            <div className="week-bars">
+                                        <div className="week-bars">
 
-                                                {/* PREVIOUS */}
+                                            {/* PREVIOUS */}
 
-                                                <div
-                                                    className="expense-bar previous-bar"
-                                                    style={{
-                                                        height:
-                                                            getBarHeight(
-                                                                item.previous
-                                                            ),
-                                                    }}
-                                                    title={`Previous: ₹${item.previous}k`}
-                                                />
+                                            <div
+                                                className="expense-bar previous-bar"
+                                                style={{
+                                                    height: getBarHeight(item.previous),
+                                                }}
+                                                title={`Previous: ${formatAmount(item.previous)}`}
+                                            />
 
+                                            {/* CURRENT */}
 
-                                                {/* CURRENT */}
-
-                                                <div
-                                                    className="expense-bar current-bar"
-                                                    style={{
-                                                        height:
-                                                            getBarHeight(
-                                                                item.current
-                                                            ),
-                                                    }}
-                                                    title={`Current: ₹${item.current}k`}
-                                                />
-
-                                            </div>
-
-
-                                            <span className="week-label">
-                                                {item.week}
-                                            </span>
+                                            <div
+                                                className="expense-bar current-bar"
+                                                style={{
+                                                    height: getBarHeight(item.current),
+                                                }}
+                                                title={`Current: ${formatAmount(item.current)}`}
+                                            />
 
                                         </div>
 
-                                    )
-                                )}
+                                        <span className="week-label">
+                                            {item.week}
+                                        </span>
+
+                                    </div>
+
+                                ))}
 
                             </div>
 
                         </div>
-
-                    </div>
-
-
-                    {/* =================================
-                        AUDIT INFO
-                    ================================== */}
-
-                    <div className="chart-audit-info">
-
-                        <div className="audit-info-message">
-
-                            <span className="audit-info-icon">
-                                ⓘ
-                            </span>
-
-                            <span>
-                                {data.auditMessage}
-                            </span>
-
-                        </div>
-
-
-                        <strong className="audit-verified">
-
-                            {data.auditStatus}
-
-                        </strong>
 
                     </div>
 
                 </div>
 
-
-                {/* =================================
-                    RIGHT SIDE
-                ================================== */}
+                {/* CATEGORY BREAKDOWN */}
 
                 <div className="variance-section">
 
                     <h3>
-                        Sub-Ledger Variance Breakdown
+                        Expense Category Breakdown
                     </h3>
-
 
                     <div className="variance-list">
 
-                        {data.varianceItems.map(
-                            (item) => (
+                        {categoryItems.map((item) => {
+
+                            const variance = getVariance(
+                                item.current,
+                                item.previous
+                            );
+
+                            return (
 
                                 <div
                                     className="variance-item"
                                     key={item.id}
                                 >
 
-                                    {/* ICON */}
-
-                                    <div
-                                        className={`variance-icon ${item.type === "increase"
-                                                ? "variance-icon-red"
-                                                : ""
-                                            }`}
-                                    >
+                                    <div className="variance-icon">
                                         {item.icon}
                                     </div>
-
-
-                                    {/* INFORMATION */}
 
                                     <div className="variance-info">
 
@@ -413,38 +374,39 @@ function DashBoardMiddleCard() {
                                         </strong>
 
                                         <span>
-                                            {item.comparison}
+                                            Current: {formatAmount(item.current)}
+                                            {" "}•{" "}
+                                            Previous: {formatAmount(item.previous)}
                                         </span>
 
                                     </div>
 
-
-                                    {/* VALUE */}
-
                                     <div className="variance-value">
 
                                         <strong>
-                                            {item.value}
+                                            {variance.difference > 0 ? "+" : ""}
+                                            {formatAmount(variance.difference)}
                                         </strong>
 
                                         <span
                                             className={
-                                                item.type === "increase"
+                                                variance.type === "increase"
                                                     ? "variance-increase"
-                                                    : item.type === "saving"
+                                                    : variance.type === "saving"
                                                         ? "variance-saving"
                                                         : ""
                                             }
                                         >
-                                            {item.variance}
+                                            {variance.percentage}% MoM
                                         </span>
 
                                     </div>
 
                                 </div>
 
-                            )
-                        )}
+                            );
+
+                        })}
 
                     </div>
 
@@ -455,6 +417,5 @@ function DashBoardMiddleCard() {
         </section>
     );
 }
-
 
 export default DashBoardMiddleCard;
