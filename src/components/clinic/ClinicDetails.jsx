@@ -793,19 +793,6 @@ function ClinicDetails() {
 
                 </div>
 
-
-                <button
-                    type="button"
-                    className="clinic-add-button"
-                    onClick={() =>
-                        console.log(
-                            "Add Clinic"
-                        )
-                    }
-                >
-                    + Register New Clinic
-                </button>
-
             </div>
 
 
@@ -912,81 +899,6 @@ function ClinicDetails() {
             </div>
 
 
-            {/* =====================================
-                SUMMARY CARDS
-            ====================================== */}
-
-            <div className="clinic-summary-grid">
-
-
-                <div className="clinic-summary-card">
-
-                    <span>
-                        TOTAL FACILITIES
-                    </span>
-
-                    <strong>
-                        {totalFacilities}
-                    </strong>
-
-                    <small>
-                        Registered clinics
-                    </small>
-
-                </div>
-
-
-                <div className="clinic-summary-card">
-
-                    <span>
-                        ACTIVE FACILITIES
-                    </span>
-
-                    <strong>
-                        {activeFacilities}
-                    </strong>
-
-                    <small className="clinic-positive">
-                        Currently operational
-                    </small>
-
-                </div>
-
-
-                <div className="clinic-summary-card">
-
-                    <span>
-                        TOTAL CLINIC VISITS
-                    </span>
-
-                    <strong>
-                        {totalVisits}
-                    </strong>
-
-                    <small>
-                        Selected period
-                    </small>
-
-                </div>
-
-
-                <div className="clinic-summary-card">
-
-                    <span>
-                        SPECIMEN RECORDS
-                    </span>
-
-                    <strong>
-                        {totalSpecimens}
-                    </strong>
-
-                    <small>
-                        Processed records
-                    </small>
-
-                </div>
-
-            </div>
 
 
             {/* =====================================
@@ -1013,7 +925,7 @@ function ClinicDetails() {
 
 
                 <span>
-                    {totalItems} Facilities
+                    {100} Visits
                 </span>
 
             </div>
@@ -1110,9 +1022,6 @@ function ClinicDetails() {
                                     </h3>
 
 
-                                    <p className="clinic-type">
-                                        {clinic.type}
-                                    </p>
 
 
                                     <div className="clinic-location">
@@ -1140,7 +1049,7 @@ function ClinicDetails() {
                                         <div>
 
                                             <span>
-                                                CONTACT
+                                                VISITOR NAME
                                             </span>
 
                                             <strong>
@@ -1149,11 +1058,7 @@ function ClinicDetails() {
                                                 }
                                             </strong>
 
-                                            <small>
-                                                {
-                                                    clinic.phone
-                                                }
-                                            </small>
+
 
                                         </div>
 
@@ -1161,21 +1066,18 @@ function ClinicDetails() {
                                         <div>
 
                                             <span>
-                                                LAST VISIT
+                                                TOTAL CLAIMS
                                             </span>
 
                                             <strong>
+
                                                 {
-                                                    clinic.lastVisit
+                                                    clinic.totalVisits
+
                                                 }
                                             </strong>
 
-                                            <small>
-                                                {
-                                                    clinic.totalVisits
-                                                }{" "}
-                                                total visits
-                                            </small>
+
 
                                         </div>
 
@@ -1230,7 +1132,7 @@ function ClinicDetails() {
                                             <div
                                                 style={{
                                                     width:
-                                                        `${clinic.progress}%`,
+                                                        `30%`,
                                                 }}
                                             />
 
@@ -1244,9 +1146,7 @@ function ClinicDetails() {
                                             </span>
 
                                             <strong>
-                                                {
-                                                    clinic.progress
-                                                }%
+                                                30%
                                             </strong>
 
                                         </div>
@@ -1254,43 +1154,7 @@ function ClinicDetails() {
                                     </div>
 
 
-                                    {/* =================
-                                        STATS
-                                    ================== */}
 
-                                    <div className="clinic-card-stats">
-
-
-                                        <div>
-
-                                            <span>
-                                                VISITS
-                                            </span>
-
-                                            <strong>
-                                                {
-                                                    clinic.totalVisits
-                                                }
-                                            </strong>
-
-                                        </div>
-
-
-                                        <div>
-
-                                            <span>
-                                                SPECIMENS
-                                            </span>
-
-                                            <strong>
-                                                {
-                                                    clinic.specimenRecords
-                                                }
-                                            </strong>
-
-                                        </div>
-
-                                    </div>
 
 
                                     {/* =================
@@ -1300,17 +1164,7 @@ function ClinicDetails() {
                                     <div className="clinic-card-actions">
 
 
-                                        <button
-                                            type="button"
-                                            className="clinic-ledger-button"
-                                            onClick={() =>
-                                                handleViewLedger(
-                                                    clinic
-                                                )
-                                            }
-                                        >
-                                            ▤ View Ledger
-                                        </button>
+
 
 
                                         <button
