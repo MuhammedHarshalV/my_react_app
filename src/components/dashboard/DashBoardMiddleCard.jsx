@@ -292,11 +292,11 @@ function DashBoardMiddleCard({
 
                             <div className="chart-bars">
 
-                                {weeklyExpenses.map((item) => (
+                                {weeklyExpenses.map((item, index) => (
 
                                     <div
                                         className="chart-week"
-                                        key={item.week}
+                                        key={index}
                                     >
 
                                         <div className="week-bars">
@@ -349,7 +349,7 @@ function DashBoardMiddleCard({
 
                     <div className="variance-list">
 
-                        {categoryItems.map((item) => {
+                        {categoryItems.map((item, index) => {
 
                             const variance = getVariance(
                                 item.current,
@@ -360,7 +360,7 @@ function DashBoardMiddleCard({
 
                                 <div
                                     className="variance-item"
-                                    key={item.id}
+                                    key={index}
                                 >
 
                                     <div className="variance-icon">

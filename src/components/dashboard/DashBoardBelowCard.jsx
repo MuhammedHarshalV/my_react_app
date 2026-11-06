@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import "./DashBoardBelowCard.css";
 
 import CenterLoader from "../common/CenterLoader";
 import { getRecentClinicsApi } from "../../services/api/dashboard/getRecentClinics";
 
 function DashBoardBelowCard() {
-
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
 
     const [clinicData, setClinicData] = useState(null);
@@ -262,25 +262,16 @@ function DashBoardBelowCard() {
 
             <div className="below-card-footer">
 
-
-
-
-
                 <button
                     className="open-records-button"
                     type="button"
+                    onClick={() => navigate("/dashboard/clinics")}
                 >
-
                     Open All{" "}
-
-                    {clinicData?.totalClinicVisited ?? 0}   {" "}
-
+                    {clinicData?.totalClinicVisited ?? 0}{" "}
                     Clinic Records
 
-                    <span>
-                        ›
-                    </span>
-
+                    <span>›</span>
                 </button>
 
             </div>

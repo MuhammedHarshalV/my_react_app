@@ -3,12 +3,12 @@ import { ApiService } from "../../core/apiServices";
 
 
 export const getClinicDetailsApi = async ({
-    startDate = "",
-    endDate = "",
-    search = '',
-    page = '',
-    limit = '',
-    approved = '',
+    startDate = null,
+    endDate = null,
+    search = null,
+    page = 1,
+    limit = 6,
+    approved = null,
 } = {}) => {
 
 

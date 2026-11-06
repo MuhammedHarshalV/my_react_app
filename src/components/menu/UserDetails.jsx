@@ -184,7 +184,7 @@ function UserDetails() {
 
                     <input
                         type="text"
-                        placeholder="Search by employee name..."
+                        placeholder="Search Employee name..."
                         value={search}
                         onChange={handleSearchChange}
                     />
@@ -205,11 +205,11 @@ function UserDetails() {
                         <p>{error}</p>
                     </div>
                 ) : users.length > 0 ? (
-                    users.map((user) => (
+                    users.map((user, index) => (
                         <div
                             className={`user-card ${user.flagged ? "flagged-card" : ""
                                 }`}
-                            key={user.id}
+                            key={index}
                         >
                             {/* CARD HEADER */}
                             <div className="user-card-header">
@@ -227,10 +227,21 @@ function UserDetails() {
                                                 src={user.profilePhoto}
                                                 alt={user.name}
                                                 className="user-profile-image"
+                                                onError={(e) => {
+                                                    e.currentTarget.style.display = "none";
+                                                    e.currentTarget.nextElementSibling.style.display = "flex";
+                                                }}
                                             />
-                                        ) : (
-                                            user.avatar
-                                        )}
+                                        ) : null}
+
+                                        <span
+                                            className="user-avatar-fallback"
+                                            style={{
+                                                display: user.profilePhoto ? "none" : "flex",
+                                            }}
+                                        >
+                                            {user.avatar}
+                                        </span>
 
                                         {user.status && (
                                             <span
@@ -416,11 +427,19 @@ function UserDetails() {
                                             <img
                                                 src={selectedUser.profilePhoto}
                                                 alt={selectedUser.name}
+                                                onError={(e) => {
+                                                    e.currentTarget.style.display = "none";
+                                                    e.currentTarget.nextElementSibling.style.display = "flex";
+                                                }}
                                             />
-                                        ) : (
-                                            selectedUser.avatar
-                                        )}
-
+                                        ) : null}
+                                        <span
+                                            style={{
+                                                display: selectedUser.profilePhoto ? "none" : "flex",
+                                            }}
+                                        >
+                                            {selectedUser.avatar}
+                                        </span>
                                         <span className="profile-status-dot online" />
                                     </div>
 

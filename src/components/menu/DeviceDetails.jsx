@@ -187,7 +187,7 @@ function DeviceDetails() {
                     <FiSearch />
                     <input
                         type="text"
-                        placeholder="Search devices..."
+                        placeholder="Search Employee name..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
@@ -221,10 +221,10 @@ function DeviceDetails() {
             ) : (
                 <div className="device-list">
                     {devices.length > 0 ? (
-                        devices.map((device) => (
+                        devices.map((device, index) => (
                             <div
                                 className="device-card"
-                                key={device.id}
+                                key={index}
                             >
                                 <div className="device-card-top">
                                     <div className="device-employee">
@@ -259,7 +259,7 @@ function DeviceDetails() {
                                             <div className="device-employee-name">
                                                 <h3>{device.employee}</h3>
                                                 <span className="employee-id">
-                                                    PRO-ID ${device.employeeId}
+                                                    PRO-ID {device.employeeId}
                                                 </span>
                                             </div>
 
@@ -281,7 +281,7 @@ function DeviceDetails() {
                                                 <div className="device-employee-name">
 
                                                     <span className="employee-id">
-                                                        DEVICE-ID ${device.id}
+                                                        DEVICE-ID #{device.id}
                                                     </span>
                                                 </div>
 
