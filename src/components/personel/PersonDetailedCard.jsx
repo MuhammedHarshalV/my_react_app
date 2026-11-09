@@ -1,189 +1,90 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 import "./PersonDetailedCard.css";
 
+function PersonDetailedCard({ person }) {
 
-function PersonDetailedCard() {
+    const [imageError, setImageError] = useState(false);
 
-    /* =========================================
-       INITIAL DATA
-
-       Later replace this with API response
-    ========================================= */
-
-    const [person, setPerson] = useState(() => ({
-        id: 1,
-
-        name: "Rahul Menon",
-
-        proId: "PRO-104",
-
-        designation:
-            "Sr. Route Diagnostic Specialist",
-
-        image:
-            "https://i.pravatar.cc/150?img=12",
-
-        phone:
-            "+91 98471 23091",
-
-        location:
-            "Ernakulam North • Medical District",
-
-        status:
-            "ON FIELD",
-
-        statusType:
-            "on-field",
-
-        clinicsVisited:
-            24,
-
-        clinicSubText:
-            "+4 vs target",
-
-        expenseClaims:
-            18,
-
-        expenseSubText:
-            "3 under audit",
-
-        totalClaimed:
-            "₹ 14,850",
-
-        verifiedAmount:
-            "₹ 12,400",
-
-        verifiedLabel:
-            "VERIFIED",
-
-        gpsAvailable:
-            true,
-    }));
-
-
-    /* =========================================
-       BUTTON FUNCTIONS
-    ========================================= */
-
-    const handleViewLedger = () => {
-
-        console.log(
-            "View Ledger:",
-            person
-        );
-    };
-
-
-    const handleLiveGps = () => {
-
-        console.log(
-            "Live GPS:",
-            person
-        );
-    };
-
-
-    const handleStationLog = () => {
-
-        console.log(
-            "Station Log:",
-            person
-        );
-    };
-
-
-    const handleCopyProId = async () => {
-
-        try {
-
-            await navigator.clipboard.writeText(
-                person.proId
-            );
-
-            console.log(
-                "Copied:",
-                person.proId
-            );
-
-        } catch (error) {
-
-            console.log(
-                "Copy Error:",
-                error
-            );
-        }
-    };
-
-
-    /* =========================================
-       NO DATA
-    ========================================= */
+    useEffect(() => {
+        setImageError(false);
+    }, [person?.profileImageUrl]);
 
     if (!person) {
-
         return null;
     }
 
+    const formatAmount = (amount) => {
+        return `₹ ${Number(amount ?? 0).toLocaleString("en-IN")}`;
+    };
+
+    const handleViewLedger = () => {
+        console.log("View Ledger:", person);
+    };
+
+    const handleCopyProId = async () => {
+        try {
+            await navigator.clipboard.writeText(
+                String(person.proId ?? "")
+            );
+            console.log("Copied:", person.proId);
+        } catch (error) {
+            console.log("Copy Error:", error);
+        }
+    };
 
     return (
-
         <div className="person-detailed-card">
-
-
-            {/* =====================================
-                TOP RED LINE
-            ====================================== */}
 
             <div className="person-card-top-line" />
 
-
-            {/* =====================================
-                PERSON HEADER
-            ====================================== */}
+            {/* PERSON HEADER */}
 
             <div className="person-card-header">
 
-
                 <div className="person-main-info">
-
 
                     {/* PROFILE IMAGE */}
 
-                    <img
-                        src={person.image}
-                        alt={person.name}
-                        className="person-profile-image"
-                    />
+                    {person.profileImageUrl && !imageError ? (
 
+                        <img
+                            src={person.profileImageUrl}
+                            alt={person.name}
+                            className="person-profile-image"
+                            onError={() => setImageError(true)}
+                        />
+
+                    ) : (
+
+                        <div className="person-profile-image person-profile-fallback">
+                            {person.name?.trim()?.charAt(0)?.toUpperCase() || "U"}
+                        </div>
+
+                    )}
 
                     {/* NAME / DESIGNATION */}
 
                     <div className="person-name-section">
 
-
                         <div className="person-name-row">
 
                             <h3>
-                                {person.name}
+                                {person.name || "-"}
                             </h3>
 
-
                             <span className="person-pro-id">
-                                {person.proId}
+                                PRO-ID {person.proId || "-"}
                             </span>
 
                         </div>
 
-
                         <p>
-                            {person.designation}
+                            {person.designation || "-"}
                         </p>
 
                     </div>
 
                 </div>
-
 
                 {/* COPY BUTTON */}
 
@@ -198,13 +99,9 @@ function PersonDetailedCard() {
 
             </div>
 
-
-            {/* =====================================
-                CONTACT INFORMATION
-            ====================================== */}
+            {/* CONTACT INFORMATION */}
 
             <div className="person-contact-section">
-
 
                 <div className="person-contact-row">
 
@@ -213,14 +110,12 @@ function PersonDetailedCard() {
                     </span>
 
                     <span>
-                        {person.phone}
+                        {person.phoneNumber || "-"}
                     </span>
 
                 </div>
 
-
                 <div className="person-location-row">
-
 
                     <div className="person-location">
 
@@ -229,122 +124,69 @@ function PersonDetailedCard() {
                         </span>
 
                         <span>
-                            {person.location}
+                            {person.location || "-"}
                         </span>
 
                     </div>
-
-
-                    <span
-                        className={`person-status ${person.statusType || ""
-                            }`}
-                    >
-                        {person.status}
-                    </span>
 
                 </div>
 
             </div>
 
-
-            {/* =====================================
-                STATISTICS
-            ====================================== */}
+            {/* STATISTICS */}
 
             <div className="person-stat-grid">
 
-
-                {/* CLINICS VISITED */}
-
                 <div className="person-stat-box">
 
-
                     <div className="person-stat-title">
-
-                        <span>
-                            ⊞
-                        </span>
-
-                        <span>
-                            CLINICS VISITED
-                        </span>
-
+                        <span>⊞</span>
+                        <span>CLINICS VISITED</span>
                     </div>
 
-
                     <strong className="person-stat-value">
-
-                        {person.clinicsVisited} Visited
-
+                        {person.totalClinicVisited ?? 0} Visited
                     </strong>
 
-
                     <span className="person-stat-subtext highlight">
-
-                        {person.clinicSubText}
-
+                        Total clinic visits
                     </span>
 
                 </div>
 
-
-                {/* EXPENSE CLAIMS */}
-
                 <div className="person-stat-box">
 
-
                     <div className="person-stat-title">
-
-                        <span>
-                            ▤
-                        </span>
-
-                        <span>
-                            EXPENSE CLAIMS
-                        </span>
-
+                        <span>▤</span>
+                        <span>EXPENSE CLAIMS</span>
                     </div>
 
-
                     <strong className="person-stat-value">
-
-                        {person.expenseClaims} Claims
-
+                        {person.totalClaimedCount ?? 0} Claims
                     </strong>
 
-
                     <span className="person-stat-subtext">
-
-                        {person.expenseSubText}
-
+                        Total claims
                     </span>
 
                 </div>
 
             </div>
 
-
-            {/* =====================================
-                TOTAL CLAIMED
-            ====================================== */}
+            {/* TOTAL CLAIMED */}
 
             <div className="person-total-claim">
 
-
                 <div className="person-total-left">
 
-
                     <span className="person-total-label">
-
-                        TOTAL MTD CLAIMED
-
+                        TOTAL CLAIMED
                     </span>
-
 
                     <div className="person-total-value">
 
                         <strong>
-                            {person.totalClaimed}
+                            {formatAmount(person.totalClaimedExpense)}
                         </strong>
 
                         <span>
@@ -355,102 +197,40 @@ function PersonDetailedCard() {
 
                 </div>
 
-
                 <div className="person-verified-amount">
 
-                    {person.verifiedAmount}
+                    {formatAmount(person.totalApprovedAmount)}
 
                     {" "}
 
                     <span>
-                        {person.verifiedLabel}
+                        APPROVED
                     </span>
 
                 </div>
 
             </div>
 
-
-            {/* =====================================
-                ACTION BUTTONS
-            ====================================== */}
+            {/* ACTION BUTTON */}
 
             <div className="person-card-actions">
 
-
-                {/* VIEW LEDGER */}
-
                 <button
                     type="button"
-                    className="
-                        person-action-button
-                        ledger-button
-                    "
-                    onClick={
-                        handleViewLedger
-                    }
+                    className="person-action-button ledger-button"
+                    onClick={handleViewLedger}
                 >
 
-                    <span>
-                        ▤
-                    </span>
+                    <span>▤</span>
 
                     View Ledger
 
                 </button>
-
-
-                {/* GPS / STATION */}
-
-                {person.gpsAvailable ? (
-
-                    <button
-                        type="button"
-                        className="
-                            person-action-button
-                            gps-button
-                        "
-                        onClick={
-                            handleLiveGps
-                        }
-                    >
-
-                        <span>
-                            ◎
-                        </span>
-
-                        Live GPS
-
-                    </button>
-
-                ) : (
-
-                    <button
-                        type="button"
-                        className="
-                            person-action-button
-                            station-button
-                        "
-                        onClick={
-                            handleStationLog
-                        }
-                    >
-
-                        <span>
-                            ◴
-                        </span>
-
-                        Station Log
-
-                    </button>
-
-                )}
 
             </div>
 
         </div>
     );
 }
-
 
 export default PersonDetailedCard;

@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import PersonDetailedCard from "../../components/personel/PersonDetailedCard";
-import AllPersonDetails from "../../components/personel/AllPersonDetails";
+import { getUsersNameApi } from "../../services/api/users/getUsersDetailsApi";
 
 import "./UsersPage.css";
 
@@ -9,244 +9,203 @@ import "./UsersPage.css";
 export default function UsersPage() {
 
     /* =========================================
+       DEFAULT DATE
+    ========================================= */
+
+    const getToday = () => {
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, "0");
+        const day = String(today.getDate()).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+    };
+
+    const getMonthStart = () => {
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, "0");
+
+        return `${year}-${month}-01`;
+    };
+
+
+    /* =========================================
        FILTER STATES
     ========================================= */
 
-    const [searchText, setSearchText] =
-        useState("");
+    const [searchText, setSearchText] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
 
-    const [startDate, setStartDate] =
-        useState("2026-10-01");
+    const [startDate, setStartDate] = useState(getMonthStart());
+    const [endDate, setEndDate] = useState(getToday());
 
-    const [endDate, setEndDate] =
-        useState("2026-10-31");
 
-    const [statusFilter, setStatusFilter] =
-        useState("all");
+    /* =========================================
+       PERSON DATA
+    ========================================= */
+
+    const [persons, setPersons] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState("");
 
 
     /* =========================================
        PAGINATION
     ========================================= */
 
-    const [currentPage, setCurrentPage] =
-        useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(4);
 
-    const [rowsPerPage, setRowsPerPage] =
-        useState(4);
-
-
-    /* =========================================
-       DUMMY DATA
-
-       Later replace with API response
-    ========================================= */
-
-    const [persons] = useState([
-        {
-            id: 1,
-            name: "Rahul Menon",
-            proId: "PRO-104",
-            designation: "Sr. Route Diagnostic Specialist",
-            image: "https://i.pravatar.cc/150?img=12",
-            phone: "+91 98471 23091",
-            location: "Ernakulam North • Medical District",
-            status: "ON FIELD",
-            statusType: "on-field",
-            clinicsVisited: 24,
-            clinicSubText: "+4 vs target",
-            expenseClaims: 18,
-            expenseSubText: "3 under audit",
-            totalClaimed: "₹ 14,850",
-            verifiedAmount: "₹ 12,400",
-            verifiedLabel: "VERIFIED",
-            gpsAvailable: true,
-        },
-
-        {
-            id: 2,
-            name: "Ananya Sharma",
-            proId: "PRO-109",
-            designation: "Senior Liaison Officer",
-            image: "https://i.pravatar.cc/150?img=47",
-            phone: "+91 97455 88204",
-            location: "Aluva Bypass • Transit Corridor",
-            status: "IN TRANSIT",
-            statusType: "in-transit",
-            clinicsVisited: 31,
-            clinicSubText: "Top Performer",
-            expenseClaims: 22,
-            expenseSubText: "All settled",
-            totalClaimed: "₹ 18,920",
-            verifiedAmount: "₹ 18,920",
-            verifiedLabel: "CLEARED",
-            gpsAvailable: true,
-        },
-
-        {
-            id: 3,
-            name: "Deepak Varma",
-            proId: "PRO-112",
-            designation: "Route Verification Lead",
-            image: "https://i.pravatar.cc/150?img=11",
-            phone: "+91 94460 11928",
-            location: "Kochi Central Lab • Desk Audit",
-            status: "HQ REVIEW",
-            statusType: "review",
-            clinicsVisited: 19,
-            clinicSubText: "Special Audits",
-            expenseClaims: 14,
-            expenseSubText: "High Fuel Ratio",
-            totalClaimed: "₹ 11,200",
-            verifiedAmount: "₹ 11,200",
-            verifiedLabel: "APPROVED",
-            gpsAvailable: false,
-        },
-
-        {
-            id: 4,
-            name: "Sneha Paul",
-            proId: "PRO-118",
-            designation: "Clinical Outreach Officer",
-            image: "https://i.pravatar.cc/150?img=44",
-            phone: "+91 99052 47310",
-            location: "Kakkanad IT Zone • Tech Clinics",
-            status: "ON FIELD",
-            statusType: "on-field",
-            clinicsVisited: 27,
-            clinicSubText: "+8 vs quota",
-            expenseClaims: 19,
-            expenseSubText: "Auto-parsed",
-            totalClaimed: "₹ 16,340",
-            verifiedAmount: "₹ 15,100",
-            verifiedLabel: "VERIFIED",
-            gpsAvailable: true,
-        },
-
-        {
-            id: 5,
-            name: "Arjun Nair",
-            proId: "PRO-121",
-            designation: "Field Operations Executive",
-            image: "https://i.pravatar.cc/150?img=13",
-            phone: "+91 98460 12234",
-            location: "Edappally • North Zone",
-            status: "ON FIELD",
-            statusType: "on-field",
-            clinicsVisited: 22,
-            clinicSubText: "+2 vs target",
-            expenseClaims: 15,
-            expenseSubText: "All settled",
-            totalClaimed: "₹ 13,500",
-            verifiedAmount: "₹ 13,500",
-            verifiedLabel: "VERIFIED",
-            gpsAvailable: true,
-        },
-
-        {
-            id: 6,
-            name: "Meera Joseph",
-            proId: "PRO-126",
-            designation: "Clinical Field Executive",
-            image: "https://i.pravatar.cc/150?img=45",
-            phone: "+91 97460 11223",
-            location: "Thrippunithura • South Zone",
-            status: "IN TRANSIT",
-            statusType: "in-transit",
-            clinicsVisited: 29,
-            clinicSubText: "+5 vs target",
-            expenseClaims: 17,
-            expenseSubText: "2 under audit",
-            totalClaimed: "₹ 15,800",
-            verifiedAmount: "₹ 14,900",
-            verifiedLabel: "VERIFIED",
-            gpsAvailable: true,
-        },
-
-        {
-            id: 7,
-            name: "Vishnu Raj",
-            proId: "PRO-130",
-            designation: "Route Diagnostic Officer",
-            image: "https://i.pravatar.cc/150?img=14",
-            phone: "+91 98470 99881",
-            location: "Kaloor • Central Zone",
-            status: "HQ REVIEW",
-            statusType: "review",
-            clinicsVisited: 18,
-            clinicSubText: "Review pending",
-            expenseClaims: 12,
-            expenseSubText: "1 under audit",
-            totalClaimed: "₹ 10,400",
-            verifiedAmount: "₹ 9,800",
-            verifiedLabel: "APPROVED",
-            gpsAvailable: false,
-        },
-
-        {
-            id: 8,
-            name: "Fathima Ali",
-            proId: "PRO-135",
-            designation: "Clinical Outreach Executive",
-            image: "https://i.pravatar.cc/150?img=48",
-            phone: "+91 97450 88776",
-            location: "Vyttila • Medical Zone",
-            status: "ON FIELD",
-            statusType: "on-field",
-            clinicsVisited: 33,
-            clinicSubText: "Top Performer",
-            expenseClaims: 21,
-            expenseSubText: "All settled",
-            totalClaimed: "₹ 19,200",
-            verifiedAmount: "₹ 19,200",
-            verifiedLabel: "CLEARED",
-            gpsAvailable: true,
-        },
-    ]);
+    const [totalItems, setTotalItems] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
 
 
     /* =========================================
-       FILTER PERSONS
+       REQUEST CONTROL
     ========================================= */
 
-    const filteredPersons = useMemo(() => {
-
-        const search =
-            searchText.trim().toLowerCase();
-
-        return persons.filter((person) => {
-
-            const matchesSearch =
-                !search ||
-                person.name
-                    .toLowerCase()
-                    .includes(search) ||
-                person.proId
-                    .toLowerCase()
-                    .includes(search) ||
-                person.phone
-                    .toLowerCase()
-                    .includes(search) ||
-                person.location
-                    .toLowerCase()
-                    .includes(search);
+    const requestId = useRef(0);
 
 
-            const matchesStatus =
-                statusFilter === "all" ||
-                person.statusType === statusFilter;
+    /* =========================================
+       SEARCH DEBOUNCE
+    ========================================= */
+
+    useEffect(() => {
+
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchText);
+        }, 400);
+
+        return () => clearTimeout(timer);
+
+    }, [searchText]);
 
 
-            return (
-                matchesSearch &&
-                matchesStatus
-            );
-        });
+    /* =========================================
+       GET USER DETAILS API
+    ========================================= */
+
+    const fetchUsers = async () => {
+
+        const currentRequestId = ++requestId.current;
+
+        try {
+
+            setIsLoading(true);
+            setError("");
+
+            const params = {
+                search: debouncedSearch.trim(),
+                startDate: startDate,
+                endDate: endDate,
+                page: currentPage,
+                limit: rowsPerPage,
+            };
+
+            console.log("GET USERS API PARAMS:", params);
+
+
+            const response = await getUsersNameApi(params);
+
+
+
+
+            // Ignore older API responses.
+            if (currentRequestId !== requestId.current) {
+                return;
+            }
+
+
+            if (response?.success) {
+
+                const users = Array.isArray(response.data)
+                    ? response.data
+                    : [];
+
+
+                /* =====================================
+                   API DATA MAPPING
+                ===================================== */
+
+
+
+                setPersons(users);
+
+
+                /* =====================================
+                   PAGINATION DATA FROM API
+                ===================================== */
+
+                setTotalItems(
+                    response.pagination?.totalRecords ?? 0
+                );
+
+                setTotalPages(
+                    Math.max(
+                        response.pagination?.totalPages ?? 1,
+                        1
+                    )
+                );
+
+            } else {
+
+                setPersons([]);
+                setTotalItems(0);
+                setTotalPages(1);
+
+                setError(
+                    response?.message || "Failed to fetch users"
+                );
+
+            }
+
+        } catch (error) {
+
+            if (currentRequestId === requestId.current) {
+
+                console.error("GET USERS ERROR:", error);
+
+                setPersons([]);
+                setTotalItems(0);
+                setTotalPages(1);
+
+                setError("Something went wrong while fetching users");
+
+            }
+
+        } finally {
+
+            if (currentRequestId === requestId.current) {
+                setIsLoading(false);
+            }
+
+        }
+    };
+
+
+    /* =========================================
+       API CALLING ON FILTER / PAGE CHANGE
+    ========================================= */
+
+    useEffect(() => {
+
+        fetchUsers();
+
+        return () => {
+            requestId.current++;
+        };
 
     }, [
-        persons,
-        searchText,
-        statusFilter,
+        debouncedSearch,
+        startDate,
+        endDate,
+        currentPage,
+        rowsPerPage,
     ]);
 
 
@@ -254,52 +213,18 @@ export default function UsersPage() {
        PAGINATION CALCULATION
     ========================================= */
 
-    const totalItems =
-        filteredPersons.length;
-
-    const totalPages =
-        Math.max(
-            1,
-            Math.ceil(
-                totalItems / rowsPerPage
-            )
-        );
+    const showingFrom = totalItems === 0
+        ? 0
+        : (currentPage - 1) * rowsPerPage + 1;
 
 
-    const safeCurrentPage =
-        Math.min(
-            currentPage,
-            totalPages
-        );
+    const showingTo = Math.min(
+        currentPage * rowsPerPage,
+        totalItems
+    );
 
 
-    const startIndex =
-        (safeCurrentPage - 1) *
-        rowsPerPage;
-
-
-    const endIndex =
-        startIndex + rowsPerPage;
-
-
-    const currentPersons =
-        filteredPersons.slice(
-            startIndex,
-            endIndex
-        );
-
-
-    const showingFrom =
-        totalItems === 0
-            ? 0
-            : startIndex + 1;
-
-
-    const showingTo =
-        Math.min(
-            endIndex,
-            totalItems
-        );
+    const currentPersons = persons;
 
 
     /* =========================================
@@ -308,39 +233,49 @@ export default function UsersPage() {
 
     const handleSearch = (event) => {
 
-        setSearchText(
-            event.target.value
-        );
+        setSearchText(event.target.value);
 
         setCurrentPage(1);
+
     };
 
 
     /* =========================================
-       STATUS FILTER
+       START DATE
     ========================================= */
 
-    const handleStatusChange = (event) => {
+    const handleStartDate = (event) => {
 
-        setStatusFilter(
-            event.target.value
-        );
+        setStartDate(event.target.value);
 
         setCurrentPage(1);
+
     };
 
 
     /* =========================================
-       ROW COUNT
+       END DATE
+    ========================================= */
+
+    const handleEndDate = (event) => {
+
+        setEndDate(event.target.value);
+
+        setCurrentPage(1);
+
+    };
+
+
+    /* =========================================
+       ROW COUNT CHANGE
     ========================================= */
 
     const handleRowsChange = (event) => {
 
-        setRowsPerPage(
-            Number(event.target.value)
-        );
+        setRowsPerPage(Number(event.target.value));
 
         setCurrentPage(1);
+
     };
 
 
@@ -352,14 +287,53 @@ export default function UsersPage() {
 
         if (
             page < 1 ||
-            page > totalPages
+            page > totalPages ||
+            page === currentPage
         ) {
             return;
         }
 
         setCurrentPage(page);
+
     };
 
+
+    /* =========================================
+       PAGE NUMBER DISPLAY
+    ========================================= */
+
+    const getPageNumbers = () => {
+
+        const maxVisiblePages = 5;
+
+        let startPage = Math.max(
+            currentPage - 2,
+            1
+        );
+
+        let endPage = Math.min(
+            startPage + maxVisiblePages - 1,
+            totalPages
+        );
+
+        startPage = Math.max(
+            endPage - maxVisiblePages + 1,
+            1
+        );
+
+        return Array.from(
+            {
+                length: endPage - startPage + 1,
+            },
+            (_, index) => startPage + index
+        );
+
+    };
+
+
+    /* =========================================
+       RETURN
+    ========================================= */
 
     return (
 
@@ -385,7 +359,7 @@ export default function UsersPage() {
                         type="text"
                         value={searchText}
                         onChange={handleSearch}
-                        placeholder="Search personnel by name, PRO ID, mobile, or location"
+                        placeholder="Search Employee name..."
                     />
 
                 </div>
@@ -398,13 +372,7 @@ export default function UsersPage() {
                     <input
                         type="date"
                         value={startDate}
-                        onChange={(event) => {
-                            setStartDate(
-                                event.target.value
-                            );
-
-                            setCurrentPage(1);
-                        }}
+                        onChange={handleStartDate}
                     />
 
                     <span>
@@ -414,49 +382,11 @@ export default function UsersPage() {
                     <input
                         type="date"
                         value={endDate}
-                        onChange={(event) => {
-                            setEndDate(
-                                event.target.value
-                            );
-
-                            setCurrentPage(1);
-                        }}
+                        onChange={handleEndDate}
                     />
 
                 </div>
 
-
-                {/* STATUS */}
-
-                <select
-                    className="personnel-filter-select"
-                    value={statusFilter}
-                    onChange={
-                        handleStatusChange
-                    }
-                >
-
-                    <option value="all">
-                        All Active Personnel
-                    </option>
-
-                    <option value="on-field">
-                        On Field
-                    </option>
-
-                    <option value="in-transit">
-                        In Transit
-                    </option>
-
-                    <option value="review">
-                        HQ Review
-                    </option>
-
-                    <option value="offline">
-                        Offline
-                    </option>
-
-                </select>
 
             </div>
 
@@ -471,16 +401,8 @@ export default function UsersPage() {
                 <div className="deployment-title-row">
 
                     <h2>
-                        Active Field Deployments
+                        Active Employees
                     </h2>
-
-
-                    <span className="active-pro-badge">
-
-                        {totalItems} ACTIVE FIELD PROS
-
-                    </span>
-
 
                     <span className="deployment-range">
 
@@ -501,8 +423,7 @@ export default function UsersPage() {
 
                     <span />
 
-                    Real-time GPS telemetry pulse:
-                    active
+                    Real-time Result
 
                 </div>
 
@@ -513,20 +434,34 @@ export default function UsersPage() {
                 PERSON CARDS
             ====================================== */}
 
-            {currentPersons.length > 0 ? (
+            {isLoading ? (
+
+                <div className="personnel-empty">
+
+                    Loading personnel...
+
+                </div>
+
+            ) : error ? (
+
+                <div className="personnel-empty">
+
+                    {error}
+
+                </div>
+
+            ) : currentPersons.length > 0 ? (
 
                 <div className="personnel-card-grid">
 
-                    {currentPersons.map(
-                        (person) => (
+                    {currentPersons.map((person, index) => (
 
-                            <PersonDetailedCard
-                                key={person.id}
-                                person={person}
-                            />
+                        <PersonDetailedCard
+                            key={index}
+                            person={person}
+                        />
 
-                        )
-                    )}
+                    ))}
 
                 </div>
 
@@ -583,9 +518,7 @@ export default function UsersPage() {
 
                     <select
                         value={rowsPerPage}
-                        onChange={
-                            handleRowsChange
-                        }
+                        onChange={handleRowsChange}
                     >
 
                         <option value={4}>
@@ -618,12 +551,8 @@ export default function UsersPage() {
 
                     <button
                         type="button"
-                        disabled={
-                            safeCurrentPage === 1
-                        }
-                        onClick={() =>
-                            goToPage(1)
-                        }
+                        disabled={currentPage === 1}
+                        onClick={() => goToPage(1)}
                     >
                         |‹
                     </button>
@@ -633,14 +562,8 @@ export default function UsersPage() {
 
                     <button
                         type="button"
-                        disabled={
-                            safeCurrentPage === 1
-                        }
-                        onClick={() =>
-                            goToPage(
-                                safeCurrentPage - 1
-                            )
-                        }
+                        disabled={currentPage === 1}
+                        onClick={() => goToPage(currentPage - 1)}
                     >
                         ‹
                     </button>
@@ -648,60 +571,32 @@ export default function UsersPage() {
 
                     {/* PAGE NUMBERS */}
 
-                    {Array.from(
-                        {
-                            length:
-                                totalPages,
-                        },
-                        (_, index) =>
-                            index + 1
-                    )
-                        .slice(
-                            Math.max(
-                                0,
-                                safeCurrentPage - 3
-                            ),
-                            Math.max(
-                                0,
-                                safeCurrentPage - 3
-                            ) + 5
-                        )
-                        .map((page) => (
+                    {getPageNumbers().map((page) => (
 
-                            <button
-                                type="button"
-                                key={page}
-                                className={
-                                    safeCurrentPage ===
-                                        page
-                                        ? "active"
-                                        : ""
-                                }
-                                onClick={() =>
-                                    goToPage(page)
-                                }
-                            >
+                        <button
+                            type="button"
+                            key={page}
+                            className={
+                                currentPage === page
+                                    ? "active"
+                                    : ""
+                            }
+                            onClick={() => goToPage(page)}
+                        >
 
-                                {page}
+                            {page}
 
-                            </button>
+                        </button>
 
-                        ))}
+                    ))}
 
 
                     {/* NEXT */}
 
                     <button
                         type="button"
-                        disabled={
-                            safeCurrentPage ===
-                            totalPages
-                        }
-                        onClick={() =>
-                            goToPage(
-                                safeCurrentPage + 1
-                            )
-                        }
+                        disabled={currentPage === totalPages}
+                        onClick={() => goToPage(currentPage + 1)}
                     >
                         ›
                     </button>
@@ -711,24 +606,20 @@ export default function UsersPage() {
 
                     <button
                         type="button"
-                        disabled={
-                            safeCurrentPage ===
-                            totalPages
-                        }
-                        onClick={() =>
-                            goToPage(
-                                totalPages
-                            )
-                        }
+                        disabled={currentPage === totalPages}
+                        onClick={() => goToPage(totalPages)}
                     >
                         ›|
                     </button>
 
+
                 </div>
 
             </div>
-            <AllPersonDetails />
+
 
         </div>
+
     );
+
 }
