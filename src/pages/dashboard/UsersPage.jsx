@@ -459,6 +459,8 @@ export default function UsersPage() {
                         <PersonDetailedCard
                             key={index}
                             person={person}
+                            startDate={startDate}
+                            endDate={endDate}
                         />
 
                     ))}

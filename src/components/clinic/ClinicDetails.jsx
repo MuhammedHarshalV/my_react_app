@@ -5,22 +5,27 @@ import "./ClinicDetails.css";
 import { getClinicDetailsApi } from "../../services/api/clinicDetails/clinicDetailsApi";
 import { getUsersNameApi } from "../../services/api/users/getUsersNameApi";
 
-function ClinicDetails() {
+function ClinicDetails({
+    employeeName = "",
+    startDate: initialStartDate = "",
+    endDate: initialEndDate = "", }) {
     const [isLoading, setIsLoading] = useState(true);
     const [clinics, setClinics] = useState([]);
+    const [searchText, setSearchText] = useState(employeeName);
+    const [debouncedSearch, setDebouncedSearch] = useState(employeeName);
 
-    const [searchText, setSearchText] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [startDate, setStartDate] = useState(initialStartDate);
+    const [endDate, setEndDate] = useState(initialEndDate);
+
 
     const [totalVisit, setTotalVisit] = useState(0);
 
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+
 
     const [statusFilter, setStatusFilter] = useState("all");
 
     const [users, setUsers] = useState([]);
-    const [selectedUser, setSelectedUser] = useState("");
+    const [selectedUser, setSelectedUser] = useState(employeeName);
     const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
     const [isUsersLoading, setIsUsersLoading] = useState(false);
 

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./PersonDetailedCard.css";
 
-function PersonDetailedCard({ person }) {
-
+function PersonDetailedCard({ person, startDate, endDate }) {
+    const navigate = useNavigate();
     const [imageError, setImageError] = useState(false);
 
     useEffect(() => {
@@ -17,9 +18,7 @@ function PersonDetailedCard({ person }) {
         return `₹ ${Number(amount ?? 0).toLocaleString("en-IN")}`;
     };
 
-    const handleViewLedger = () => {
-        console.log("View Ledger:", person);
-    };
+
 
     const handleCopyProId = async () => {
         try {
@@ -218,7 +217,13 @@ function PersonDetailedCard({ person }) {
                 <button
                     type="button"
                     className="person-action-button ledger-button"
-                    onClick={handleViewLedger}
+                    onClick={() => navigate("/dashboard/clinics", {
+                        state: {
+                            employeeName: person.name,
+                            startDate: startDate,
+                            endDate: endDate,
+                        }
+                    })}
                 >
 
                     <span>▤</span>
