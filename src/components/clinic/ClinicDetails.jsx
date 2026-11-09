@@ -1,8 +1,9 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import "./ClinicDetails.css";
 import { getClinicDetailsApi } from "../../services/api/clinicDetails/clinicDetailsApi";
+import { getUsersNameApi } from "../../services/api/users/getUsersNameApi";
 
 function ClinicDetails() {
     const [isLoading, setIsLoading] = useState(true);
@@ -17,6 +18,17 @@ function ClinicDetails() {
     const [endDate, setEndDate] = useState("");
 
     const [statusFilter, setStatusFilter] = useState("all");
+
+    const [users, setUsers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState("");
+    const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+    const [isUsersLoading, setIsUsersLoading] = useState(false);
+
+    const [userPage, setUserPage] = useState(1);
+    const [userTotalPages, setUserTotalPages] = useState(1);
+
+    const userDropdownRef = useRef(null);
+    const userLoadingRef = useRef(false);
 
     /* =========================================
        PAGINATION
@@ -95,7 +107,62 @@ function ClinicDetails() {
         currentPage,
         rowsPerPage,
     ]);
+    const loadUsers = async (page, reset = false) => {
+        if (userLoadingRef.current) return;
 
+        userLoadingRef.current = true;
+        setIsUsersLoading(true);
+
+        try {
+            const response = await getUsersNameApi({
+                page,
+                limit: 10,
+            });
+
+            if (response?.success) {
+                const newUsers = Array.isArray(response.data)
+                    ? response.data
+                    : [];
+
+                setUsers((previous) =>
+                    reset ? newUsers : [...previous, ...newUsers]
+                );
+
+                setUserTotalPages(
+                    response?.pagination?.totalPages ?? 1
+                );
+
+                setUserPage(page);
+            }
+        } catch (error) {
+            console.log("Get Users Error:", error);
+        } finally {
+            userLoadingRef.current = false;
+            setIsUsersLoading(false);
+        }
+    };
+    useEffect(() => {
+        if (!isUserDropdownOpen || isUsersLoading) return;
+
+        const element = userDropdownRef.current;
+
+        if (!element) return;
+
+        // If dropdown content does not fill the available height,
+        // automatically load the next page.
+        if (
+            element.scrollHeight <= element.clientHeight + 5 &&
+            userPage < userTotalPages
+        ) {
+            loadUsers(userPage + 1);
+        }
+    }, [
+        users,
+        isUserDropdownOpen,
+        isUsersLoading,
+        userPage,
+        userTotalPages,
+    ]);
     /* =========================================
        PAGINATION CALCULATION
     ========================================= */
@@ -172,6 +239,38 @@ function ClinicDetails() {
         console.log("View Clinic:", clinic);
     };
 
+    //dropdown
+    const handleUserDropdown = () => {
+        if (!isUserDropdownOpen) {
+            setUserPage(1);
+            setUsers([]);
+            loadUsers(1, true);
+        }
+
+        setIsUserDropdownOpen(!isUserDropdownOpen);
+    };
+
+    const handleUserScroll = () => {
+        const element = userDropdownRef.current;
+
+        if (!element || isUsersLoading) return;
+
+        const isBottom =
+            element.scrollTop + element.clientHeight >=
+            element.scrollHeight - 10;
+
+        if (isBottom && userPage < userTotalPages) {
+            loadUsers(userPage + 1);
+        }
+    };
+
+    const handleUserSelect = (user) => {
+        setSelectedUser(user.name);
+        setSearchText(user.name);
+        setCurrentPage(1);
+        setIsUserDropdownOpen(false);
+    };
+
     /* =========================================
        PROGRESS PERCENTAGE
     ========================================= */
@@ -226,45 +325,115 @@ function ClinicDetails() {
                 {/* SEARCH */}
 
                 <div className="clinic-search">
-
-                    <span>
-                        ⌕
-                    </span>
+                    <span className="search-icon">⌕</span>
 
                     <input
                         type="text"
                         value={searchText}
                         onChange={handleSearch}
-                        placeholder="Search Employee name..."
+                        placeholder="Search..."
                     />
 
+                    {searchText && (
+                        <button
+                            type="button"
+                            className="search-clear-button"
+                            onClick={() => handleSearch({ target: { value: "" } })}
+                            title="Clear search"
+                        >
+                            ×
+                        </button>
+                    )}
+
+                    <div className="user-dropdown-container">
+
+                        <button
+                            type="button"
+                            className="search-by-dropdown"
+                            onClick={handleUserDropdown}
+                        >
+                            {selectedUser || "Select Employee"}
+                            <span>{isUserDropdownOpen ? "▲" : "▼"}</span>
+                        </button>
+
+                        {isUserDropdownOpen && (
+                            <div
+                                className="user-dropdown-list"
+                                ref={userDropdownRef}
+                                onScroll={handleUserScroll}
+                            >
+
+                                {users.length === 0 && !isUsersLoading ? (
+                                    <div className="user-dropdown-empty">
+                                        No employees found
+                                    </div>
+                                ) : (
+                                    users.map((user, index) => (
+                                        <div
+                                            key={`${user.name}-${index}`}
+                                            className="user-dropdown-item"
+                                            onClick={() => handleUserSelect(user)}
+                                        >
+                                            {user.name}
+                                        </div>
+                                    ))
+                                )}
+
+                                {isUsersLoading && (
+                                    <div className="user-dropdown-loading">
+                                        Loading...
+                                    </div>
+                                )}
+
+                                {!isUsersLoading &&
+                                    userPage >= userTotalPages &&
+                                    users.length > 0 && (
+                                        <div className="user-dropdown-end">
+                                            No more employees
+                                        </div>
+                                    )}
+
+                            </div>
+                        )}
+
+                    </div>
                 </div>
 
                 {/* DATE */}
 
                 <div className="clinic-date-range">
 
-                    <input
-                        type="date"
-                        value={startDate}
-                        onChange={(event) => {
-                            setStartDate(event.target.value);
-                            setCurrentPage(1);
-                        }}
-                    />
+                    <div className="clinic-date-input-wrapper">
+                        {!startDate && (
+                            <span className="date-placeholder">dd-mm-yyyy</span>
+                        )}
 
-                    <span>
-                        -
-                    </span>
+                        <input
+                            type="date"
+                            value={startDate}
+                            onChange={(event) => {
+                                setStartDate(event.target.value);
+                                setCurrentPage(1);
+                            }}
+                        />
+                    </div>
 
-                    <input
-                        type="date"
-                        value={endDate}
-                        onChange={(event) => {
-                            setEndDate(event.target.value);
-                            setCurrentPage(1);
-                        }}
-                    />
+                    <span className="date-separator">-</span>
+
+                    <div className="clinic-date-input-wrapper">
+                        {!endDate && (
+                            <span className="date-placeholder">dd-mm-yyyy</span>
+                        )}
+
+                        <input
+                            type="date"
+                            value={endDate}
+                            onChange={(event) => {
+                                setEndDate(event.target.value);
+                                setCurrentPage(1);
+                            }}
+                        />
+                    </div>
 
                 </div>
 
@@ -494,7 +663,7 @@ function ClinicDetails() {
                                             handleViewClinic(clinic)
                                         }
                                     >
-                                        View Clinic
+                                        View Expenses
                                     </button>
 
                                 </div>

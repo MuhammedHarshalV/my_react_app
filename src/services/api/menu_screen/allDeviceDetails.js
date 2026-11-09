@@ -6,7 +6,7 @@ import { ApiService } from "../../core/apiServices";
 
 export const getAllDevicesApi = async ({
     page = 1,
-    limit = 2,
+    limit = 10,
     search = "",
 } = {}) => {
     const queryParams = { page, limit };
