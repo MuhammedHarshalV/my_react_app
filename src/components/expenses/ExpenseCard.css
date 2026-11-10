@@ -1,3 +1,7 @@
+/* ================================
+   PAGE
+================================ */
+
 .expense-page {
     width: 100%;
     min-width: 0;
@@ -10,9 +14,9 @@
     box-sizing: border-box;
 }
 
-/* =========================================
-   PAGE HEADER
-========================================= */
+/* ================================
+   HEADER
+================================ */
 
 .expense-page-header {
     display: flex;
@@ -45,15 +49,13 @@
     font-size: var(--font-size-sm);
 }
 
-
-
-/* =========================================
+/* ================================
    SUMMARY CARDS
-========================================= */
+================================ */
 
 .expense-summary-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
     margin-bottom: 16px;
 }
@@ -67,7 +69,7 @@
     background: var(--color-white);
     border: 1px solid var(--color-border-light);
     border-radius: 6px;
-    border-top: 3px solid #dfe3f3;
+    border-top: 5px solid #ddd;
 }
 
 .expense-summary-card>span {
@@ -86,17 +88,39 @@
     font-size: var(--font-size-xs);
 }
 
+/* Claimed - Blue */
+
+.expense-summary-card.claimed {
+    border-top-color: #1976d2;
+}
+
+.expense-summary-card.claimed>strong {
+    color: #1976d2;
+}
+
+/* Approved - Green */
+
+.expense-summary-card.approved {
+    border-top-color: #2e9b50;
+}
+
+.expense-summary-card.approved>strong {
+    color: #2e9b50;
+}
+
+/* Pending - Red */
+
 .expense-summary-card.danger {
-    border-top-color: var(--color-primary);
+    border-top-color: red;
 }
 
 .expense-summary-card.danger>strong {
-    color: var(--color-primary);
+    color: red;
 }
 
-/* =========================================
+/* ================================
    FILTERS
-========================================= */
+================================ */
 
 .expense-filter-panel {
     display: grid;
@@ -168,9 +192,9 @@
     font-size: var(--font-size-xs);
 }
 
-/* =========================================
+/* ================================
    LIST HEADING
-========================================= */
+================================ */
 
 .expense-list-heading {
     display: flex;
@@ -187,9 +211,9 @@
     color: var(--color-text-primary);
 }
 
-/* =========================================
-   EXPENSE LIST AND CARDS
-========================================= */
+/* ================================
+   EXPENSE LIST
+================================ */
 
 .expense-list {
     display: flex;
@@ -221,6 +245,10 @@
 .expense-card-actions {
     min-width: 0;
 }
+
+/* ================================
+   EMPLOYEE DETAILS
+================================ */
 
 .expense-voucher-info>strong {
     display: flex;
@@ -264,18 +292,9 @@
     gap: 3px;
 }
 
-.expense-employee b,
-.expense-employee span {
-    overflow-wrap: anywhere;
-}
-
 .expense-employee b {
+    overflow-wrap: anywhere;
     font-size: var(--font-size-xs);
-}
-
-.expense-employee>div>span {
-    color: var(--color-text-secondary);
-    font-size: 10px;
 }
 
 .expense-location {
@@ -285,16 +304,36 @@
     overflow-wrap: anywhere;
 }
 
+/* ================================
+   EXPENSE DESCRIPTION
+================================ */
+
 .expense-description {
-    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     align-self: stretch;
+    gap: 15px;
+    padding: 8px;
     background: #f0f2fd;
+}
+
+.expense-date-category {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .expense-description strong {
     display: block;
     font-size: var(--font-size-xs);
     overflow-wrap: anywhere;
+}
+
+.expense-date-category strong,
+.expense-person-count strong {
+    font-size: 14px;
 }
 
 .expense-description p {
@@ -309,6 +348,24 @@
     font-size: 9px;
 }
 
+.expense-person-count {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.expense-person-count span {
+    color: #888;
+    font-size: 11px;
+}
+
+/* ================================
+   RECEIPT
+================================ */
+
 .expense-receipt {
     display: flex;
     align-items: center;
@@ -319,11 +376,15 @@
     width: 35px;
     height: 42px;
     flex-shrink: 0;
-    display: grid;
-    place-items: center;
     background: #f0f2fd;
     color: var(--color-text-secondary);
     font-size: 22px;
+    object-fit: cover;
+}
+
+.expense-receipt-placeholder:not(img) {
+    display: grid;
+    place-items: center;
 }
 
 .expense-receipt>div:last-child {
@@ -354,6 +415,10 @@
     cursor: pointer;
 }
 
+/* ================================
+   AMOUNTS
+================================ */
+
 .expense-amounts {
     display: flex;
     flex-direction: column;
@@ -382,6 +447,10 @@
     font-size: var(--font-size-sm);
 }
 
+/* ================================
+   ACTIONS
+================================ */
+
 .expense-card-actions {
     display: flex;
     align-items: flex-start;
@@ -404,24 +473,12 @@
     color: #b71920;
 }
 
-.expense-status.approved,
-.expense-status.released {
+.expense-status.approved {
     background: #e5f5eb;
     color: #177245;
 }
 
-.expense-status.partial {
-    background: #eceffd;
-    color: #515c77;
-}
-
-.expense-status.rejected {
-    background: #eee;
-    color: #555;
-}
-
 .expense-approve-button,
-.expense-secondary-button,
 .expense-icon-button {
     min-height: 30px;
     padding: 6px 8px;
@@ -437,11 +494,14 @@
     color: var(--color-white);
 }
 
-.expense-secondary-button,
 .expense-icon-button {
     background: #eff1fb;
     color: var(--color-text-primary);
 }
+
+/* ================================
+   EMPTY STATE
+================================ */
 
 .expense-empty {
     min-height: 180px;
@@ -453,9 +513,9 @@
     text-align: center;
 }
 
-/* =========================================
+/* ================================
    PAGINATION
-========================================= */
+================================ */
 
 .expense-pagination {
     width: 100%;
@@ -531,9 +591,9 @@
     color: var(--color-white);
 }
 
-/* =========================================
+/* ================================
    MEDIUM SCREENS
-========================================= */
+================================ */
 
 @media (max-width: 1200px) {
     .expense-summary-grid {
@@ -561,17 +621,13 @@
     }
 }
 
-/* =========================================
+/* ================================
    TABLET
-========================================= */
+================================ */
 
 @media (max-width: 850px) {
     .expense-page-header {
         flex-direction: column;
-    }
-
-    .expense-export-button {
-        width: fit-content;
     }
 
     .expense-card-main {
@@ -583,9 +639,9 @@
     }
 }
 
-/* =========================================
+/* ================================
    MOBILE
-========================================= */
+================================ */
 
 @media (max-width: 650px) {
     .expense-summary-grid {
@@ -631,17 +687,13 @@
     }
 }
 
-/* =========================================
+/* ================================
    SMALL MOBILE
-========================================= */
+================================ */
 
 @media (max-width: 480px) {
     .expense-page-header h1 {
         font-size: var(--font-size-lg);
-    }
-
-    .expense-export-button {
-        width: 100%;
     }
 
     .expense-summary-grid {
