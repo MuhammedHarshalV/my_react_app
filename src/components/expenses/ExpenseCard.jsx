@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import "./ExpenseCard.css";
+
 import { getAllExpensesApi } from "../../services/api/expenseDetails/getAllExpensesApi";
+import { approveExpensesApi } from "../../services/api/expenseDetails/expenseApprovelApi";
+import { toast } from "react-toastify";
 
 const formatCurrency = (amount) =>
     new Intl.NumberFormat("en-IN", {
@@ -9,25 +12,38 @@ const formatCurrency = (amount) =>
         maximumFractionDigits: 0,
     }).format(Number(amount || 0));
 
-export default function ExpenseCard() {
+export default function ExpenseCard({
+    employeeName = "",
+    startDate: initialStartDate = "",
+    endDate: initialEndDate = "",
+    filter = "" }) {
     const [expenses, setExpenses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const [selectedExpenses, setSelectedExpenses] = useState([]);
+    const [approvedAmounts, setApprovedAmounts] = useState({});
+    const [isApproving, setIsApproving] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
+
+
     // Filters
-    const [search, setSearch] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [search, setSearch] = useState(employeeName);
+    const [debouncedSearch, setDebouncedSearch] = useState(employeeName);
 
     const [expenseType, setExpenseType] = useState("All");
-    const [statusFilter, setStatusFilter] = useState("All");
 
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+    const [statusFilter, setStatusFilter] = useState(
+        filter === "all" || !filter ? "All" : filter
+    );
+
+    const [startDate, setStartDate] = useState(initialStartDate);
+    const [endDate, setEndDate] = useState(initialEndDate);
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    // API summary
+    // Summary
     const [summary, setSummary] = useState({
         totalClaimedAmount: 0,
         totalClaimsCount: 0,
@@ -50,13 +66,14 @@ export default function ExpenseCard() {
         return () => clearTimeout(timer);
     }, [search]);
 
-    // Load expenses from API
+    // Load expenses
     useEffect(() => {
         let isActive = true;
 
         const loadExpenses = async () => {
             try {
                 setIsLoading(true);
+                setSelectedExpenses([]);
 
                 const params = {
                     search: debouncedSearch,
@@ -79,7 +96,6 @@ export default function ExpenseCard() {
 
                 const response = await getAllExpensesApi(params);
 
-                // Supports both API payload and Axios response formats
                 const result =
                     response?.success !== undefined
                         ? response
@@ -87,7 +103,6 @@ export default function ExpenseCard() {
 
                 if (!isActive) return;
 
-                // Format API data for existing UI
                 const formattedExpenses = (result.data || []).map(
                     (expense) => {
                         const isApproved =
@@ -95,26 +110,13 @@ export default function ExpenseCard() {
 
                         return {
                             id: expense.expenseId,
-
                             voucherNo: `EXP-${expense.expenseId}`,
-
-                            category:
-                                expense.expenseCategory || "Other",
-
+                            category: expense.expenseCategory || "Other",
                             employee: expense.name || "Unknown",
-
                             proId: expense.proId || "",
-
-
-
-                            location:
-                                expense.clinicName || "N/A",
-
-                            expenseType:
-                                expense.expenseCategory || "Other",
-
-                            description:
-                                expense.description || "",
+                            location: expense.clinicName || "N/A",
+                            expenseType: expense.expenseCategory || "Other",
+                            description: expense.description || "",
 
                             submittedAt: expense.expenseDate
                                 ? new Date(
@@ -123,19 +125,18 @@ export default function ExpenseCard() {
                                 : "",
 
                             date: expense.expenseDate,
-
-                            receipt:
-                                expense.receiptPhotoUrl || null,
+                            receipt: expense.receiptPhotoUrl || null,
 
                             claimedAmount: Number(
                                 expense.expenseAmount || 0
                             ),
 
-                            approvedAmount:
-                                expense.approvedAmount,
+                            approvedAmount: expense.approvedAmount,
 
                             personCount:
-                                expense.personCount == null ? 1 : expense.personCount,
+                                expense.personCount == null
+                                    ? 1
+                                    : expense.personCount,
 
                             status: isApproved
                                 ? "APPROVED"
@@ -150,45 +151,52 @@ export default function ExpenseCard() {
 
                 setExpenses(formattedExpenses);
 
-                // Summary from API
+                // Set default approved amount for pending expenses
+                setApprovedAmounts((previous) => {
+                    const updated = { ...previous };
+
+                    formattedExpenses.forEach((expense) => {
+                        if (
+                            expense.approvedAmount == null &&
+                            updated[expense.id] === undefined
+                        ) {
+                            updated[expense.id] =
+                                expense.claimedAmount;
+                        }
+                    });
+
+                    return updated;
+                });
+
                 setSummary({
                     totalClaimedAmount: Number(
                         result.totalClaimedAmount || 0
                     ),
-
                     totalClaimsCount: Number(
                         result.totalClaimsCount || 0
                     ),
-
                     totalApprovedAmount: Number(
                         result.totalApprovedAmount || 0
                     ),
-
                     approvedClaimsCount: Number(
                         result.approvedClaimsCount || 0
                     ),
                 });
 
-                // Pagination from API
                 setPagination({
                     totalPages: Number(
                         result.pagination?.totalPages || 1
                     ),
-
                     limit: Number(
                         result.pagination?.limit || rowsPerPage
                     ),
-
                     totalRecords: Number(
                         result.pagination?.totalRecords || 0
                     ),
                 });
 
             } catch (error) {
-                console.error(
-                    "Failed to load expenses:",
-                    error
-                );
+                console.error("Failed to load expenses:", error);
 
                 if (isActive) {
                     setExpenses([]);
@@ -226,11 +234,152 @@ export default function ExpenseCard() {
         endDate,
         currentPage,
         rowsPerPage,
+        refreshKey,
     ]);
 
+    // Select / unselect one expense
+    const handleExpenseSelection = (expenseId, checked) => {
+        if (checked) {
+            setSelectedExpenses((previous) => [
+                ...previous,
+                expenseId,
+            ]);
+        } else {
+            setSelectedExpenses((previous) =>
+                previous.filter((id) => id !== expenseId)
+            );
+        }
+    };
+
+    // Select / unselect all pending expenses on current page
+    const pendingExpenses = expenses.filter(
+        (expense) => expense.statusType === "pending"
+    );
+
+    const allPendingSelected =
+        pendingExpenses.length > 0 &&
+        pendingExpenses.every((expense) =>
+            selectedExpenses.includes(expense.id)
+        );
+
+    const handleSelectAll = (checked) => {
+        if (checked) {
+            setSelectedExpenses(
+                pendingExpenses.map((expense) => expense.id)
+            );
+        } else {
+            setSelectedExpenses([]);
+        }
+    };
+
+    // Update approved amount
+    const handleApprovedAmountChange = (expenseId, value) => {
+        setApprovedAmounts((previous) => ({
+            ...previous,
+            [expenseId]: value,
+        }));
+    };
+
+    // Prepare and validate approval data
+    const getApprovalData = (selectedIds) => {
+        const selected = expenses.filter(
+            (expense) =>
+                selectedIds.includes(expense.id) &&
+                expense.statusType === "pending"
+        );
+
+        if (selected.length === 0) {
+            window.alert("Please select pending expenses.");
+            return null;
+        }
+
+        const approvalData = [];
+
+        for (const expense of selected) {
+            const amount = Number(
+                approvedAmounts[expense.id]
+            );
+
+            if (
+                approvedAmounts[expense.id] === "" ||
+                !Number.isFinite(amount) ||
+                amount < 0 ||
+                amount > expense.claimedAmount
+            ) {
+                toast.error(
+                    `Enter a valid approved amount for ${expense.voucherNo}.`
+                );
+                return null;
+            }
+
+            approvalData.push({
+                expenseId: expense.id,
+                expenseAmount: amount,
+            });
+        }
+
+        return approvalData;
+    };
 
 
 
+    // Bulk approve selected expenses
+    const handleBulkApprove = async () => {
+        const approvalData = getApprovalData(selectedExpenses);
+
+
+        await submitApproval(approvalData);
+    };
+
+    // Common approval API call
+    const submitApproval = async (approvalData) => {
+        try {
+            if (!approvalData || approvalData.length === 0) {
+                toast.error("No expenses selected.");
+                return;
+            }
+
+            setIsApproving(true);
+
+            console.log("Approval request:", approvalData);
+
+            const response = await approveExpensesApi(approvalData);
+
+            const result = response?.data ?? response;
+
+            console.log("Approval response:", result);
+
+            if (result?.success !== true) {
+                toast.error(
+                    result?.message || "Expense approval failed."
+                );
+                return;
+            }
+
+            // Show success message
+            toast.success(
+                result?.message || "Expenses approved successfully."
+            );
+
+            // Clear selected expenses
+            setSelectedExpenses([]);
+
+            // Reload expense list and summary
+            setRefreshKey((previous) => previous + 1);
+
+        } catch (error) {
+            console.error("Expense approval failed:", error);
+
+            toast.error(
+                error?.response?.data?.message ||
+                error?.message ||
+                "Failed to approve expenses."
+            );
+
+        } finally {
+            setIsApproving(false);
+        }
+    };
 
     // Pagination values
     const totalPages = Math.max(
@@ -238,11 +387,7 @@ export default function ExpenseCard() {
         1
     );
 
-    const safePage = Math.min(
-        currentPage,
-        totalPages
-    );
-
+    const safePage = Math.min(currentPage, totalPages);
     const totalRecords = pagination.totalRecords;
 
     const startItem =
@@ -255,19 +400,17 @@ export default function ExpenseCard() {
         totalRecords
     );
 
-    // API already returns filtered and paginated records
     const visibleExpenses = expenses;
 
     // Summary values
     const totalClaimed = summary.totalClaimedAmount;
-
     const approvedCount = summary.approvedClaimsCount;
 
-    const pendingCount =
-        summary.totalClaimsCount -
-        summary.approvedClaimsCount;
+    const pendingCount = Math.max(
+        summary.totalClaimsCount - summary.approvedClaimsCount,
+        0
+    );
 
-    // Expense categories available in current API response
     const expenseCategories = [
         "Stationery",
         "Other Expense",
@@ -327,7 +470,6 @@ export default function ExpenseCard() {
             {/* Filters */}
             <div className="expense-filter-panel">
 
-                {/* Search */}
                 <label className="expense-search">
                     <span>⌕</span>
 
@@ -342,7 +484,6 @@ export default function ExpenseCard() {
                     />
                 </label>
 
-                {/* Expense Type */}
                 <select
                     value={expenseType}
                     onChange={(event) => {
@@ -356,16 +497,12 @@ export default function ExpenseCard() {
                     </option>
 
                     {expenseCategories.map((category) => (
-                        <option
-                            key={category}
-                            value={category}
-                        >
+                        <option key={category} value={category}>
                             {category}
                         </option>
                     ))}
                 </select>
 
-                {/* Status */}
                 <select
                     value={statusFilter}
                     onChange={(event) => {
@@ -374,20 +511,11 @@ export default function ExpenseCard() {
                     }}
                     aria-label="Filter by approval status"
                 >
-                    <option value="All">
-                        All
-                    </option>
-
-                    <option value="approved">
-                        Approved
-                    </option>
-
-                    <option value="pending">
-                        Not Approved
-                    </option>
+                    <option value="All">All</option>
+                    <option value="approved">Approved</option>
+                    <option value="pending">Not Approved</option>
                 </select>
 
-                {/* Date Range */}
                 <div className="expense-date-range">
 
                     <input
@@ -445,209 +573,280 @@ export default function ExpenseCard() {
 
             ) : (
 
-                <div className="expense-list">
+                <>
+                    {/* Select All + Bulk Approval */}
+                    <div className="expense-bulk-toolbar">
 
-                    {visibleExpenses.map((expense, index) => (
+                        <label className="expense-select-all">
+                            <input
+                                type="checkbox"
+                                checked={allPendingSelected}
+                                onChange={(event) =>
+                                    handleSelectAll(event.target.checked)
+                                }
+                                disabled={pendingExpenses.length === 0}
+                            />
 
-                        <article
-                            className="expense-card"
-                            key={index}
+                            <span>
+                                Select all pending ({pendingExpenses.length})
+                            </span>
+                        </label>
+
+                        <button
+                            type="button"
+                            className="bulk-approve-btn"
+                            onClick={handleBulkApprove}
+                            disabled={
+                                selectedExpenses.length === 0 ||
+                                isApproving ||
+                                isLoading
+                            }
                         >
+                            {isApproving ? (
+                                "Approving..."
+                            ) : (
+                                <>
+                                    <span>✓</span>
+                                    Bulk Approve
 
-                            <div className="expense-card-main">
+                                    <span className="bulk-approve-count">
+                                        {selectedExpenses.length}
+                                    </span>
+                                </>
+                            )}
+                        </button>
 
-                                {/* Employee Information */}
-                                <div className="expense-voucher-info">
+                    </div>
 
-                                    <strong>
-                                        #{expense.voucherNo}
+                    <div className="expense-list">
 
-                                        <span className="expense-category-tag">
-                                            {expense.category}
-                                        </span>
-                                    </strong>
+                        {visibleExpenses.map((expense) => (
 
-                                    <div className="expense-employee">
+                            <article
+                                className="expense-card"
+                                key={expense.id}
+                            >
 
-                                        <span className="expense-avatar">
-                                            {expense.employee
-                                                .split(" ")
-                                                .map((part) => part[0])
-                                                .slice(0, 2)
-                                                .join("")}
-                                        </span>
+                                <div className="expense-card-main">
 
-                                        <div>
-                                            <b>
-                                                {expense.employee}
-                                            </b>
+                                    {/* Employee Information */}
+                                    <div className="expense-voucher-info">
 
+                                        <strong>
+                                            #{expense.voucherNo}
 
+                                            <span className="expense-category-tag">
+                                                {expense.category}
+                                            </span>
+                                        </strong>
+
+                                        <div className="expense-employee">
+
+                                            <span className="expense-avatar">
+                                                {expense.employee
+                                                    .split(" ")
+                                                    .map((part) => part[0])
+                                                    .slice(0, 2)
+                                                    .join("")}
+                                            </span>
+
+                                            <div>
+                                                <b>{expense.employee}</b>
+                                            </div>
+
+                                        </div>
+
+                                        <p className="expense-location">
+                                            ◉ {expense.location}
+                                        </p>
+
+                                    </div>
+
+                                    {/* Expense Description */}
+                                    <div className="expense-description">
+
+                                        <div className="expense-date-category">
+                                            <strong>
+                                                {expense.expenseType}
+                                            </strong>
+
+                                            <p>
+                                                {expense.description}
+                                            </p>
+
+                                            <small>
+                                                {expense.date
+                                                    ? new Date(
+                                                        expense.date
+                                                    ).toLocaleDateString("en-IN")
+                                                    : ""}
+                                            </small>
+                                        </div>
+
+                                        <div className="expense-person-count">
+                                            <span>Persons</span>
+                                            <strong>
+                                                {expense.personCount}
+                                            </strong>
                                         </div>
 
                                     </div>
 
-                                    <p className="expense-location">
-                                        ◉ {expense.location}
-                                    </p>
+                                    {/* Receipt */}
+                                    <div className="expense-receipt">
 
-                                </div>
+                                        {expense.receipt == null ? <div className="expense-receipt-placeholder">
+                                            ▧
+                                        </div> : <img
+                                            src={expense.receipt}
+                                            alt="Expense receipt"
+                                            className="expense-receipt-placeholder"
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = "none";
+                                                e.currentTarget.nextElementSibling.style.display = "flex";
+                                            }}
+                                        />}
 
-                                {/* Expense Description */}
-                                <div className="expense-description">
+                                        <div>
+                                            <span>RECEIPT FILE</span>
 
-                                    <div className="expense-date-category">
+                                            <b>
+                                                {expense.receipt
+                                                    ? "Receipt available"
+                                                    : "No receipt"}
+                                            </b>
+
+                                            {expense.receipt && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        window.open(
+                                                            expense.receipt,
+                                                            "_blank",
+                                                            "noopener,noreferrer"
+                                                        )
+                                                    }
+                                                >
+                                                    View / Scan
+                                                </button>
+                                            )}
+                                        </div>
+
+                                    </div>
+
+                                    {/* Amounts */}
+                                    <div className="expense-amounts">
+
+                                        <span>Claimed</span>
+
                                         <strong>
-                                            {expense.expenseType}
+                                            {formatCurrency(
+                                                expense.claimedAmount
+                                            )}
                                         </strong>
-                                        <p>
-                                            {expense.description}
-                                        </p>
-                                        <small>
-                                            {expense.date
-                                                ? new Date(expense.date).toLocaleDateString("en-IN")
-                                                : ""}
-                                        </small>
+
+                                        {expense.approvedAmount == null ? (
+                                            <>
+                                                <label
+                                                    htmlFor={`approved-${expense.id}`}
+                                                >
+                                                    Approved amount
+                                                </label>
+
+                                                <input
+                                                    id={`approved-${expense.id}`}
+                                                    type="number"
+                                                    min="0"
+                                                    max={expense.claimedAmount}
+                                                    step="0.01"
+                                                    value={
+                                                        approvedAmounts[expense.id] ??
+                                                        expense.claimedAmount
+                                                    }
+                                                    onChange={(event) =>
+                                                        handleApprovedAmountChange(
+                                                            expense.id,
+                                                            event.target.value
+                                                        )
+                                                    }
+                                                />
+                                            </>
+                                        ) : (
+                                            <>
+                                                <label>
+                                                    Approved amount
+                                                </label>
+
+                                                <strong>
+                                                    {formatCurrency(
+                                                        expense.approvedAmount
+                                                    )}
+                                                </strong>
+                                            </>
+                                        )}
+
                                     </div>
 
-                                    <div className="expense-person-count">
-                                        <span>Persons</span>
-                                        <strong>{expense.personCount ?? 0}</strong>
-                                    </div>
+                                    {/* Actions */}
+                                    <div className="expense-card-actions">
 
-                                </div>
-
-                                {/* Receipt */}
-                                <div className="expense-receipt">
-
-                                    {expense.receipt == null ? <div className="expense-receipt-placeholder">
-                                        ▧
-                                    </div> : <img
-                                        src={expense.receipt}
-                                        alt="Expense receipt"
-                                        className="expense-receipt-placeholder"
-                                        onError={(e) => {
-                                            e.currentTarget.style.display = "none";
-                                            e.currentTarget.nextElementSibling.style.display = "flex";
-                                        }}
-                                    />}
-
-                                    <div>
-
-                                        <span>
-                                            RECEIPT FILE
+                                        <span
+                                            className={`expense-status ${expense.statusType}`}
+                                        >
+                                            {expense.status}
                                         </span>
 
-                                        <b>
-                                            {expense.receipt
-                                                ? "Receipt available"
-                                                : "No receipt"}
-                                        </b>
+                                        {expense.statusType === "pending" && (
+                                            <>
+                                                <label className="expense-select-checkbox">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedExpenses.includes(
+                                                            expense.id
+                                                        )}
+                                                        onChange={(event) =>
+                                                            handleExpenseSelection(
+                                                                expense.id,
+                                                                event.target.checked
+                                                            )
+                                                        }
+                                                    />
 
-                                        {expense.receipt && (
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    window.open(
-                                                        expense.receipt,
-                                                        "_blank",
-                                                        "noopener,noreferrer"
-                                                    )
-                                                }
-                                            >
-                                                View / Scan
-                                            </button>
+                                                    <span>Select</span>
+                                                </label>
+
+                                                <button
+                                                    type="button"
+                                                    className="expense-approve-button"
+                                                    onClick={async () => {
+                                                        const expenseData = [
+                                                            {
+                                                                expenseId: expense.id,
+                                                                expenseAmount: Number(
+                                                                    approvedAmounts[expense.id] ?? expense.claimedAmount
+                                                                ),
+                                                            },
+                                                        ];
+
+                                                        await submitApproval(expenseData);
+                                                    }}
+                                                    disabled={isApproving}
+                                                >
+                                                    ✓ Approve
+                                                </button>
+                                            </>
                                         )}
 
                                     </div>
 
                                 </div>
 
-                                {/* Amounts */}
-                                <div className="expense-amounts">
+                            </article>
 
-                                    <span>
-                                        Claimed
-                                    </span>
+                        ))}
 
-                                    <strong>
-                                        {formatCurrency(expense.claimedAmount)}
-                                    </strong>
-
-                                    {expense.approvedAmount == null ? (
-                                        <>
-                                            <label htmlFor={`approved-${expense.id}`}>
-                                                Approved amount
-                                            </label>
-
-                                            <input
-                                                id={`approved-${expense.id}`}
-                                                type="number"
-                                                min="0"
-                                                max={expense.claimedAmount}
-                                                defaultValue={expense.claimedAmount}
-                                                aria-label={`Approved amount for ${expense.voucherNo}`}
-                                            />
-                                        </>
-                                    ) : (
-                                        <>
-                                            <label>Approved amount</label>
-
-                                            <strong>
-                                                {formatCurrency(expense.approvedAmount)}
-                                            </strong>
-                                        </>
-                                    )}
-
-                                </div>
-                                {/* Actions */}
-                                <div className="expense-card-actions">
-
-                                    <span
-                                        className={`expense-status ${expense.statusType}`}
-                                    >
-                                        {expense.status}
-                                    </span>
-
-                                    {expense.statusType === "pending" && (
-                                        <>
-                                            <button
-                                                type="button"
-                                                className="expense-approve-button"
-                                                onClick={() =>
-                                                    approveExpense(expense)
-                                                }
-                                            >
-                                                ✓ Approve
-                                            </button>
-
-                                            <button
-                                                type="button"
-                                                className="expense-icon-button"
-                                                title="Reject voucher"
-                                                onClick={() =>
-                                                    rejectExpense(expense)
-                                                }
-                                            >
-                                                ×
-                                            </button>
-                                        </>
-                                    )}
-
-
-
-
-
-                                </div>
-
-                            </div>
-
-                        </article>
-
-                    ))}
-
-                </div>
-
+                    </div>
+                </>
             )}
 
             {/* Pagination */}
@@ -672,7 +871,6 @@ export default function ExpenseCard() {
                                 setRowsPerPage(
                                     Number(event.target.value)
                                 );
-
                                 setCurrentPage(1);
                             }}
                         >
@@ -681,14 +879,12 @@ export default function ExpenseCard() {
                             <option value={20}>20</option>
                             <option value={50}>50</option>
                         </select>
-
                     </label>
 
                 </div>
 
                 <div className="expense-pagination-buttons">
 
-                    {/* First Page */}
                     <button
                         type="button"
                         disabled={safePage === 1 || isLoading}
@@ -698,19 +894,15 @@ export default function ExpenseCard() {
                         «
                     </button>
 
-                    {/* Previous Page */}
                     <button
                         type="button"
                         disabled={safePage === 1 || isLoading}
-                        onClick={() =>
-                            setCurrentPage(safePage - 1)
-                        }
+                        onClick={() => setCurrentPage(safePage - 1)}
                         aria-label="Previous page"
                     >
                         ‹
                     </button>
 
-                    {/* Page Numbers */}
                     {Array.from(
                         { length: totalPages },
                         (_, index) => index + 1
@@ -723,9 +915,7 @@ export default function ExpenseCard() {
                                 safePage === page ? "active" : ""
                             }
                             aria-current={
-                                safePage === page
-                                    ? "page"
-                                    : undefined
+                                safePage === page ? "page" : undefined
                             }
                             disabled={isLoading}
                             onClick={() => setCurrentPage(page)}
@@ -735,29 +925,23 @@ export default function ExpenseCard() {
 
                     ))}
 
-                    {/* Next Page */}
                     <button
                         type="button"
                         disabled={
                             safePage === totalPages || isLoading
                         }
-                        onClick={() =>
-                            setCurrentPage(safePage + 1)
-                        }
+                        onClick={() => setCurrentPage(safePage + 1)}
                         aria-label="Next page"
                     >
                         ›
                     </button>
 
-                    {/* Last Page */}
                     <button
                         type="button"
                         disabled={
                             safePage === totalPages || isLoading
                         }
-                        onClick={() =>
-                            setCurrentPage(totalPages)
-                        }
+                        onClick={() => setCurrentPage(totalPages)}
                         aria-label="Last page"
                     >
                         »
@@ -770,7 +954,6 @@ export default function ExpenseCard() {
         </section>
     );
 }
-
 
 // Summary Card Component
 function SummaryCard({

@@ -376,7 +376,7 @@ function DashBoardMiddleCard({
                                         <span>
                                             Current: {formatAmount(item.current)}
                                             {" "}•{" "}
-                                            Previous: {formatAmount(item.previous)}
+                                            Comparitive: {formatAmount(item.previous)}
                                         </span>
 
                                     </div>

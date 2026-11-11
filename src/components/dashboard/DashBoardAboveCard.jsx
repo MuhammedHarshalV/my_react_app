@@ -301,7 +301,7 @@ function DashBoardAboveCard() {
                                 ? new Date(selectedYear, selectedMonth).toLocaleString("en-US", {
                                     month: "long",
                                 }) + " " + String(selectedYear).slice(-2)
-                                : "Previous Month"
+                                : "Comparitive Month"
                             } : ₹ {expenseData?.totalExpense?.compareMonth ?? 0}
                         </span>
                     </div>
@@ -420,7 +420,7 @@ function DashBoardAboveCard() {
                                 ? new Date(selectedYear, selectedMonth).toLocaleString("en-US", {
                                     month: "long",
                                 }) + " " + String(selectedYear).slice(-2)
-                                : "Previous Month"
+                                : "Comparitive Month"
                             } : ₹ {expenseData?.totalClinic?.compareMonth ?? 0}
 
                         </span>

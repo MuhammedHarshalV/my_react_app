@@ -1,6 +1,6 @@
 
 import { useEffect, useState, useRef } from "react";
-
+import { useNavigate } from "react-router-dom";
 import "./ClinicDetails.css";
 import { getClinicDetailsApi } from "../../services/api/clinicDetails/clinicDetailsApi";
 import { getUsersNameApi } from "../../services/api/users/getUsersNameApi";
@@ -8,7 +8,9 @@ import { getUsersNameApi } from "../../services/api/users/getUsersNameApi";
 function ClinicDetails({
     employeeName = "",
     startDate: initialStartDate = "",
-    endDate: initialEndDate = "", }) {
+    endDate: initialEndDate = "",
+    filter = "", }) {
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [clinics, setClinics] = useState([]);
     const [searchText, setSearchText] = useState(employeeName);
@@ -665,7 +667,14 @@ function ClinicDetails({
                                         type="button"
                                         className="clinic-view-button"
                                         onClick={() =>
-                                            handleViewClinic(clinic)
+                                            navigate("/dashboard/expenses", {
+                                                state: {
+                                                    employeeName: searchText.trim(),
+                                                    startDate: startDate,
+                                                    endDate: endDate,
+                                                    filter: statusFilter,
+                                                },
+                                            })
                                         }
                                     >
                                         View Expenses
