@@ -8,10 +8,10 @@ function HistoryPage() {
         <div >
             <HistoricalAudit />
             <div style={{ height: 24 }} />
-            <DetailedEmployeeCard />
+            {/* <DetailedEmployeeCard />
             <div style={{ height: 24 }} />
             <ClinicSectionCard />
-            <div style={{ height: 24 }} />
+            <div style={{ height: 24 }} /> */}
             <CategoryAnalytics />
         </div>
 

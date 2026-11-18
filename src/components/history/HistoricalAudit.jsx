@@ -202,7 +202,7 @@ const HistoricalAudit = () => {
                     </p>
                 </div>
 
-               
+
             </div>
 
             {/* SEARCH AND FILTERS */}
@@ -223,17 +223,6 @@ const HistoricalAudit = () => {
                 </div>
 
                 <div className="history-filter-bottom">
-                    <div className="history-periods">
-                        {["Last 30D", "Q3 2026", "YTD (26-27)"].map((period) => (
-                            <button
-                                key={period}
-                                className={activePeriod === period ? "active" : ""}
-                                onClick={() => setActivePeriod(period)}
-                            >
-                                {period}
-                            </button>
-                        ))}
-                    </div>
 
                     <div className="history-date-range">
                         <input
@@ -248,14 +237,15 @@ const HistoricalAudit = () => {
                             onChange={(e) => setDateTo(e.target.value)}
                         />
                     </div>
+                    <div className="history-jump-links">
+                        JUMP TO:
+                        <a href="#employees">PROs</a>
+                        <a href="#clinics">Clinics</a>
+                        <a href="#categories">Categories</a>
+                    </div>
                 </div>
 
-                <div className="history-jump-links">
-                    JUMP TO:
-                    <a href="#employees">PROs</a>
-                    <a href="#clinics">Clinics</a>
-                    <a href="#categories">Categories</a>
-                </div>
+
             </div>
 
             {loading && (
