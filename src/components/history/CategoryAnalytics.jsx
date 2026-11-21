@@ -98,46 +98,7 @@ export default function CategoryAnalytics() {
 
             {/* HEADER */}
 
-            <header className="analytics-header">
 
-                <div className="header-left">
-
-                    <div className="forensic-badge">
-                        FORENSIC
-                        <br />
-                        MATRIX
-                    </div>
-
-                    <div className="header-text">
-                        <h2>
-                            Comprehensive Category-Wise Deep-Dive
-                            Analytics
-                        </h2>
-
-                        <p>
-                            Dissection of 6 statutory expense codes
-                            highlighting top spenders, facilities,
-                            and peak transaction records.
-                        </p>
-                    </div>
-
-                </div>
-
-                <div className="header-right">
-
-                    <span className="total-label">
-                        Total
-                        <br />
-                        Classified:
-                    </span>
-
-                    <span className="total-amount">
-                        ₹ 4,62,650
-                    </span>
-
-                </div>
-
-            </header>
 
 
             {/* CATEGORY GRID */}
@@ -181,8 +142,8 @@ export default function CategoryAnalytics() {
 
                             <span
                                 className={`aggregate-amount ${cat.highlightAggregate
-                                        ? "text-primary"
-                                        : ""
+                                    ? "text-primary"
+                                    : ""
                                     }`}
                             >
                                 ₹ {cat.aggregate}
@@ -237,6 +198,50 @@ export default function CategoryAnalytics() {
                             </div>
 
                         </div>
+                        <div className="highest-expense-block">
+
+                            <span className="highlight-label text-primary">
+                                SMALLEST SINGLE EXPENSE
+                            </span>
+
+                            <div className="spender-row">
+
+                                <span className="spender-name">
+                                    {cat.spender}
+                                </span>
+
+                                <span className="spender-amount text-primary">
+                                    ₹ {cat.spendAmount}
+                                </span>
+
+                            </div>
+
+                            <div className="facility-row">
+
+                                <FiPlusSquare
+                                    size={13}
+                                    className="facility-icon"
+                                />
+
+                                <span className="facility-name">
+                                    {cat.facility}
+                                </span>
+
+                            </div>
+
+                            <div className="receipt-row">
+
+                                <span className="receipt-text">
+                                    {cat.receipt}
+                                </span>
+
+                                <span className="receipt-date">
+                                    {cat.date}
+                                </span>
+
+                            </div>
+
+                        </div>
 
 
                         {/* FOOTER */}
@@ -244,7 +249,7 @@ export default function CategoryAnalytics() {
                         <div className="card-footer">
 
                             <span className="status-text">
-                                {cat.status}
+
                             </span>
 
                             <button

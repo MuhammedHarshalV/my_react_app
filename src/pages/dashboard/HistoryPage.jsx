@@ -1,7 +1,6 @@
 
 import HistoricalAudit from "../../components/history/HistoricalAudit";
-import DetailedEmployeeCard from "../../components/history/DetailedEmployeeCard";
-import ClinicSectionCard from "../../components/history/ClinicSectionCard";
+
 import CategoryAnalytics from "../../components/history/CategoryAnalytics";
 function HistoryPage() {
     return (
