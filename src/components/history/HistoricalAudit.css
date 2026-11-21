@@ -305,6 +305,34 @@
     font-weight: 700;
 }
 
+.clinic-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: #e9ecf7;
+    border-radius: 8px;
+    font-size: 22px;
+}
+
+.history-card-image {
+    position: relative;
+}
+
+.history-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eeeeee;
+    color: var(--color-primary);
+    font-size: 24px;
+    font-weight: 700;
+    border-radius: 8px;
+}
+
 .history-card-image>span {
     padding: 3px 5px;
     background: #e9ecf7;

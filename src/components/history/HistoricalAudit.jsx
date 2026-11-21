@@ -1,56 +1,70 @@
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./HistoricalAudit.css";
 
-// --------------------------------------------------
-// DUMMY DATA
-// --------------------------------------------------
+import { getCategoryDetailsApi } from "../../services/api/historyDetails/getCategoryDetailsapi";
+import { getClinicalDetailsApi } from "../../services/api/historyDetails/getClinicDetailsApi";
+import { getPersonalDetailsApi } from "../../services/api/historyDetails/getPersonalDetailsApi";
 
-const dummyData = {
-    employees: [
-        { id: 1, name: "Rahul Menon", code: "PRO-104", location: "Aluva Hub", amount: 148250, status: "ACTIVE SELECTION", image: "" },
-        { id: 2, name: "Kavitha Nair", code: "PRO-112", location: "Kochi North", amount: 184300, image: "" },
-        { id: 3, name: "Sijomon Varghese", code: "PRO-115", location: "Angamaly", amount: 112600, image: "" },
-        { id: 4, name: "Deepa Mohan", code: "PRO-108", location: "Tripunithura", amount: 89400, image: "" },
-        { id: 5, name: "Arun Kumar", code: "PRO-102", location: "Kakkanad SEZ", amount: 132700, image: "" },
-        { id: 6, name: "Meera Pillai", code: "PRO-120", location: "Central Kochi", amount: 98150, image: "" },
-    ],
-
-    clinics: [
-        { id: 1, name: "Care Diagnostic Centre", code: "CLN-3340", location: "Kakkanad", visits: 142, amount: 312450, image: "" },
-        { id: 2, name: "Apex Clinical Labs", code: "CLN-1092", location: "Ernakulam Town", visits: 168, amount: 284900, image: "" },
-        { id: 3, name: "Medicare Speciality", code: "CLN-4011", location: "Aluva Bypass", visits: 95, amount: 174300, image: "" },
-        { id: 4, name: "St. Jude Medical Lab", code: "CLN-2298", location: "Angamaly", visits: 112, amount: 198400, image: "" },
-        { id: 5, name: "Lisie Specialty Centre", code: "CLN-5510", location: "Kaloor Junction", visits: 88, amount: 146800, image: "" },
-    ],
-
-    categories: [
-        { id: 1, name: "Reagents & Consumables", icon: "⚗", vouchers: 58, amount: 184300 },
-        { id: 2, name: "Fuel & Vehicle Transit", icon: "⛽", vouchers: 110, amount: 96200 },
-        { id: 3, name: "Food / Lunch Engagement", icon: "🍴", vouchers: 44, amount: 68450 },
-        { id: 4, name: "Per Diem & Lodging", icon: "▣", vouchers: 16, amount: 54000 },
-        { id: 5, name: "STAT Courier Transit", icon: "♧", vouchers: 32, amount: 42900 },
-        { id: 6, name: "Toll & Parking Passes", icon: "◉", vouchers: 94, amount: 16800 },
-    ],
-};
+const LIMIT = 6;
 
 const formatCurrency = (amount) =>
     `₹ ${Number(amount || 0).toLocaleString("en-IN")}`;
 
+// Handle both Axios response and direct response objects
+const getResponseData = (response) => response?.data ?? response ?? {};
+
 // --------------------------------------------------
-// API FUNCTION
-// Replace the URL with your actual API endpoint.
-// Expected response: { employees: [], clinics: [], categories: [] }
+// RESPONSE MAPPING
 // --------------------------------------------------
 
-const getHistoricalAuditData = async () => {
-    const response = await fetch("/api/historical-audits");
+const mapEmployee = (item) => ({
+    id: item.userId,
+    name: item.name || "",
+    code: item.userId || "",
+    location: item.location || "",
+    amount: item.totalExpenseClaimed || 0,
+    approvedAmount: item.totalExpenseApproved || 0,
+    image: item.profilePicture || "",
+});
 
-    if (!response.ok) {
-        throw new Error("Failed to fetch historical audit data");
-    }
+const mapClinic = (item) => ({
+    id: item.clinicName,
+    name: item.clinicName || "",
+    code: "",
+    location: item.clinicPlace || "",
+    visits: item.totalVisits || 0,
+    amount: item.totalClinicSpend || 0,
+    approvedAmount: item.totalApprovedAmount || 0,
+    image: item.clinicPhoto || "",
+});
 
-    return response.json();
+const mapCategory = (item, index) => ({
+    id: item.categoryName || index,
+    name: item.categoryName || "",
+    icon: "▣",
+    vouchers: item.totalClaims || 0,
+    amount: item.totalExpense || 0,
+    approvedAmount: item.totalApprovedExpense || 0,
+});
+
+// --------------------------------------------------
+// PAGINATION
+// --------------------------------------------------
+
+const getPagination = (response, currentPage) => {
+    const pagination = response?.pagination || {};
+
+    return {
+        currentPage: Number(pagination.currentPage || currentPage),
+        limit: Number(pagination.limit || LIMIT),
+        totalRecords: Number(pagination.totalRecords || 0),
+        totalPages: Number(
+            pagination.totalPages ||
+            Math.ceil((pagination.totalRecords || 0) / LIMIT) ||
+            1
+        ),
+    };
 };
 
 // --------------------------------------------------
@@ -58,135 +72,257 @@ const getHistoricalAuditData = async () => {
 // --------------------------------------------------
 
 const HistoricalAudit = () => {
-    const [dashboardData, setDashboardData] = useState(dummyData);
-    const [loading, setLoading] = useState(true);
+
+    // Employee states
+    const [employees, setEmployees] = useState([]);
+    const [employeePage, setEmployeePage] = useState(1);
+
+    const [employeePagination, setEmployeePagination] = useState({
+        currentPage: 1,
+        totalPages: 1,
+        totalRecords: 0,
+    });
+
+    const [employeeLoading, setEmployeeLoading] = useState(false);
+
+    // Clinic states
+    const [clinics, setClinics] = useState([]);
+    const [clinicPage, setClinicPage] = useState(1);
+
+    const [clinicPagination, setClinicPagination] = useState({
+        currentPage: 1,
+        totalPages: 1,
+        totalRecords: 0,
+    });
+
+    const [clinicLoading, setClinicLoading] = useState(false);
+
+    // Category states
+    const [categories, setCategories] = useState([]);
+    const [categoryPage, setCategoryPage] = useState(1);
+
+    const [categoryPagination, setCategoryPagination] = useState({
+        currentPage: 1,
+        totalPages: 1,
+        totalRecords: 0,
+    });
+
+    const [categoryLoading, setCategoryLoading] = useState(false);
+
+    // Common states
     const [search, setSearch] = useState("");
-    const [activePeriod, setActivePeriod] = useState("Last 30D");
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
 
-    const [selectedEmployee, setSelectedEmployee] = useState(1);
-    const [employeePage, setEmployeePage] = useState(0);
-    const [clinicPage, setClinicPage] = useState(0);
-    const [categoryPage, setCategoryPage] = useState(0);
+    const [dateFrom, setDateFrom] = useState("");
+    const [dateTo, setDateTo] = useState("");
 
-    const [dateFrom, setDateFrom] = useState("2026-10-01");
-    const [dateTo, setDateTo] = useState("2026-10-31");
+    const [error, setError] = useState("");
 
-    // Initial API call
+    // --------------------------------------------------
+    // 1. EMPLOYEE API
+    // --------------------------------------------------
+
+    const loadEmployeeDetails = async () => {
+        try {
+            setEmployeeLoading(true);
+
+            const result = await getPersonalDetailsApi({
+                page: employeePage,
+                limit: LIMIT,
+                startDate: dateFrom,
+                endDate: dateTo,
+                search: search.trim(),
+            });
+
+            const response = getResponseData(result);
+            const list = response?.personDetails || [];
+
+            setEmployees(list.map(mapEmployee));
+
+
+            setEmployeePagination(
+                getPagination(response, employeePage)
+            );
+
+            setError("");
+
+        } catch (err) {
+            console.error("Employee API error:", err);
+            setEmployees([]);
+            setError("Unable to load employee details.");
+        } finally {
+            setEmployeeLoading(false);
+        }
+    };
+
+    // --------------------------------------------------
+    // 2. CLINIC API
+    // --------------------------------------------------
+
+    const loadClinicDetails = async () => {
+        try {
+            setClinicLoading(true);
+
+            const result = await getClinicalDetailsApi({
+                page: clinicPage,
+                limit: LIMIT,
+                startDate: dateFrom,
+                endDate: dateTo,
+                search: search.trim(),
+            });
+
+            const response = getResponseData(result);
+            const list = response?.clinicDetails || [];
+
+            setClinics(list.map(mapClinic));
+
+            setClinicPagination(
+                getPagination(response, clinicPage)
+            );
+
+        } catch (err) {
+            console.error("Clinic API error:", err);
+            setClinics([]);
+            setError("Unable to load clinic details.");
+        } finally {
+            setClinicLoading(false);
+        }
+    };
+
+    // --------------------------------------------------
+    // 3. CATEGORY API
+    // --------------------------------------------------
+
+    const loadCategoryDetails = async () => {
+        try {
+            setCategoryLoading(true);
+
+            const result = await getCategoryDetailsApi({
+                page: categoryPage,
+                limit: LIMIT,
+                startDate: dateFrom,
+                endDate: dateTo,
+                search: search.trim(),
+            });
+
+            const response = getResponseData(result);
+            const list = response?.categoryDetails || [];
+
+            setCategories(list.map(mapCategory));
+
+            setCategoryPagination(
+                getPagination(response, categoryPage)
+            );
+
+        } catch (err) {
+            console.error("Category API error:", err);
+            setCategories([]);
+            setError("Unable to load category details.");
+        } finally {
+            setCategoryLoading(false);
+        }
+    };
+
+    // --------------------------------------------------
+    // INITIAL LOAD + INDEPENDENT API CALLS
+    // --------------------------------------------------
+
     useEffect(() => {
-        const loadData = async () => {
-            try {
-                setLoading(true);
+        loadEmployeeDetails();
+    }, [employeePage, dateFrom, dateTo, search]);
 
-                const result = await getHistoricalAuditData();
+    useEffect(() => {
+        loadClinicDetails();
+    }, [clinicPage, dateFrom, dateTo, search]);
 
-                // Use dummy data for any missing or empty API sections.
-                setDashboardData({
-                    employees: result?.employees?.length
-                        ? result.employees : dummyData.employees,
+    useEffect(() => {
+        loadCategoryDetails();
+    }, [categoryPage, dateFrom, dateTo, search]);
 
-                    clinics: result?.clinics?.length
-                        ? result.clinics : dummyData.clinics,
+    // --------------------------------------------------
+    // DATE FILTER
+    // --------------------------------------------------
 
-                    categories: result?.categories?.length
-                        ? result.categories : dummyData.categories,
-                });
-            } catch (error) {
-                console.error("Historical audit API error:", error);
-
-                // API unavailable: show dummy data.
-                setDashboardData(dummyData);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadData();
-    }, []);
-
-    // Search filtering
-    const filterItems = (items) => {
-        const query = search.toLowerCase().trim();
-
-        if (!query) return items;
-
-        return items.filter((item) =>
-            `${item.name} ${item.code || ""} ${item.location || ""}`
-                .toLowerCase()
-                .includes(query)
-        );
+    const handleDateFromChange = (value) => {
+        setDateFrom(value);
+        setEmployeePage(1);
+        setClinicPage(1);
+        setCategoryPage(1);
     };
 
-    const employees = useMemo(
-        () => filterItems(dashboardData.employees),
-        [dashboardData.employees, search]
-    );
-
-    const clinics = useMemo(
-        () => filterItems(dashboardData.clinics),
-        [dashboardData.clinics, search]
-    );
-
-    const categories = useMemo(
-        () => filterItems(dashboardData.categories),
-        [dashboardData.categories, search]
-    );
-
-    const changePage = (setter, currentPage, totalItems) => {
-        const totalPages = Math.ceil(totalItems / 6);
-
-        setter(
-            (currentPage + 1) % Math.max(totalPages, 1)
-        );
+    const handleDateToChange = (value) => {
+        setDateTo(value);
+        setEmployeePage(1);
+        setClinicPage(1);
+        setCategoryPage(1);
     };
 
-    const visibleEmployees = employees.slice(employeePage * 6, employeePage * 6 + 6);
-    const visibleClinics = clinics.slice(clinicPage * 6, clinicPage * 6 + 6);
-    const visibleCategories = categories.slice(categoryPage * 6, categoryPage * 6 + 6);
+    // --------------------------------------------------
+    // SEARCH
+    // --------------------------------------------------
 
-    const handlePrint = () => window.print();
-
-    const handleExportExcel = () => {
-        const rows = [
-            ["Category", "Name", "Code", "Location", "Amount"],
-            ...dashboardData.employees.map((item) => [
-                "Employee", item.name, item.code, item.location, item.amount
-            ]),
-            ...dashboardData.clinics.map((item) => [
-                "Clinic", item.name, item.code, item.location, item.amount
-            ]),
-            ...dashboardData.categories.map((item) => [
-                "Expense", item.name, "", "", item.amount
-            ]),
-        ];
-
-        const csv = rows
-            .map((row) => row.map((value) =>
-                `"${String(value ?? "").replace(/"/g, '""')}"`
-            ).join(","))
-            .join("\n");
-
-        const blob = new Blob([csv], {
-            type: "text/csv;charset=utf-8;"
-        });
-
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-
-        link.href = url;
-        link.download = "historical-audit.csv";
-        link.click();
-
-        URL.revokeObjectURL(url);
+    const handleSearch = (value) => {
+        setSearch(value);
+        setEmployeePage(1);
+        setClinicPage(1);
+        setCategoryPage(1);
     };
 
-    const handleExportPDF = () => {
-        window.print();
+    // --------------------------------------------------
+    // INDEPENDENT PAGINATION
+    // --------------------------------------------------
+
+    const changeEmployeePage = (direction) => {
+        const nextPage = employeePage + direction;
+
+        if (
+            nextPage >= 1 &&
+            nextPage <= employeePagination.totalPages
+        ) {
+            setEmployeePage(nextPage);
+        }
     };
+
+    const changeClinicPage = (direction) => {
+        const nextPage = clinicPage + direction;
+
+        if (
+            nextPage >= 1 &&
+            nextPage <= clinicPagination.totalPages
+        ) {
+            setClinicPage(nextPage);
+        }
+    };
+
+    const changeCategoryPage = (direction) => {
+        const nextPage = categoryPage + direction;
+
+        if (
+            nextPage >= 1 &&
+            nextPage <= categoryPagination.totalPages
+        ) {
+            setCategoryPage(nextPage);
+        }
+    };
+
+    // --------------------------------------------------
+    // EMPLOYEE SELECTION
+    // No API call here
+    // --------------------------------------------------
+
+    const handleEmployeeSelect = (employee) => {
+        setSelectedEmployee(employee.id);
+    };
+
+    // --------------------------------------------------
+    // UI
+    // --------------------------------------------------
 
     return (
         <div className="historical-audit-page">
 
             {/* PAGE HEADING */}
+
             <div className="history-heading">
                 <div>
                     <div className="history-brand">
@@ -194,175 +330,369 @@ const HistoricalAudit = () => {
                         <small>Historical Multi-Vector Telemetry</small>
                     </div>
 
-                    <h1>Historical Audits &amp; Multi-Dimension Analytics</h1>
+                    <h1>
+                        Historical Audits &amp; Multi-Dimension Analytics
+                    </h1>
 
                     <p>
                         Cross-sectional expense trail across field personnel,
                         medical facilities, and clinical logistics ledgers.
                     </p>
                 </div>
-
-
             </div>
 
             {/* SEARCH AND FILTERS */}
+
             <div className="history-filter-panel">
+
                 <div className="history-search">
                     <span>⌕</span>
+
                     <input
                         type="text"
-                        placeholder="Search employee, clinic, voucher ID, or category..."
+                        placeholder="Search employee name..."
                         value={search}
-                        onChange={(e) => {
-                            setSearch(e.target.value);
-                            setEmployeePage(0);
-                            setClinicPage(0);
-                            setCategoryPage(0);
-                        }}
+                        onChange={(e) => handleSearch(e.target.value)}
                     />
                 </div>
 
                 <div className="history-filter-bottom">
 
                     <div className="history-date-range">
+
                         <input
                             type="date"
                             value={dateFrom}
-                            onChange={(e) => setDateFrom(e.target.value)}
+                            onChange={(e) =>
+                                handleDateFromChange(e.target.value)
+                            }
                         />
+
                         <span>-</span>
+
                         <input
                             type="date"
                             value={dateTo}
-                            onChange={(e) => setDateTo(e.target.value)}
+                            min={dateFrom}
+                            onChange={(e) =>
+                                handleDateToChange(e.target.value)
+                            }
                         />
+
                     </div>
+
                     <div className="history-jump-links">
                         JUMP TO:
                         <a href="#employees">PROs</a>
                         <a href="#clinics">Clinics</a>
                         <a href="#categories">Categories</a>
                     </div>
+
                 </div>
-
-
             </div>
 
-            {loading && (
-                <div className="history-loading">Loading historical audit...</div>
+            {error && (
+                <div className="history-error">
+                    {error}
+                </div>
             )}
 
             {/* EMPLOYEE DIMENSION */}
+
             <section className="history-dimension" id="employees">
+
                 <div className="dimension-heading">
-                    <h2><span /> DIMENSION 01: FIELD EMPLOYEES &amp; PRO OFFICERS</h2>
-                    <small>{employees.length} Active in View</small>
+
+                    <h2>
+                        <span />
+                        DIMENSION 01: FIELD EMPLOYEES &amp; PRO OFFICERS
+                    </h2>
+
+                    <small>
+                        {employeePagination.totalRecords} Active in View
+                    </small>
 
                     <div className="dimension-arrows">
-                        <button onClick={() => setEmployeePage(Math.max(0, employeePage - 1))}>‹</button>
-                        <button onClick={() => changePage(setEmployeePage, employeePage, employees.length)}>›</button>
+
+                        <button
+                            onClick={() => changeEmployeePage(-1)}
+                            disabled={employeePage <= 1 || employeeLoading}
+                        >
+                            ‹
+                        </button>
+
+                        <button
+                            onClick={() => changeEmployeePage(1)}
+                            disabled={
+                                employeePage >= employeePagination.totalPages ||
+                                employeeLoading
+                            }
+                        >
+                            ›
+                        </button>
+
                     </div>
                 </div>
 
-                <div className="history-card-grid">
-                    {visibleEmployees.map((item) => (
-                        <article
-                            className={`history-person-card ${selectedEmployee === item.id ? "selected" : ""}`}
-                            key={item.id}
-                            onClick={() => setSelectedEmployee(item.id)}
-                        >
-                            <div className="history-card-image">
-                                {item.image ? (
-                                    <img src={item.image} alt={item.name} />
-                                ) : (
-                                    <div className="history-image-placeholder">
-                                        {item.name.charAt(0)}
+                {employeeLoading ? (
+                    <div className="history-loading">
+                        Loading employees...
+                    </div>
+                ) : (
+                    <div className="history-card-grid">
+
+                        {employees.length > 0 ? (
+                            employees.map((item) => (
+
+                                <article
+                                    className={`history-person-card ${selectedEmployee === item.id
+                                        ? "selected"
+                                        : ""
+                                        }`}
+                                    key={item.id}
+                                    onClick={() => handleEmployeeSelect(item)}
+                                >
+
+                                    <div className="history-card-image">
+                                        {item.image ? (
+                                            <img
+                                                src={item.image}
+                                                alt={item.name}
+                                                onError={(e) => {
+                                                    e.currentTarget.style.display = "none";
+                                                    e.currentTarget.nextElementSibling.style.display = "flex";
+                                                }}
+                                            />
+                                        ) : null}
+
+                                        <div
+                                            className="history-image-placeholder"
+                                            style={{
+                                                display: item.image ? "none" : "flex",
+                                            }}
+                                        >
+                                            {item.name?.charAt(0)?.toUpperCase() || "?"}
+                                        </div>
+
+                                        <span>{item.code}</span>
                                     </div>
-                                )}
 
-                                <span>{item.code}</span>
+                                    {selectedEmployee === item.id && (
+                                        <b className="selection-label">
+                                            ACTIVE SELECTION
+                                        </b>
+                                    )}
+
+                                    <h3>{item.name}</h3>
+
+                                    <p>
+                                        {item.code}
+                                        {item.location
+                                            ? ` • ${item.location}`
+                                            : ""}
+                                    </p>
+
+                                    <div className="history-card-footer">
+
+                                        <small>DISBURSED</small>
+
+                                        <strong>
+                                            {formatCurrency(item.amount)}
+                                        </strong>
+
+                                    </div>
+
+                                </article>
+
+                            ))
+                        ) : (
+                            <div className="history-empty">
+                                No employees found.
                             </div>
+                        )}
 
-                            {selectedEmployee === item.id && (
-                                <b className="selection-label">ACTIVE SELECTION</b>
-                            )}
+                    </div>
+                )}
 
-                            <h3>{item.name}</h3>
-                            <p>{item.code} • {item.location}</p>
-
-                            <div className="history-card-footer">
-                                <small>DISBURSED</small>
-                                <strong>{formatCurrency(item.amount)}</strong>
-                            </div>
-                        </article>
-                    ))}
-                </div>
             </section>
 
             {/* CLINIC DIMENSION */}
+
             <section className="history-dimension" id="clinics">
+
                 <div className="dimension-heading">
-                    <h2><span /> DIMENSION 02: PARTNER CLINICS &amp; DIAGNOSTIC NODES</h2>
-                    <small>{clinics.length} Facilities Active</small>
+
+                    <h2>
+                        <span />
+                        DIMENSION 02: PARTNER CLINICS &amp; DIAGNOSTIC NODES
+                    </h2>
+
+                    <small>
+                        {clinicPagination.totalRecords} Facilities Active
+                    </small>
 
                     <div className="dimension-arrows">
-                        <button onClick={() => setClinicPage(Math.max(0, clinicPage - 1))}>‹</button>
-                        <button onClick={() => changePage(setClinicPage, clinicPage, clinics.length)}>›</button>
+
+                        <button
+                            onClick={() => changeClinicPage(-1)}
+                            disabled={clinicPage <= 1 || clinicLoading}
+                        >
+                            ‹
+                        </button>
+
+                        <button
+                            onClick={() => changeClinicPage(1)}
+                            disabled={
+                                clinicPage >= clinicPagination.totalPages ||
+                                clinicLoading
+                            }
+                        >
+                            ›
+                        </button>
+
                     </div>
                 </div>
 
-                <div className="history-card-grid">
-                    {visibleClinics.map((item, index) => (
-                        <article className="history-clinic-card" key={item.id}>
-                            <div className="clinic-image">
-                                {item.image ? (
-                                    <img src={item.image} alt={item.name} />
-                                ) : (
-                                    <div className="clinic-placeholder">🏥</div>
-                                )}
+                {clinicLoading ? (
+                    <div className="history-loading">
+                        Loading clinics...
+                    </div>
+                ) : (
+                    <div className="history-card-grid">
 
-                                {index === 0 && (
-                                    <span className="focus-label">FOCUS NODE</span>
-                                )}
+                        {clinics.length > 0 ? (
+                            clinics.map((item, index) => (
+
+                                <article
+                                    className="history-clinic-card"
+                                    key={`${item.id}-${index}`}
+                                >
+
+                                    <div className="clinic-image">
+                                        {item.image ? (
+                                            <img
+                                                src={item.image}
+                                                alt={item.name}
+                                                onError={(e) => {
+                                                    e.currentTarget.style.display = "none";
+                                                    e.currentTarget.nextElementSibling.style.display = "flex";
+                                                }}
+                                            />
+                                        ) : null}
+
+                                        <div
+                                            className="clinic-placeholder"
+                                            style={{
+                                                display: item.image ? "none" : "flex",
+                                            }}
+                                        >
+                                            🏥
+                                        </div>
+
+                                        {index === 0 && (
+                                            <span className="focus-label">
+                                                FOCUS NODE
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <h3>{item.name}</h3>
+
+                                    <p>
+                                        {item.code ? `#${item.code} • ` : ""}
+                                        {item.location}
+                                    </p>
+
+                                    <div className="clinic-card-footer">
+
+                                        <small>
+                                            {item.visits} FIELD VISITS
+                                        </small>
+
+                                        <strong>
+                                            {formatCurrency(item.amount)}
+                                        </strong>
+
+                                    </div>
+
+                                </article>
+
+                            ))
+                        ) : (
+                            <div className="history-empty">
+                                No clinics found.
                             </div>
+                        )}
 
-                            <h3>{item.name}</h3>
-                            <p>#{item.code} • {item.location}</p>
+                    </div>
+                )}
 
-                            <div className="clinic-card-footer">
-                                <small>{item.visits} FIELD VISITS</small>
-                                <strong>{formatCurrency(item.amount)}</strong>
-                            </div>
-                        </article>
-                    ))}
-                </div>
             </section>
 
-            {/* EXPENSE CATEGORY DIMENSION */}
+            {/* CATEGORY DIMENSION */}
+
             <section className="history-dimension" id="categories">
+
                 <div className="dimension-heading">
-                    <h2><span /> DIMENSION 03: EXPENSE CATEGORY LEDGER ARCHETYPES</h2>
-                    <small>{categories.length} Standard Heads</small>
 
-                    <div className="dimension-arrows">
-                        <button onClick={() => setCategoryPage(Math.max(0, categoryPage - 1))}>‹</button>
-                        <button onClick={() => changePage(setCategoryPage, categoryPage, categories.length)}>›</button>
+                    <h2>
+                        <span />
+                        DIMENSION 03: EXPENSE CATEGORY LEDGER ARCHETYPES
+                    </h2>
+
+                    <small>
+                        {categoryPagination.totalRecords || categories.length}
+                        {" "}Standard Heads
+                    </small>
+
+
+                </div>
+
+                {categoryLoading ? (
+                    <div className="history-loading">
+                        Loading categories...
                     </div>
-                </div>
+                ) : (
+                    <div className="history-card-grid category-grid">
 
-                <div className="history-card-grid category-grid">
-                    {visibleCategories.map((item) => (
-                        <article className="history-category-card" key={item.id}>
-                            <div className="category-card-top">
-                                <span className="category-icon">{item.icon}</span>
-                                <small>{item.vouchers} Vouchers</small>
+                        {categories.length > 0 ? (
+                            categories.map((item, index) => (
+
+                                <article
+                                    className="history-category-card"
+                                    key={`${item.id}-${index}`}
+                                >
+
+                                    <div className="category-card-top">
+
+                                        <span className="category-icon">
+                                            {item.icon}
+                                        </span>
+
+                                        <small>
+                                            {item.vouchers} Vouchers
+                                        </small>
+
+                                    </div>
+
+                                    <h3>{item.name}</h3>
+
+                                    <strong>
+                                        {formatCurrency(item.amount)}
+                                    </strong>
+
+                                </article>
+
+                            ))
+                        ) : (
+                            <div className="history-empty">
+                                No categories found.
                             </div>
+                        )}
 
-                            <h3>{item.name}</h3>
-                            <strong>{formatCurrency(item.amount)}</strong>
-                        </article>
-                    ))}
-                </div>
+                    </div>
+                )}
+
             </section>
 
         </div>

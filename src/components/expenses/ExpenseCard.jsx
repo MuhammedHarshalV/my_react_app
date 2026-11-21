@@ -125,6 +125,7 @@ export default function ExpenseCard({
                                 : "",
 
                             date: expense.expenseDate,
+                            entryDate: expense.entryDate,
                             receipt: expense.receiptPhotoUrl || null,
 
                             claimedAmount: Number(
@@ -552,9 +553,7 @@ export default function ExpenseCard({
                     {totalRecords} vouchers
                 </strong>
 
-                <span>
-                    Route Group: Central Kerala
-                </span>
+
 
             </div>
 
@@ -674,12 +673,22 @@ export default function ExpenseCard({
                                                 {expense.description}
                                             </p>
 
-                                            <small>
-                                                {expense.date
-                                                    ? new Date(
-                                                        expense.date
-                                                    ).toLocaleDateString("en-IN")
-                                                    : ""}
+                                            <small className="expense-date">
+                                                <span className="date-value">
+                                                    {expense.date
+                                                        ? new Date(expense.date).toLocaleDateString("en-IN")
+                                                        : ""}
+                                                </span>
+                                                <span className="date-label"> Expense Date</span>
+                                            </small>
+
+                                            <small className="expense-date">
+                                                <span className="date-value">
+                                                    {expense.entryDate
+                                                        ? new Date(expense.entryDate).toLocaleDateString("en-IN")
+                                                        : ""}
+                                                </span>
+                                                <span className="date-label"> Entry Date</span>
                                             </small>
                                         </div>
 
