@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import { FiMenu, FiLogOut } from "react-icons/fi";
+import { FiMenu, FiLogOut, FiX } from "react-icons/fi";
 import Sidebar from "../../components/sidebar/sidebar";
 import { TokenStorage } from "../../services/core/tokenStorage";
 import "./DashboardLayout.css";
 
 export default function DashboardLayout() {
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
     const toggleSidebar = () => {
         setSidebarOpen((previous) => !previous);
@@ -70,11 +72,58 @@ export default function DashboardLayout() {
                         className="logout-button"
 
                         type="button"
-                        onClick={handleLogout}
+                        onClick={() => setShowLogoutPopup(true)}
                     >
                         <FiLogOut />
                         <span>Logout</span>
                     </button>
+                    {showLogoutPopup && (
+                        <div
+                            className="logout-modal-overlay"
+                            onClick={() => setShowLogoutPopup(false)}
+                        >
+                            <div
+                                className="logout-modal"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <button
+                                    className="logout-modal-close"
+                                    onClick={() => setShowLogoutPopup(false)}
+                                    type="button"
+                                >
+                                    <FiX />
+                                </button>
+
+                                <div className="logout-modal-icon">
+                                    <FiLogOut />
+                                </div>
+
+                                <h2>Confirm Logout</h2>
+
+                                <p>
+                                    Are you sure you want to logout from your account?
+                                </p>
+
+                                <div className="logout-modal-actions">
+                                    <button
+                                        className="logout-cancel-btn"
+                                        type="button"
+                                        onClick={() => setShowLogoutPopup(false)}
+                                    >
+                                        No, Stay
+                                    </button>
+
+                                    <button
+                                        className="logout-confirm-btn"
+                                        type="button"
+                                        onClick={handleLogout}
+                                    >
+                                        Yes, Logout
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                 </header>
 

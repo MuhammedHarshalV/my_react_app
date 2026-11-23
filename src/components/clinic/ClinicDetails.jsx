@@ -412,7 +412,7 @@ function ClinicDetails({
 
                     <div className="clinic-date-input-wrapper">
                         {!startDate && (
-                            <span className="date-placeholder">dd-mm-yyyy</span>
+                            <span ></span>
                         )}
 
                         <input
@@ -429,7 +429,7 @@ function ClinicDetails({
 
                     <div className="clinic-date-input-wrapper">
                         {!endDate && (
-                            <span className="date-placeholder">dd-mm-yyyy</span>
+                            <span ></span>
                         )}
 
                         <input
