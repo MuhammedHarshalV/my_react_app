@@ -368,7 +368,7 @@
     background: var(--color-grey-200);
 }
 
-.FuelTravel {
+.Fuel {
     background: rgb(150, 248, 5);
 }
 
@@ -384,7 +384,7 @@
     background: #7E57C2;
 }
 
-.Stationery {
+.Travel {
     background: #E69B00;
 }
 
@@ -434,7 +434,7 @@
     background: #7E57C2;
 }
 
-.stationery-dot {
+.travel-dot {
     background: #E69B00;
 }
 

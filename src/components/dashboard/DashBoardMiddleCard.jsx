@@ -130,9 +130,9 @@ function DashBoardMiddleCard({
         {
             id: 2,
             icon: "⛽",
-            title: "Fuel / Travel",
-            previous: Number(data.fuelTravel?.comparitiveMonth || 0),
-            current: Number(data.fuelTravel?.currentMonth || 0),
+            title: "Fuel",
+            previous: Number(data.fuel?.comparitiveMonth || 0),
+            current: Number(data.fuel?.currentMonth || 0),
         },
         {
             id: 3,

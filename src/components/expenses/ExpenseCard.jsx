@@ -413,10 +413,10 @@ export default function ExpenseCard({
     );
 
     const expenseCategories = [
-        "Stationery",
+        "Travel",
         "Other Expense",
         "Food & Lunch",
-        "Fuel / Travel",
+        "Fuel",
         "Hotel / Stay",
         "Medical Demo",
     ];

@@ -309,8 +309,8 @@ function DashBoardAboveCard() {
                     <div className="expense-bottom">
                         <div className="expense-label-row">
                             <span>
-                                Fuel/Travel (
-                                {expenseData?.fuelTravel ?? 0}
+                                Fuel (
+                                {expenseData?.fuel ?? 0}
                                 )
                             </span>
 
@@ -323,10 +323,10 @@ function DashBoardAboveCard() {
 
                         <div className="expense-progress">
                             <div
-                                className="FuelTravel"
+                                className="Fuel"
                                 style={{
                                     width: `${expenseData?.totalExpense?.currentMonth > 0
-                                        ? (expenseData.fuelTravel / expenseData.totalExpense.currentMonth) * 100
+                                        ? (expenseData.fuel / expenseData.totalExpense.currentMonth) * 100
                                         : 0
                                         }%`
                                 }}
@@ -363,10 +363,10 @@ function DashBoardAboveCard() {
                             />
 
                             <div
-                                className="Stationery"
+                                className="Travel"
                                 style={{
                                     width: `${expenseData?.totalExpense?.currentMonth > 0
-                                        ? (expenseData.stationery / expenseData.totalExpense.currentMonth) * 100
+                                        ? (expenseData.travel / expenseData.totalExpense.currentMonth) * 100
                                         : 0
                                         }%`
                                 }}
@@ -384,11 +384,11 @@ function DashBoardAboveCard() {
                         </div>
 
                         <div className="expense-legend">
-                            <span><i className="legend-dot fuel-dot" />Fuel/Travel</span>
+                            <span><i className="legend-dot fuel-dot" />Fuel</span>
                             <span><i className="legend-dot food-dot" />Food&Lunch</span>
                             <span><i className="legend-dot medical-dot" />Medical Demo</span>
                             <span><i className="legend-dot hotel-dot" />Hotel/Stay</span>
-                            <span><i className="legend-dot stationery-dot" />Stationery</span>
+                            <span><i className="legend-dot travel-dot" />Travel</span>
                             <span><i className="legend-dot other-dot" />Others</span>
                         </div>
                     </div>

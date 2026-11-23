@@ -1,7 +1,15 @@
 
 import React, { useEffect, useState } from "react";
 import "./HistoricalAudit.css";
-
+import {
+    FiHome,
+    FiFileText,
+    FiCoffee,
+    FiTruck,
+    FiPlusSquare,
+    FiMapPin,
+    FiCircle,
+} from "react-icons/fi";
 import { getCategoryDetailsApi } from "../../services/api/historyDetails/getCategoryDetailsapi";
 import { getClinicalDetailsApi } from "../../services/api/historyDetails/getClinicDetailsApi";
 import { getPersonalDetailsApi } from "../../services/api/historyDetails/getPersonalDetailsApi";
@@ -27,7 +35,35 @@ const mapEmployee = (item) => ({
     approvedAmount: item.totalExpenseApproved || 0,
     image: item.profilePicture || "",
 });
+const getCategoryIcon = (category) => {
+    const name = category?.toLowerCase() || "";
 
+    if (name.includes("hotel") || name.includes("stay")) {
+        return <FiHome size={20} />;
+    }
+
+    if (name.includes("other")) {
+        return <FiFileText size={20} />;
+    }
+
+    if (name.includes("food") || name.includes("lunch")) {
+        return <FiCoffee size={20} />;
+    }
+
+    if (name.includes("fuel")) {
+        return <FiTruck size={20} />;
+    }
+
+    if (name.includes("medical")) {
+        return <FiPlusSquare size={20} />;
+    }
+
+    if (name.includes("travel")) {
+        return <FiMapPin size={20} />;
+    }
+
+    return <FiCircle size={20} />;
+};
 const mapClinic = (item) => ({
     id: item.clinicName,
     name: item.clinicName || "",
@@ -42,7 +78,7 @@ const mapClinic = (item) => ({
 const mapCategory = (item, index) => ({
     id: item.categoryName || index,
     name: item.categoryName || "",
-    icon: "▣",
+    icon: getCategoryIcon(item.categoryName),
     vouchers: item.totalClaims || 0,
     amount: item.totalExpense || 0,
     approvedAmount: item.totalApprovedExpense || 0,
@@ -294,16 +330,6 @@ const HistoricalAudit = () => {
         }
     };
 
-    const changeCategoryPage = (direction) => {
-        const nextPage = categoryPage + direction;
-
-        if (
-            nextPage >= 1 &&
-            nextPage <= categoryPagination.totalPages
-        ) {
-            setCategoryPage(nextPage);
-        }
-    };
 
     // --------------------------------------------------
     // EMPLOYEE SELECTION
